@@ -363,3 +363,25 @@ canvas {
   transform: none;
   box-shadow: none;
 }
+
+.footer {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+}
+
+.footer a {
+  font-size: 10px;
+  color: #faf5f5;
+  opacity: 0.25;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  transition: opacity 0.2s;
+}
+
+.footer a:hover {
+  opacity: 0.5;
+}
