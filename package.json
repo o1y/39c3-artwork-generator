@@ -1,0 +1,29 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "Interactive web-based animator for the 39C3 variable font, featuring dynamic weight interpolation and brand-compliant color modes.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write \"**/*.{js,json,html,css}\"",
+    "format:check": "prettier --check \"**/*.{js,json,html,css}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o1y/39c3-logo-animator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/o1y/39c3-logo-animator/issues"
+  },
+  "homepage": "https://github.com/o1y/39c3-logo-animator#readme",
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "vite": "^7.1.12",
+    "vite-plugin-compression": "^0.5.1"
+  }
+}
