@@ -4,6 +4,34 @@
   box-sizing: border-box;
 }
 
+:root {
+  --accent-color: #9673ff;
+  --accent-color-hover: #b69dfe;
+  --accent-contrast: #141414;
+  --accent-surface: rgba(150, 115, 255, 0.12);
+  --accent-shadow-color: rgba(150, 115, 255, 0.3);
+  --accent-border-glow: rgba(150, 115, 255, 0.35);
+  --accent-glow: rgba(150, 115, 255, 0.15);
+}
+
+body.theme-green {
+  --accent-color: #00ff00;
+  --accent-color-hover: #6cff57;
+  --accent-surface: rgba(0, 255, 0, 0.12);
+  --accent-shadow-color: rgba(0, 255, 0, 0.3);
+  --accent-border-glow: rgba(0, 255, 0, 0.35);
+  --accent-glow: rgba(0, 255, 0, 0.15);
+}
+
+body.theme-violet {
+  --accent-color: #9673ff;
+  --accent-color-hover: #b69dfe;
+  --accent-surface: rgba(150, 115, 255, 0.12);
+  --accent-shadow-color: rgba(150, 115, 255, 0.3);
+  --accent-border-glow: rgba(150, 115, 255, 0.35);
+  --accent-glow: rgba(150, 115, 255, 0.15);
+}
+
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -72,10 +100,15 @@ input[type='text'] {
   transition: all 0.2s;
 }
 
+input[type='text']:hover,
 input[type='text']:focus {
   outline: none;
-  background: rgba(250, 245, 245, 0.08);
-  border-color: #00ff00;
+  background: var(--accent-surface);
+  border-color: var(--accent-color);
+}
+
+input[type='text']:focus {
+  box-shadow: 0 0 0 2px var(--accent-border-glow);
 }
 
 input[type='range'] {
@@ -93,7 +126,7 @@ input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
-  background: #00ff00;
+  background: var(--accent-color);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
@@ -101,16 +134,21 @@ input[type='range']::-webkit-slider-thumb {
 
 input[type='range']::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  background: #6cff57;
+  background: var(--accent-color-hover);
 }
 
 input[type='range']::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: #00ff00;
+  background: var(--accent-color);
   border-radius: 50%;
   cursor: pointer;
   border: none;
+  transition: all 0.2s;
+}
+
+input[type='range']::-moz-range-thumb:hover {
+  background: var(--accent-color-hover);
 }
 
 select {
@@ -132,10 +170,16 @@ select {
   background-size: 12px;
 }
 
+select:hover {
+  background-color: var(--accent-surface);
+  border-color: var(--accent-color);
+}
+
 select:focus {
   outline: none;
-  background-color: rgba(250, 245, 245, 0.08);
-  border-color: #00ff00;
+  background-color: var(--accent-surface);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-border-glow);
 }
 
 select option {
@@ -158,12 +202,12 @@ input[type='checkbox'] {
 }
 
 input[type='checkbox']:hover {
-  border-color: #00ff00;
+  border-color: var(--accent-color);
 }
 
 input[type='checkbox']:checked {
-  background: #00ff00;
-  border-color: #00ff00;
+  background: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 input[type='checkbox']:checked::after {
@@ -210,7 +254,7 @@ canvas {
   width: auto;
   height: auto;
   display: block;
-  filter: drop-shadow(0 0 40px rgba(0, 255, 0, 0.15));
+  filter: drop-shadow(0 0 40px var(--accent-glow));
   object-fit: contain;
 }
 
@@ -285,9 +329,15 @@ canvas {
   align-items: center;
 }
 
-.export-toggle-btn:hover {
-  background: rgba(250, 245, 245, 0.08);
-  border-color: #00ff00;
+.export-toggle-btn:hover,
+.export-toggle-btn:focus-visible {
+  background: var(--accent-surface);
+  border-color: var(--accent-color);
+}
+
+.export-toggle-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-border-glow);
+  outline: none;
 }
 
 .export-toggle-btn .toggle-icon {
@@ -333,8 +383,8 @@ canvas {
 
 .download-btn {
   width: 100%;
-  background: #00ff00;
-  color: #141414;
+  background: var(--accent-color);
+  color: var(--accent-contrast);
   border: none;
   padding: 12px 24px;
   border-radius: 6px;
@@ -347,9 +397,16 @@ canvas {
 }
 
 .download-btn:hover {
-  background: #6cff57;
+  background: var(--accent-color-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+  box-shadow: 0 4px 12px var(--accent-shadow-color);
+}
+
+.download-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--accent-border-glow),
+    0 4px 12px var(--accent-shadow-color);
 }
 
 .download-btn:active {

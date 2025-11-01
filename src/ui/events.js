@@ -1,6 +1,7 @@
 import { settings } from '../config/settings.js';
 import { exportPNG } from '../export/png.js';
 import { exportVideo } from '../export/video.js';
+import { applyColorTheme } from './theme.js';
 
 export function initEventListeners() {
   document.getElementById('textInput').addEventListener('input', (e) => {
@@ -42,9 +43,14 @@ export function initEventListeners() {
     settings.mode = e.target.value;
   });
 
-  document.getElementById('colorSelect').addEventListener('change', (e) => {
-    settings.colorMode = e.target.value;
-  });
+  const colorSelect = document.getElementById('colorSelect');
+
+  if (colorSelect) {
+    colorSelect.addEventListener('change', (e) => {
+      settings.colorMode = e.target.value;
+      applyColorTheme(settings.colorMode);
+    });
+  }
 
   document.getElementById('exportToggleBtn').addEventListener('click', () => {
     const downloadSection = document.getElementById('downloadSection');
@@ -79,4 +85,9 @@ export function initDisplayValues() {
   document.getElementById('speedValue').textContent = settings.animationSpeed.toFixed(1) + 'x';
   document.getElementById('linesValue').textContent = settings.numLines;
   document.getElementById('widthValue').textContent = settings.widthValue;
+  const colorSelect = document.getElementById('colorSelect');
+  if (colorSelect) {
+    colorSelect.value = settings.colorMode;
+  }
+  applyColorTheme(settings.colorMode);
 }
