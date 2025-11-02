@@ -38,7 +38,7 @@ export function exportVideo() {
     setCanvas(tempCanvas, recordingCtx);
   }
 
-  const stream = recordingCanvas.captureStream(30); // 30 fps
+  const stream = recordingCanvas.captureStream(60); // 60 fps
   recordedChunks = [];
 
   const codecs = [
@@ -58,7 +58,8 @@ export function exportVideo() {
   }
 
   // Scale bitrate with resolution (4x pixels = 4x bitrate)
-  const baseBitrate = 8000000; // 8 Mbps for 1x
+  // 16 Mbps base for 60fps (doubled from 8 Mbps @ 30fps)
+  const baseBitrate = 16000000;
   const bitrate = baseBitrate * (resolution * resolution);
 
   const options = {
