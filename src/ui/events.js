@@ -14,13 +14,21 @@ export function initEventListeners() {
     // Show/hide controls based on theme
     const linesControl = document.getElementById('linesControl');
     const widthControl = document.getElementById('widthControl');
+    const modeControl = document.getElementById('modeControl');
 
     if (settings.theme === 'toggle') {
       linesControl.classList.add('hidden');
       widthControl.classList.remove('hidden');
-    } else {
+      modeControl.classList.add('hidden'); // Toggle has custom animation
+    } else if (settings.theme === 'ccc') {
       linesControl.classList.remove('hidden');
       widthControl.classList.add('hidden');
+      modeControl.classList.add('hidden'); // CCC has custom animation
+    } else {
+      // 'lines' theme uses all controls
+      linesControl.classList.remove('hidden');
+      widthControl.classList.add('hidden');
+      modeControl.classList.remove('hidden'); // Lines uses animation mode
     }
   });
 

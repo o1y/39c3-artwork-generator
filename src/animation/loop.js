@@ -1,6 +1,7 @@
 import { settings } from '../config/settings.js';
 import { renderToggleTheme } from '../rendering/toggle.js';
 import { renderLinesTheme } from '../rendering/lines.js';
+import { renderCCCTheme } from '../rendering/ccc.js';
 import { getCanvas } from '../rendering/canvas.js';
 
 const targetFPS = 30;
@@ -15,6 +16,8 @@ function render() {
 
   if (settings.theme === 'toggle') {
     renderToggleTheme(canvas);
+  } else if (settings.theme === 'ccc') {
+    renderCCCTheme(canvas);
   } else {
     renderLinesTheme(canvas);
   }

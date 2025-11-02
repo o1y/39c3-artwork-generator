@@ -11,7 +11,7 @@ export const settings = {
   animationSpeed: 1.5,
   mode: 'wave',
   colorMode: 'violet-inv',
-  theme: 'lines', // 'lines' or 'toggle'
+  theme: 'lines', // 'lines', 'toggle', or 'ccc'
   time: 0,
 };
 
