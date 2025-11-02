@@ -25,10 +25,9 @@ function measureTextWithAnimation(text, size) {
   return textWidth;
 }
 
-// Draw toggle switch
 export function drawToggle(x, y, height, color, time, phase, useConstantSpeed = false) {
   const ctx = getContext();
-  const width = height * 2.5; // Pill shape ratio
+  const width = height * 2; // Pill shape ratio
   const radius = height / 2;
 
   // Draw toggle pill background
@@ -39,10 +38,9 @@ export function drawToggle(x, y, height, color, time, phase, useConstantSpeed = 
   ctx.closePath();
   ctx.fill();
 
-  // Calculate dot position (animated)
+  // Calculate dot position
   const dotRadius = radius * 0.7;
   const dotTravel = width - radius * 2;
-  // Use constant speed for toggle theme, respect animation speed for lines theme
   const animSpeed = useConstantSpeed ? 1 : settings.animationSpeed;
   const dotProgress = (Math.sin(time * animSpeed + phase) + 1) / 2; // 0 to 1
   const dotX = x + radius + dotTravel * dotProgress;
@@ -69,12 +67,11 @@ export function renderToggleTheme(canvas) {
 
   let toggleHeight = 120;
   let toggleWidth = toggleHeight * 2.5;
-  let spacing = 60;
   let testSize = 200;
 
   // Measure text width at initial size (account for per-character weight animation)
   let textWidth = measureTextWithAnimation(text, testSize);
-  let totalContentWidth = toggleWidth + spacing + textWidth;
+  let totalContentWidth = toggleWidth + textWidth;
 
   // Check if content fits, if not scale down
   const usableWidth = settings.canvasSize - 2 * settings.margin;
@@ -84,12 +81,11 @@ export function renderToggleTheme(canvas) {
     // Scale everything proportionally
     toggleHeight *= scaleFactorInitial;
     toggleWidth = toggleHeight * 2.5;
-    spacing *= scaleFactorInitial;
     testSize *= scaleFactorInitial;
 
     // Recalculate text width with new size (account for per-character weight animation)
     textWidth = measureTextWithAnimation(text, testSize);
-    totalContentWidth = toggleWidth + spacing + textWidth;
+    totalContentWidth = toggleWidth + textWidth;
   }
 
   // Center horizontally and vertically
@@ -102,7 +98,7 @@ export function renderToggleTheme(canvas) {
   drawToggle(toggleX, toggleY, toggleHeight, textColor, settings.time, 0, true);
 
   // Draw text on the right, aligned to center - render each character individually
-  let textX = startX + toggleWidth + spacing;
+  let textX = startX + toggleWidth;
 
   // Apply width from slider (50-100 range)
   // Scale horizontally to simulate variable font width axis
