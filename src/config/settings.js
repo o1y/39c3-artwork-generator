@@ -1,6 +1,6 @@
 export const defaultTexts = {
   default: '39C3 POWER CYCLES',
-  ccc: '39C3',
+  ccc: '\uE002',
 };
 
 export const settings = {
@@ -33,7 +33,7 @@ export const themePresets = {
   },
   ccc: {
     colorMode: 'mono',
-    numLines: 18,
+    numLines: 22,
     text: defaultTexts.ccc,
   },
 };

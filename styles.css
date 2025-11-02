@@ -96,7 +96,8 @@ input[type='text'] {
   padding: 10px 15px;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300;
+  font-family: 'Kario39C3', sans-serif;
   transition: all 0.2s;
 }
 

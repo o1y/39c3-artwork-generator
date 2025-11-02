@@ -7,6 +7,20 @@ function setFont(weight, size) {
   ctx.font = `${weight} ${size}px Kario39C3`;
 }
 
+function getLogicalLength(text) {
+  let length = 0;
+  for (let i = 0; i < text.length; i++) {
+    const charCode = text.charCodeAt(i);
+    // Check if it's the PUA character U+E002 (39C3 Logo)
+    if (charCode === 0xE002) {
+      length += 5;
+    } else {
+      length += 1;
+    }
+  }
+  return length;
+}
+
 function measurePatternWidth(parts, fixedTextUpper, userText, fontSize) {
   const ctx = getContext();
   let totalWidth = 0;
@@ -107,7 +121,7 @@ export function renderCCCTheme(canvas) {
 
   // Dynamically calculate pattern repetitions based on text length
   // Each pattern unit consists of: fixedText + userText (use uppercase for measurement)
-  const patternUnitLength = fixedTextUpper.length + userText.length;
+  const patternUnitLength = fixedTextUpper.length + getLogicalLength(userText);
   const targetTotalChars = 36; // Target total characters per line for good readability
   const calculatedParts = Math.floor(targetTotalChars / patternUnitLength);
 
