@@ -19,19 +19,23 @@ export const settings = {
 export const colors = {
   // Neon Green tints (for UI variation)
   green: [
-    '#009900', // 900 - darkest
+    '#009900', // 900
     '#00d300', // 700
+    '#00ea00', // 600
     '#00ff00', // 400 - Primary
-    '#6cff57', // 300
     '#a3ff90', // 200
+    '#ccffbe', // 100
+    '#ebffe5' // 50
   ],
   // Electric Violet tints (for UI variation)
   violet: [
-    '#3626e4', // 700
+    '#4d2eed', // 600
     '#5c33f4', // 500
+    '#7952fe', // 400
     '#9673ff', // 300 - Secondary
     '#b69dfe', // 200
-    '#d4c4fe', // 100 - lightest
+    '#d4c4fe', // 100
+    '#efe7ff' // 50
   ],
   // Natural (monochrome)
   natural: '#faf5f5',
