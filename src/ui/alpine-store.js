@@ -93,6 +93,24 @@ export function createAppStore() {
       return themeMap[this.colorMode] || 'theme-violet';
     },
 
+    get isChromium() {
+      return /Chrome/.test(navigator.userAgent);
+    },
+
+    get availableResolutions() {
+      // Chromium browsers have glyph corruption issues with 2x video export, limit to 1x
+      if (this.exportFormat === 'video' && this.isChromium) {
+        return [
+          { value: '1', label: '1x (1000px)' }
+        ];
+      }
+      return [
+        { value: '1', label: '1x (1000px)' },
+        { value: '2', label: '2x (2000px)' },
+        { value: '4', label: '4x (4000px)' }
+      ];
+    },
+
     init() {
       // Apply initial capabilities from theme preset
       const initialPreset = themePresets[this.theme];
@@ -132,6 +150,13 @@ export function createAppStore() {
 
       this.$watch('mode', (value) => {
         settings.mode = value;
+      });
+
+      this.$watch('exportFormat', (value) => {
+        // Reset to 1x resolution when switching to video format in Chromium browsers
+        if (value === 'video' && this.isChromium && this.exportResolution !== '1') {
+          this.exportResolution = '1';
+        }
       });
     },
 

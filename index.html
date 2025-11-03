@@ -109,9 +109,9 @@
         <div class="control-group">
           <label>Resolution</label>
           <select x-model="exportResolution">
-            <option value="1">1x (1000px)</option>
-            <option value="2">2x (2000px)</option>
-            <option value="4">4x (4000px)</option>
+            <template x-for="res in availableResolutions" :key="res.value">
+              <option :value="res.value" x-text="res.label"></option>
+            </template>
           </select>
         </div>
         <div class="control-group" x-show="showDurationControl" x-cloak>
