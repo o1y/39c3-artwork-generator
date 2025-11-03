@@ -260,7 +260,7 @@ canvas {
   width: auto;
   height: auto;
   display: block;
-  filter: drop-shadow(0 0 40px var(--accent-glow));
+  box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-glow);
   object-fit: contain;
 }
 
