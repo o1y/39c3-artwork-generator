@@ -100,8 +100,10 @@ export function createAppStore() {
     get bodyThemeClass() {
       const themeMap = {
         green: 'theme-green',
+        'green-smooth': 'theme-green',
         'green-inv': 'theme-green',
         violet: 'theme-violet',
+        'violet-smooth': 'theme-violet',
         'violet-inv': 'theme-violet',
         mono: 'theme-violet',
         'mono-inv': 'theme-violet',
