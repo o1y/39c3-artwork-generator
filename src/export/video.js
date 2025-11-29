@@ -26,6 +26,13 @@ export function exportVideo(durationSeconds = 5, resolution = 2, callbacks = {})
     tempCanvas = document.createElement('canvas');
     tempCanvas.width = highResSize;
     tempCanvas.height = highResSize;
+
+    // Attach to DOM. Required to fix font rendering in detached canvases
+    tempCanvas.style.position = 'absolute';
+    tempCanvas.style.left = '-9999px';
+    tempCanvas.style.top = '-9999px';
+    document.body.appendChild(tempCanvas);
+
     recordingCanvas = tempCanvas;
     const recordingCtx = tempCanvas.getContext('2d', { alpha: false });
 
@@ -80,6 +87,9 @@ export function exportVideo(durationSeconds = 5, resolution = 2, callbacks = {})
       setCanvas(originalCanvas, originalCtx);
       settings.canvasSize = originalCanvasSize;
       settings.margin = originalMargin;
+
+      // Clean up: remove temporary canvas from DOM
+      document.body.removeChild(tempCanvas);
     }
 
     const blob = new Blob(recordedChunks, { type: mimeType });

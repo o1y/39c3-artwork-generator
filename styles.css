@@ -55,6 +55,14 @@ body {
     url('fonts/Kario39C3VarWEB-Roman.woff') format('woff');
   font-weight: 10 100;
   font-stretch: 50% 200%;
+  font-display: block;  /* Chrome: wait for font before rendering */
+}
+
+/* Force Chrome to properly load variable font */
+canvas {
+  font-smooth: never;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .header {

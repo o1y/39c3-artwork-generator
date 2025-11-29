@@ -8,11 +8,17 @@ export function exportPNG(resolution = 2) {
 
   // Create temporary high-res canvas
   const tempCanvas = document.createElement('canvas');
-  const tempCtx = tempCanvas.getContext('2d', { alpha: false });
   const highResSize = originalSize * resolution;
-
   tempCanvas.width = highResSize;
   tempCanvas.height = highResSize;
+
+  // Attach to DOM. Required to fix font rendering in detached canvases
+  tempCanvas.style.position = 'absolute';
+  tempCanvas.style.left = '-9999px';
+  tempCanvas.style.top = '-9999px';
+  document.body.appendChild(tempCanvas);
+
+  const tempCtx = tempCanvas.getContext('2d', { alpha: false });
 
   // Temporarily scale settings
   const originalCanvasSize = settings.canvasSize;
@@ -43,5 +49,8 @@ export function exportPNG(resolution = 2) {
     link.href = url;
     link.click();
     URL.revokeObjectURL(url);
+
+    // Clean up: remove temporary canvas from DOM
+    document.body.removeChild(tempCanvas);
   }, 'image/png');
 }
