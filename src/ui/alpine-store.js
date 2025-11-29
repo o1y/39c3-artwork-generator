@@ -1,7 +1,7 @@
 import { settings, defaultTexts, themePresets } from '../config/settings.js';
 import { exportPNG } from '../export/png.js';
 import { exportSVG } from '../export/svg.js';
-import { exportVideo } from '../export/video.js';
+import { exportVideo } from '../export/video/index.js';
 
 export function createAppStore() {
   return {
@@ -10,6 +10,22 @@ export function createAppStore() {
     exportSectionCollapsed: true,
     isExporting: false,
     exportProgress: 0,
+
+    // Browser detection
+    get isChrome() {
+      return /Chrome/.test(navigator.userAgent) && !/Edg|Firefox/.test(navigator.userAgent);
+    },
+
+    get exportStatusLabel() {
+      if (!this.isExporting) return '';
+      if (this.exportFormat === 'video') {
+        if (this.isChrome) {
+          return 'Rendering (grab a coffee ☕)';
+        }
+        return 'Rendering';
+      }
+      return 'Exporting';
+    },
 
     // Application Settings
     text: settings.text,
@@ -78,7 +94,7 @@ export function createAppStore() {
       if (!this.isExporting) {
         return 'Download';
       }
-      return `Recording... ${this.exportProgress}%`;
+      return `${this.exportStatusLabel}... ${this.exportProgress}%`;
     },
 
     get bodyThemeClass() {
@@ -93,17 +109,7 @@ export function createAppStore() {
       return themeMap[this.colorMode] || 'theme-violet';
     },
 
-    get isChromium() {
-      return /Chrome/.test(navigator.userAgent);
-    },
-
     get availableResolutions() {
-      // Chromium browsers have glyph corruption issues with 2x video export, limit to 1x
-      if (this.exportFormat === 'video' && this.isChromium) {
-        return [
-          { value: '1', label: '1x (1000px)' }
-        ];
-      }
       return [
         { value: '1', label: '1x (1000px)' },
         { value: '2', label: '2x (2000px)' },
@@ -146,13 +152,6 @@ export function createAppStore() {
 
       this.$watch('mode', (value) => {
         settings.mode = value;
-      });
-
-      this.$watch('exportFormat', (value) => {
-        // Reset to 1x resolution when switching to video format in Chromium browsers
-        if (value === 'video' && this.isChromium && this.exportResolution !== '1') {
-          this.exportResolution = '1';
-        }
       });
     },
 

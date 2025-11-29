@@ -12,6 +12,7 @@ let lastFrameTime = performance.now();
 let frameCount = 0;
 let lastFPSUpdate = performance.now();
 let fps = 30;
+let isPaused = false;
 
 function render() {
   const canvas = getCanvas();
@@ -34,7 +35,7 @@ export function animate() {
   const elapsed = now - lastFrameTime;
 
   // Throttle to target FPS
-  if (elapsed >= frameInterval) {
+  if (!isPaused && elapsed >= frameInterval) {
     settings.time += 0.0333; // ~30fps time increment
     render();
     lastFrameTime = now - (elapsed % frameInterval);
@@ -50,6 +51,15 @@ export function animate() {
   }
 
   requestAnimationFrame(animate);
+}
+
+export function pauseAnimation() {
+  isPaused = true;
+}
+
+export function resumeAnimation() {
+  isPaused = false;
+  lastFrameTime = performance.now();
 }
 
 // Export render function for use in export functionality
