@@ -16,7 +16,6 @@ export function createAppStore() {
     theme: settings.theme,
     colorMode: settings.colorMode,
     numLines: settings.numLines,
-    widthValue: settings.widthValue,
     animationSpeed: settings.animationSpeed,
     mode: settings.mode,
     exportFormat: 'png',
@@ -73,10 +72,6 @@ export function createAppStore() {
 
     get linesDisplay() {
       return this.numLines.toString();
-    },
-
-    get widthDisplay() {
-      return this.widthValue.toString();
     },
 
     get downloadButtonText() {
@@ -143,10 +138,6 @@ export function createAppStore() {
 
       this.$watch('numLines', (value) => {
         settings.numLines = value;
-      });
-
-      this.$watch('widthValue', (value) => {
-        settings.widthValue = value;
       });
 
       this.$watch('animationSpeed', (value) => {

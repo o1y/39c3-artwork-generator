@@ -51,7 +51,6 @@ export const themePresets = {
     },
     controls: {
       showLines: false,
-      showWidth: true,
       showMode: false,
     },
   },
@@ -65,7 +64,6 @@ export const themePresets = {
     },
     controls: {
       showLines: false,
-      showWidth: true,
       showMode: false,
     },
   },

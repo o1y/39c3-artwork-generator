@@ -49,10 +49,6 @@ export function renderToggleTheme(renderer, canvasSize) {
   // Draw text on the right, aligned to center - render each character individually
   let textX = startX + toggleWidth + spacing;
 
-  // Apply width from slider (50-100 range)
-  const baseWidth = 76;
-  const scaleFactor = settings.widthValue / baseWidth;
-
   // Render each character with individual weight animation
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
     const char = text[charIndex];
@@ -65,16 +61,11 @@ export function renderToggleTheme(renderer, canvasSize) {
 
     const color = getColor(charIndex, 0, text.length, settings.time);
 
-    // Scale horizontally to simulate width variation
-    renderer.save();
-    renderer.translate(textX, centerY);
-    renderer.scale(scaleFactor, 1);
-    renderer.drawText(char, 0, 0, textSize, weight, color, { baseline: 'middle' });
-    renderer.restore();
+    renderer.drawText(char, textX, centerY, textSize, weight, color, { baseline: 'middle' });
 
     // Move to next character position
     const charWidth = renderer.measureText(char, textSize, weight);
-    textX += charWidth * scaleFactor;
+    textX += charWidth;
   }
 }
 
