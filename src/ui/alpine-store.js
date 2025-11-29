@@ -7,6 +7,7 @@ export function createAppStore() {
   return {
     // UI State
     isTextDirty: false,
+    isColorModeDirty: false,
     exportSectionCollapsed: true,
     isExporting: false,
     exportProgress: 0,
@@ -142,6 +143,10 @@ export function createAppStore() {
 
       this.$watch('colorMode', (value) => {
         settings.colorMode = value;
+        const preset = themePresets[this.theme];
+        if (preset && preset.colorMode && value !== preset.colorMode) {
+          this.isColorModeDirty = true;
+        }
       });
 
       this.$watch('numLines', (value) => {
@@ -166,10 +171,6 @@ export function createAppStore() {
       }
 
       if (!this.isTextDirty && preset) {
-        if (preset.colorMode) {
-          this.colorMode = preset.colorMode;
-        }
-
         if (preset.numLines) {
           this.numLines = preset.numLines;
         }
@@ -182,6 +183,10 @@ export function createAppStore() {
         if (newTheme !== 'ccc' && this.text === defaultTexts.ccc) {
           this.text = defaultTexts.default;
         }
+      }
+
+      if (!this.isColorModeDirty && preset && preset.colorMode) {
+        this.colorMode = preset.colorMode;
       }
 
       if (!this.isAnimated && this.exportFormat === 'video') {
