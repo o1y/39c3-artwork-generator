@@ -74,14 +74,29 @@ canvas {
 }
 
 .controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 15px;
   align-items: end;
 }
 
 .controls > .control-group:first-child {
-  grid-column: span 2;
+  flex: 0 0 280px;
+}
+
+.controls > .control-group:nth-child(2) {
+  flex: 0 0 180px;
+}
+
+.controls > .control-group:nth-child(3),
+.controls > .control-group:nth-child(4),
+.controls > .control-group:nth-child(5) {
+  flex: 0 0 150px;
+}
+
+.controls > .control-group:nth-child(6) {
+  flex: 1 1 200px;
+  min-width: 180px;
 }
 
 .control-group {
@@ -283,18 +298,14 @@ canvas {
     padding: 15px;
   }
 
-  .controls {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  /* Text input and theme span full width */
-  .controls > .control-group:first-child {
-    grid-column: span 2;
-  }
-
-  .controls > .control-group:nth-child(2) {
-    grid-column: span 2;
+  .controls > .control-group:first-child,
+  .controls > .control-group:nth-child(2),
+  .controls > .control-group:nth-child(3),
+  .controls > .control-group:nth-child(4),
+  .controls > .control-group:nth-child(5),
+  .controls > .control-group:nth-child(6) {
+    flex: 1 1 100%;
+    min-width: 100%;
   }
 
   .header {
