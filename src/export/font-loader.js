@@ -1,4 +1,5 @@
 import { parse } from 'opentype.js';
+import fontUrl from '/fonts/Kario39C3VarWEB-Roman.woff?url';
 
 let font = null;
 let fontLoaded = false;
@@ -20,7 +21,7 @@ export async function loadFont() {
   loadPromise = (async () => {
     try {
       // Load the woff font file (opentype.js doesn't support woff2)
-      const response = await fetch('/fonts/Kario39C3VarWEB-Roman.woff');
+      const response = await fetch(fontUrl);
       const arrayBuffer = await response.arrayBuffer();
       font = parse(arrayBuffer);
       fontLoaded = true;
