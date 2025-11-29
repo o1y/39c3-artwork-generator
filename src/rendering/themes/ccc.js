@@ -1,43 +1,42 @@
-import { settings } from '../config/settings.js';
-import { getBackgroundColor, getColor } from './colors.js';
-import { getContext } from './canvas.js';
-
-function setFont(weight, size) {
-  const ctx = getContext();
-  ctx.font = `${weight} ${size}px Kario39C3`;
-}
+import { settings } from '../../config/settings.js';
+import { getBackgroundColor, getColor } from '../colors.js';
 
 function getLogicalLength(text) {
   let length = 0;
   for (let i = 0; i < text.length; i++) {
     const charCode = text.charCodeAt(i);
-    // Check if it's the PUA character U+E002 (39C3 Logo)
+    // 39C3 logo glyph
     if (charCode === 0xe002) {
       length += 5;
-    } else {
+    }
+    // CCC logo glyphs (bold and thin)
+    else if (charCode === 0xe003 || charCode === 0xe004) {
+      length += 5; // CCC logos are about 5 characters wide
+    }
+    else {
       length += 1;
     }
   }
   return length;
 }
 
-function measurePatternWidth(parts, fixedTextUpper, userText, fontSize) {
-  const ctx = getContext();
+function measurePatternWidth(renderer, parts, fixedTextUpper, userText, fontSize, avgWeight) {
   let totalWidth = 0;
 
   for (let i = 0; i < parts; i++) {
-    const fixedMetrics = ctx.measureText(fixedTextUpper);
+    const fixedWidth = renderer.measureText(fixedTextUpper, fontSize, avgWeight);
     let userWidth = 0;
     for (let j = 0; j < userText.length; j++) {
-      userWidth += ctx.measureText(userText[j]).width;
+      userWidth += renderer.measureText(userText[j], fontSize, avgWeight);
     }
-    totalWidth += fixedMetrics.width + userWidth;
+    totalWidth += fixedWidth + userWidth;
   }
 
   return totalWidth;
 }
 
 function drawCCC(
+  renderer,
   fixedText,
   fixedTextUpper,
   x,
@@ -48,22 +47,19 @@ function drawCCC(
   lineIndex,
   globalCharIndex
 ) {
-  const ctx = getContext();
+  const color = getColor(globalCharIndex, lineIndex, settings.text.length, settings.time);
+  renderer.drawText(fixedText, x, y, finalFontSize, cccWeight, color, { baseline: 'top' });
 
-  setFont(cccWeight, finalFontSize);
-  ctx.fillStyle = getColor(globalCharIndex, lineIndex, settings.text.length, settings.time);
-  ctx.fillText(fixedText, x, y);
-
-  setFont(avgWeight, finalFontSize);
-  const fixedMetrics = ctx.measureText(fixedTextUpper);
+  const fixedWidth = renderer.measureText(fixedTextUpper, finalFontSize, avgWeight);
 
   return {
-    width: fixedMetrics.width,
+    width: fixedWidth,
     charCount: fixedText.length,
   };
 }
 
 function drawUserText(
+  renderer,
   userText,
   x,
   y,
@@ -73,28 +69,21 @@ function drawUserText(
   lineIndex,
   globalCharIndex
 ) {
-  const ctx = getContext();
   let currentX = x;
   let charCount = 0;
 
-  setFont(breatheWeight, finalFontSize);
-
   for (let charIndex = 0; charIndex < userText.length; charIndex++) {
     const char = userText[charIndex];
-    ctx.fillStyle = getColor(
+    const color = getColor(
       globalCharIndex + charIndex,
       lineIndex,
       userText.length,
       settings.time
     );
-    ctx.fillText(char, currentX, y);
+    renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, { baseline: 'top' });
 
-    setFont(avgWeight, finalFontSize);
-    const metrics = ctx.measureText(char);
-    currentX += metrics.width;
-
-    // Restore breathe weight for next character
-    setFont(breatheWeight, finalFontSize);
+    const charWidth = renderer.measureText(char, finalFontSize, avgWeight);
+    currentX += charWidth;
     charCount++;
   }
 
@@ -104,25 +93,23 @@ function drawUserText(
   };
 }
 
-// Render CCC theme: <<CCC + UserInput + <<CCC + UserInput...
-// <<CCC animates with font weight (wave), UserInput breathes (weight)
-export function renderCCCTheme(canvas) {
-  const ctx = getContext();
-
-  ctx.fillStyle = getBackgroundColor();
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+/**
+ * Render CCC Theme
+ * Works with any renderer (Canvas or SVG)
+ */
+export function renderCCCTheme(renderer, canvasSize) {
+  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
   if (!userText) return;
 
-  const fixedTextUpper = '<<CCC'; // Uppercase variant
-  const fixedTextLower = '<<ccc'; // Lowercase variant
+  const fixedTextUpper = '\uE003'; // Bold CCC logo
+  const fixedTextLower = '\uE004'; // Thin CCC logo
   const testSize = 1000;
 
   // Dynamically calculate pattern repetitions based on text length
-  // Each pattern unit consists of: fixedText + userText (use uppercase for measurement)
-  const patternUnitLength = fixedTextUpper.length + getLogicalLength(userText);
-  const targetTotalChars = 36; // Target total characters per line for good readability
+  const patternUnitLength = getLogicalLength(fixedTextUpper) + getLogicalLength(userText);
+  const targetTotalChars = 36;
   const calculatedParts = Math.floor(targetTotalChars / patternUnitLength);
 
   // Clamp between min and max for reasonable bounds
@@ -132,8 +119,7 @@ export function renderCCCTheme(canvas) {
 
   // Measure max line width using average weight
   const avgWeight = (settings.minWeight + settings.maxWeight) / 2;
-  setFont(avgWeight, testSize);
-  const maxLineWidth = measurePatternWidth(parts, fixedTextUpper, userText, testSize);
+  const maxLineWidth = measurePatternWidth(renderer, parts, fixedTextUpper, userText, testSize, avgWeight);
 
   const maxTextHeight = testSize + (settings.numLines - 1) * testSize * settings.lineSpacingFactor;
   const usableWidth = settings.canvasSize - 2 * settings.margin;
@@ -147,19 +133,16 @@ export function renderCCCTheme(canvas) {
   const topY = (settings.canvasSize - textBlockHeight) / 2 + settings.verticalOffset;
   const startY = topY + (settings.numLines - 1) * lineSpacing;
 
-  ctx.textBaseline = 'top';
-
   for (let lineIndex = 0; lineIndex < settings.numLines; lineIndex++) {
     const y = startY - lineIndex * lineSpacing;
 
     // Measure line width with average weight (fixed spacing)
-    setFont(avgWeight, finalFontSize);
-    const lineWidth = measurePatternWidth(parts, fixedTextUpper, userText, finalFontSize);
+    const lineWidth = measurePatternWidth(renderer, parts, fixedTextUpper, userText, finalFontSize, avgWeight);
 
     // Center the line
     let x = (settings.canvasSize - lineWidth) / 2;
 
-    const cccSpeed = 1.0; // Fixed animation speed for CCC
+    const cccSpeed = 1.0;
     const tCCC = settings.time * cccSpeed;
 
     // Wave animation for <<CCC (cycles through full weight range)
@@ -176,7 +159,6 @@ export function renderCCCTheme(canvas) {
     let globalCharIndex = 0;
 
     // Determine starting element based on line index
-    // Even lines start with <<CCC, odd lines start with user text
     const startWithCCC = lineIndex % 2 === 0;
 
     // Draw the pattern
@@ -187,6 +169,7 @@ export function renderCCCTheme(canvas) {
       if (startWithCCC) {
         // Draw <<CCC/<<ccc first, then user text
         const cccResult = drawCCC(
+          renderer,
           fixedText,
           fixedTextUpper,
           x,
@@ -201,6 +184,7 @@ export function renderCCCTheme(canvas) {
         globalCharIndex += cccResult.charCount;
 
         const userResult = drawUserText(
+          renderer,
           userText,
           x,
           y,
@@ -215,6 +199,7 @@ export function renderCCCTheme(canvas) {
       } else {
         // Draw user text first, then <<CCC/<<ccc
         const userResult = drawUserText(
+          renderer,
           userText,
           x,
           y,
@@ -228,6 +213,7 @@ export function renderCCCTheme(canvas) {
         globalCharIndex += userResult.charCount;
 
         const cccResult = drawCCC(
+          renderer,
           fixedText,
           fixedTextUpper,
           x,

@@ -1,9 +1,10 @@
 import { settings } from '../config/settings.js';
-import { renderToggleTheme } from '../rendering/toggle.js';
-import { renderToggle39C3Theme } from '../rendering/toggle39c3.js';
-import { renderLinesTheme } from '../rendering/lines.js';
-import { renderCCCTheme } from '../rendering/ccc.js';
-import { getCanvas } from '../rendering/canvas.js';
+import { renderToggleTheme } from '../rendering/themes/toggle.js';
+import { renderToggle39C3Theme } from '../rendering/themes/toggle39c3.js';
+import { renderLinesTheme } from '../rendering/themes/lines.js';
+import { renderCCCTheme } from '../rendering/themes/ccc.js';
+import { getCanvas, getContext } from '../rendering/canvas.js';
+import { CanvasRenderer } from '../rendering/core/canvas-renderer.js';
 
 const targetFPS = 30;
 const frameInterval = 1000 / targetFPS;
@@ -14,15 +15,17 @@ let fps = 30;
 
 function render() {
   const canvas = getCanvas();
+  const ctx = getContext();
+  const renderer = new CanvasRenderer(ctx);
 
-  if (settings.theme === 'toggle') {
-    renderToggleTheme(canvas);
-  } else if (settings.theme === 'toggle39c3Animated' || settings.theme === 'toggle39c3Static') {
-    renderToggle39C3Theme(canvas);
+  if (settings.theme.startsWith('toggle39c3')) {
+    renderToggle39C3Theme(renderer, canvas.width);
+  } else if (settings.theme.startsWith('toggle')) {
+    renderToggleTheme(renderer, canvas.width);
   } else if (settings.theme === 'ccc') {
-    renderCCCTheme(canvas);
+    renderCCCTheme(renderer, canvas.width);
   } else {
-    renderLinesTheme(canvas);
+    renderLinesTheme(renderer, canvas.width);
   }
 }
 

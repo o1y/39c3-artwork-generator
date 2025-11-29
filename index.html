@@ -21,10 +21,13 @@
         <div class="control-group">
           <label>Theme</label>
           <select x-model="theme">
-            <option value="lines">Lines</option>
-            <option value="toggle">Toggle</option>
-            <option value="toggle39c3Animated">39C3 Toggle Animated</option>
-            <option value="toggle39c3Static">39C3 Toggle Static</option>
+            <option value="lines">Nerdy Lines</option>
+            <option value="toggleFilled">Toggle (Filled)</option>
+            <option value="toggleOutlined">Toggle (Outlined)</option>
+            <option value="toggle39c3AnimatedFilled">39C3 Toggle Animated (Filled)</option>
+            <option value="toggle39c3AnimatedOutlined">39C3 Toggle Animated (Outlined)</option>
+            <option value="toggle39c3StaticFilled">39C3 Toggle Static (Filled)</option>
+            <option value="toggle39c3StaticOutlined">39C3 Toggle Static (Outlined)</option>
             <option value="ccc">CCC</option>
           </select>
         </div>
@@ -103,10 +106,11 @@
           <label>Format</label>
           <select x-model="exportFormat">
             <option value="png">PNG Image (current frame)</option>
+            <option value="svg">SVG Vector (current frame)</option>
             <option value="video" :disabled="videoExportDisabled">Video (WebM)</option>
           </select>
         </div>
-        <div class="control-group">
+        <div class="control-group" x-show="showResolutionControl" x-cloak>
           <label>Resolution</label>
           <select x-model="exportResolution">
             <template x-for="res in availableResolutions" :key="res.value">

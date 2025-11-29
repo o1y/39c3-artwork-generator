@@ -16,7 +16,7 @@ export const settings = {
   animationSpeed: 1.5,
   mode: 'wave',
   colorMode: 'violet-inv',
-  theme: 'lines', // 'lines', 'toggle', 'toggle39c3Animated', 'toggle39c3Static', or 'ccc'
+  theme: 'lines', // 'lines', 'toggleFilled', 'toggleOutlined', 'toggle39c3AnimatedFilled', 'toggle39c3AnimatedOutlined', 'toggle39c3StaticFilled', 'toggle39c3StaticOutlined', or 'ccc'
   time: 0,
   // Theme capabilities - controls which UI elements and features are available
   capabilities: {
@@ -41,9 +41,10 @@ export const themePresets = {
       showMode: true,
     },
   },
-  toggle: {
+  toggleFilled: {
     colorMode: 'mono',
     text: defaultTexts.default,
+    pillStyle: 'filled',
     capabilities: {
       animated: true,
       variableWeight: true,
@@ -54,9 +55,24 @@ export const themePresets = {
       showMode: false,
     },
   },
-  toggle39c3Animated: {
+  toggleOutlined: {
+    colorMode: 'mono',
+    text: defaultTexts.default,
+    pillStyle: 'outlined',
+    capabilities: {
+      animated: true,
+      variableWeight: true,
+    },
+    controls: {
+      showLines: false,
+      showWidth: true,
+      showMode: false,
+    },
+  },
+  toggle39c3AnimatedFilled: {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
+    pillStyle: 'filled',
     capabilities: {
       animated: true,
       variableWeight: false,
@@ -67,10 +83,40 @@ export const themePresets = {
       showMode: false,
     },
   },
-  toggle39c3Static: {
+  toggle39c3AnimatedOutlined: {
+    colorMode: 'mono-inv',
+    text: 'POWER CYCLES',
+    pillStyle: 'outlined',
+    capabilities: {
+      animated: true,
+      variableWeight: false,
+    },
+    controls: {
+      showLines: false,
+      showWidth: false,
+      showMode: false,
+    },
+  },
+  toggle39c3StaticFilled: {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     staticWeight: 80,
+    pillStyle: 'filled',
+    capabilities: {
+      animated: false,
+      variableWeight: false,
+    },
+    controls: {
+      showLines: false,
+      showWidth: false,
+      showMode: false,
+    },
+  },
+  toggle39c3StaticOutlined: {
+    colorMode: 'mono-inv',
+    text: 'POWER CYCLES',
+    staticWeight: 80,
+    pillStyle: 'outlined',
     capabilities: {
       animated: false,
       variableWeight: false,

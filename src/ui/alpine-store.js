@@ -1,5 +1,6 @@
 import { settings, defaultTexts, themePresets } from '../config/settings.js';
 import { exportPNG } from '../export/png.js';
+import { exportSVG } from '../export/svg.js';
 import { exportVideo } from '../export/video.js';
 
 export function createAppStore() {
@@ -56,6 +57,10 @@ export function createAppStore() {
 
     get showDurationControl() {
       return this.exportFormat === 'video';
+    },
+
+    get showResolutionControl() {
+      return this.exportFormat !== 'svg';
     },
 
     get videoExportDisabled() {
@@ -202,6 +207,8 @@ export function createAppStore() {
 
       if (this.exportFormat === 'png') {
         exportPNG(resolution);
+      } else if (this.exportFormat === 'svg') {
+        exportSVG();
       } else if (this.exportFormat === 'video') {
         const callbacks = {
           onStart: () => {

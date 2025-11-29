@@ -1,14 +1,14 @@
-import { settings } from '../config/settings.js';
-import { getBackgroundColor, getColor } from './colors.js';
-import { getLineWidth, calculateWeight } from './weight.js';
-import { getContext } from './canvas.js';
+import { settings } from '../../config/settings.js';
+import { getBackgroundColor, getColor } from '../colors.js';
+import { calculateWeight } from '../weight.js';
 
-export function renderLinesTheme(canvas) {
-  const ctx = getContext();
-
+/**
+ * Render Lines Theme
+ * Works with any renderer (Canvas or SVG)
+ */
+export function renderLinesTheme(renderer, canvasSize) {
   // Clear canvas with appropriate background color
-  ctx.fillStyle = getBackgroundColor();
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
 
   const text = settings.text;
   if (!text) return;
@@ -18,7 +18,7 @@ export function renderLinesTheme(canvas) {
   // Find max width across all lines
   let maxTextWidth = 0;
   for (let i = 0; i < settings.numLines; i++) {
-    const width = getLineWidth(text, testSize, i, settings.time);
+    const width = getLineWidth(renderer, text, testSize, i, settings.time);
     maxTextWidth = Math.max(maxTextWidth, width);
   }
 
@@ -36,14 +36,11 @@ export function renderLinesTheme(canvas) {
 
   const midIndex = (text.length - 1) / 2;
 
-  // Draw text
-  ctx.textBaseline = 'top';
-
   for (let lineIndex = 0; lineIndex < settings.numLines; lineIndex++) {
     const y = startY - lineIndex * lineSpacing;
 
     // Center each line
-    const lineWidth = getLineWidth(text, finalFontSize, lineIndex, settings.time);
+    const lineWidth = getLineWidth(renderer, text, finalFontSize, lineIndex, settings.time);
     let x = (settings.canvasSize - lineWidth) / 2;
 
     const startWeight =
@@ -55,7 +52,7 @@ export function renderLinesTheme(canvas) {
 
     for (let charIndex = 0; charIndex < text.length; charIndex++) {
       const char = text[charIndex];
-      let weight = calculateWeight(
+      const weight = calculateWeight(
         charIndex,
         lineIndex,
         startWeight,
@@ -65,15 +62,38 @@ export function renderLinesTheme(canvas) {
         settings.time
       );
 
-      // Set font with variable weight directly in font string
-      ctx.font = `${weight} ${finalFontSize}px Kario39C3`;
+      const color = getColor(charIndex, lineIndex, text.length, settings.time);
+      renderer.drawText(char, x, y, finalFontSize, weight, color, { baseline: 'top' });
 
-      // Draw normal character
-      ctx.fillStyle = getColor(charIndex, lineIndex, text.length, settings.time);
-      ctx.fillText(char, x, y);
-
-      const metrics = ctx.measureText(char);
-      x += metrics.width;
+      const charWidth = renderer.measureText(char, finalFontSize, weight);
+      x += charWidth;
     }
   }
+}
+
+// Helper function to measure line width
+function getLineWidth(renderer, text, size, lineIndex, timeOffset = 0) {
+  let total = 0;
+  const midIndex = (text.length - 1) / 2;
+  const startWeight =
+    settings.maxWeight -
+    ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
+  const endWeight =
+    settings.minWeight +
+    ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
+
+  for (let charIndex = 0; charIndex < text.length; charIndex++) {
+    const weight = calculateWeight(
+      charIndex,
+      lineIndex,
+      startWeight,
+      endWeight,
+      midIndex,
+      text.length,
+      timeOffset
+    );
+
+    total += renderer.measureText(text[charIndex], size, weight);
+  }
+  return total;
 }
