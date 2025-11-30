@@ -2,6 +2,7 @@ import { settings, defaultTexts, themePresets } from '../config/settings.js';
 import { exportPNG } from '../export/png.js';
 import { exportSVG } from '../export/svg.js';
 import { exportVideo } from '../export/video/index.js';
+import { pauseAnimation, resumeAnimation, setFramePosition, getIsPaused, render } from '../animation/loop.js';
 
 export function createAppStore() {
   return {
@@ -11,6 +12,8 @@ export function createAppStore() {
     exportSectionCollapsed: true,
     isExporting: false,
     exportProgress: 0,
+    isPaused: false,
+    framePosition: 0,
 
     // Browser detection
     get isChrome() {
@@ -69,6 +72,31 @@ export function createAppStore() {
 
     get showModeControl() {
       return this.controls.showMode;
+    },
+
+    get showAnimationControls() {
+      return this.isAnimated;
+    },
+
+    get playPauseLabel() {
+      return this.isPaused ? 'Play' : 'Pause';
+    },
+
+    get currentFrameNumber() {
+      // 30 FPS, 10 second cycle = 300 total frames per cycle
+      const fps = 30;
+      const totalFrames = 300;
+      const frameNumber = Math.floor(this.framePosition * fps) % totalFrames;
+      return frameNumber;
+    },
+
+    get frameDisplay() {
+      return `Frame ${this.currentFrameNumber}/300`;
+    },
+
+    get framePercentDisplay() {
+      const percent = Math.round((this.currentFrameNumber / 300) * 100);
+      return percent + '%';
     },
 
     get showDurationControl() {
@@ -135,10 +163,12 @@ export function createAppStore() {
           });
         }
         settings.text = upperValue;
+        if (this.isPaused) render();
       });
 
       this.$watch('theme', (value) => {
         this.onThemeChange(value);
+        if (this.isPaused) render();
       });
 
       this.$watch('colorMode', (value) => {
@@ -147,19 +177,38 @@ export function createAppStore() {
         if (preset && preset.colorMode && value !== preset.colorMode) {
           this.isColorModeDirty = true;
         }
+        if (this.isPaused) render();
       });
 
       this.$watch('numLines', (value) => {
         settings.numLines = value;
+        if (this.isPaused) render();
       });
 
       this.$watch('animationSpeed', (value) => {
         settings.animationSpeed = value;
+        if (this.isPaused) render();
       });
 
       this.$watch('mode', (value) => {
         settings.mode = value;
+        if (this.isPaused) render();
       });
+
+      this.$watch('framePosition', (value) => {
+        if (this.isPaused) {
+          setFramePosition(value);
+        }
+      });
+
+      const updateFramePosition = () => {
+        if (!this.isPaused) {
+          this.framePosition = settings.time % 10;
+        }
+        this.isPaused = getIsPaused();
+        requestAnimationFrame(updateFramePosition);
+      };
+      requestAnimationFrame(updateFramePosition);
     },
 
     onThemeChange(newTheme) {
@@ -196,6 +245,23 @@ export function createAppStore() {
 
     toggleExportSection() {
       this.exportSectionCollapsed = !this.exportSectionCollapsed;
+    },
+
+    togglePlayPause() {
+      if (this.isPaused) {
+        resumeAnimation();
+        this.isPaused = false;
+      } else {
+        pauseAnimation();
+        this.isPaused = true;
+      }
+    },
+
+    onFrameSliderInput() {
+      if (!this.isPaused) {
+        pauseAnimation();
+        this.isPaused = true;
+      }
     },
 
     handleDownload() {

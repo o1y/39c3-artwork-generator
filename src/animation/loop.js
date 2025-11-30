@@ -13,6 +13,7 @@ let frameCount = 0;
 let lastFPSUpdate = performance.now();
 let fps = 30;
 let isPaused = false;
+let manualFrameControl = false;
 
 function render() {
   const canvas = getCanvas();
@@ -55,11 +56,24 @@ export function animate() {
 
 export function pauseAnimation() {
   isPaused = true;
+  manualFrameControl = true;
 }
 
 export function resumeAnimation() {
   isPaused = false;
+  manualFrameControl = false;
   lastFrameTime = performance.now();
+}
+
+export function getIsPaused() {
+  return isPaused;
+}
+
+export function setFramePosition(time) {
+  settings.time = time;
+  if (isPaused) {
+    render();
+  }
 }
 
 // Export render function for use in export functionality

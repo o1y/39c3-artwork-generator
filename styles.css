@@ -95,6 +95,12 @@ canvas {
 }
 
 .controls > .control-group:nth-child(6) {
+  flex: 1 1 220px;
+  min-width: 220px;
+  order: 999;
+}
+
+.controls > .control-group:nth-child(7) {
   flex: 1 1 200px;
   min-width: 180px;
 }
@@ -466,4 +472,65 @@ canvas {
 
 .footer a:hover {
   opacity: 0.5;
+}
+
+/* Animation Controls */
+.animation-controls .animation-controls-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.frame-slider-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.animation-controls .frame-slider {
+  width: 100%;
+  height: 4px;
+}
+
+.play-pause-btn {
+  background: var(--accent-color);
+  color: var(--accent-contrast);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 70px;
+  text-align: center;
+}
+
+.play-pause-btn:hover {
+  background: var(--accent-color-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--accent-shadow-color);
+}
+
+.play-pause-btn:active {
+  transform: translateY(0);
+}
+
+.frame-display-row {
+  display: flex;
+  justify-content: center;
+}
+
+.frame-number {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-color);
+  opacity: 0.8;
 }
