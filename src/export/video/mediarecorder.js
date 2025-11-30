@@ -1,25 +1,23 @@
 import { settings } from '../../config/settings.js';
 import { getCanvas, getContext, setCanvas } from '../../rendering/canvas.js';
 import { generateFilename } from '../filename.js';
-import { render, pauseAnimation, resumeAnimation } from '../../animation/loop.js';
 
 let mediaRecorder = null;
 let recordedChunks = [];
 
 export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, callbacks = {}) {
-  pauseAnimation();
+  const duration = durationSeconds * 1000;
 
   if (callbacks.onStart) {
     callbacks.onStart();
   }
 
+  let recordingCanvas = getCanvas();
   const originalCanvas = getCanvas();
   const originalCtx = getContext();
+  let tempCanvas = null;
   const originalCanvasSize = settings.canvasSize;
   const originalMargin = settings.margin;
-
-  let recordingCanvas = originalCanvas;
-  let tempCanvas = null;
 
   if (resolution > 1) {
     const highResSize = settings.canvasSize * resolution;
@@ -29,6 +27,7 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
 
     tempCanvas.style.position = 'absolute';
     tempCanvas.style.left = '-9999px';
+    tempCanvas.style.top = '-9999px';
     document.body.appendChild(tempCanvas);
 
     recordingCanvas = tempCanvas;
@@ -40,11 +39,17 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
     setCanvas(tempCanvas, recordingCtx);
   }
 
-  const targetFPS = 30;
-  const stream = recordingCanvas.captureStream(targetFPS);
+  const stream = recordingCanvas.captureStream(60);
   recordedChunks = [];
 
-  const codecs = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  const codecs = [
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm;codecs=h264',
+    'video/webm',
+    'video/mp4',
+  ];
+
   let mimeType = 'video/webm';
   for (const codec of codecs) {
     if (MediaRecorder.isTypeSupported(codec)) {
@@ -77,12 +82,12 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
       document.body.removeChild(tempCanvas);
     }
 
-    resumeAnimation();
-
     const blob = new Blob(recordedChunks, { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.download = generateFilename('webm');
+
+    const extension = mimeType.includes('mp4') ? 'mp4' : 'webm';
+    link.download = generateFilename(extension);
     link.href = url;
     link.click();
     URL.revokeObjectURL(url);
@@ -93,32 +98,26 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
     recordedChunks = [];
   };
 
-  mediaRecorder.start(100);
+  mediaRecorder.start();
 
-  const timeIncrement = 1 / targetFPS;
-  let startTime = performance.now();
+  let elapsed = 0;
+  const progressInterval = setInterval(() => {
+    elapsed += 100;
+    const percentage = Math.min(100, (elapsed / duration) * 100);
 
-  function renderLoop() {
-    const now = performance.now();
-    const elapsed = now - startTime;
-
-    if (elapsed >= durationSeconds * 1000) {
-      if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-      }
-      return;
-    }
-
-    settings.time += timeIncrement;
-    render();
-
-    const percentage = Math.min(100, Math.floor((elapsed / (durationSeconds * 1000)) * 100));
     if (callbacks.onProgress) {
-      callbacks.onProgress(percentage);
+      callbacks.onProgress(Math.floor(percentage));
     }
 
-    requestAnimationFrame(renderLoop);
-  }
+    if (elapsed >= duration) {
+      clearInterval(progressInterval);
+    }
+  }, 100);
 
-  renderLoop();
+  setTimeout(() => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+      clearInterval(progressInterval);
+    }
+  }, duration);
 }
