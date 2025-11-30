@@ -1,0 +1,119 @@
+@layer utilities {
+  /* Form Controls */
+  .control-base {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    padding: 10px 15px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .control-base:hover {
+    background: var(--accent-surface);
+    border-color: var(--accent-color);
+  }
+
+  .control-base:focus {
+    outline: none;
+    background: var(--accent-surface);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-border-glow);
+  }
+
+  /* Buttons */
+  .btn-base {
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: var(--accent-color);
+    color: var(--accent-contrast);
+    border: none;
+    padding: 10px 20px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-color-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--accent-shadow-color);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    background: var(--glass-bg);
+    color: rgba(250, 245, 245, 0.3);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    padding: 10px 15px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent-surface);
+    border-color: var(--accent-color);
+  }
+
+  /* Transitions */
+  .smooth {
+    transition: all 0.2s;
+  }
+
+  .smooth-transform {
+    transition: transform 0.3s ease;
+  }
+
+  .transition-colors {
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .transition-transform {
+    transition: transform 0.2s;
+  }
+
+  /* Shadow Utilities */
+  .shadow-accent-sm {
+    box-shadow: 0 2px 8px var(--accent-shadow-color);
+  }
+
+  .shadow-accent-md {
+    box-shadow: 0 4px 12px var(--accent-shadow-color);
+  }
+
+  .shadow-accent-glow {
+    box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-glow);
+  }
+
+  .shadow-focus {
+    box-shadow: 0 0 0 2px var(--accent-border-glow);
+  }
+
+  /* Glass Surfaces */
+  .glass-surface {
+    background: var(--glass-bg-subtle);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+  }
+}
