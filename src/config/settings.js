@@ -110,6 +110,21 @@ export const themePresets = {
       showToggleVariant: false,
     },
   },
+  terminal: {
+    colorMode: 'green',
+    numLines: 7,
+    text: 'POWER CYCLES',
+    capabilities: {
+      animated: true,
+      variableWeight: true,
+    },
+    controls: {
+      showLines: true,
+      showWidth: false,
+      showMode: false,
+      showToggleVariant: false,
+    },
+  },
 };
 
 // 39C3 Brand Colors (one color + dark rule)

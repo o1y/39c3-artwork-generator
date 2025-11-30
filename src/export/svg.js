@@ -6,6 +6,7 @@ import { renderLinesTheme } from '../rendering/themes/lines.js';
 import { renderToggleTheme } from '../rendering/themes/toggle.js';
 import { renderToggle39C3Theme } from '../rendering/themes/toggle39c3.js';
 import { renderCCCTheme } from '../rendering/themes/ccc.js';
+import { renderTerminalTheme } from '../rendering/themes/terminal.js';
 
 /**
  * Export current frame as SVG with fonts converted to paths
@@ -38,6 +39,8 @@ export async function exportSVG() {
       renderToggleTheme(renderer, size);
     } else if (settings.theme === 'ccc') {
       renderCCCTheme(renderer, size);
+    } else if (settings.theme === 'terminal') {
+      renderTerminalTheme(renderer, size);
     } else {
       renderLinesTheme(renderer, size);
     }
