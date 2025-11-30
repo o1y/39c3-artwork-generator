@@ -63,30 +63,6 @@
             <option value="bounce">Bounce</option>
           </select>
         </div>
-        <div class="control-group animation-controls" x-show="showAnimationControls" x-cloak>
-          <label>Frame Control</label>
-          <div class="animation-controls-row">
-            <button
-              class="play-pause-btn"
-              @click="togglePlayPause"
-              x-text="playPauseLabel"
-            ></button>
-            <div class="frame-slider-group">
-              <input
-                type="range"
-                min="0"
-                max="10"
-                step="0.01"
-                x-model.number="framePosition"
-                @input="onFrameSliderInput"
-                class="frame-slider"
-              />
-              <div class="frame-display-row">
-                <span class="frame-number" x-text="frameDisplay"></span>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="control-group">
           <label>Color Mode</label>
           <select x-model="colorMode">
@@ -154,18 +130,41 @@
 
     <div class="canvas-container">
       <canvas id="canvas"></canvas>
-      <div class="stats" id="stats">FPS: <span id="fps">0</span></div>
+      <div class="stats" id="stats">
+        FPS: <span id="fps">0</span>
+        <a
+          href="https://github.com/o1y/39c3-artwork-generator"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View source on GitHub
+        </a>
+      </div>
     </div>
 
-    <footer class="footer">
-      <a
-        href="https://github.com/o1y/39c3-artwork-generator"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        View source on GitHub
-      </a>
-    </footer>
+    <div class="playback-controls" x-show="showAnimationControls" x-cloak>
+      <div class="playback-controls-inner">
+        <button
+          class="play-pause-btn"
+          @click="togglePlayPause"
+          x-text="playPauseLabel"
+        ></button>
+        <div class="frame-slider-group">
+          <input
+            type="range"
+            min="0"
+            max="10"
+            step="0.01"
+            x-model.number="framePosition"
+            @input="onFrameSliderInput"
+            class="frame-slider"
+          />
+          <div class="frame-display-row">
+            <span class="frame-number" x-text="frameDisplay"></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="/app.js"></script>
   </body>
