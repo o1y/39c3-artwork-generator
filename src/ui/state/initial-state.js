@@ -1,0 +1,29 @@
+import { settings } from '../../config/settings.js';
+
+export function createInitialState() {
+  return {
+    // View state
+    isTextDirty: false,
+    isColorModeDirty: false,
+    exportSectionCollapsed: true,
+
+    // Settings state
+    text: settings.text,
+    theme: settings.theme,
+    colorMode: settings.colorMode,
+    numLines: settings.numLines,
+    animationSpeed: settings.animationSpeed,
+    mode: settings.mode,
+
+    // Animation state
+    isPaused: false,
+    framePosition: 0,
+
+    // Export state
+    isExporting: false,
+    exportProgress: 0,
+    exportFormat: 'png',
+    exportResolution: '2',
+    exportDuration: '5',
+  };
+}
