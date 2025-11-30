@@ -1,4 +1,4 @@
-import { settings, defaultTexts, themePresets } from '../../config/settings.js';
+import { settings, defaultTexts, themePresets, parseToggleVariant } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 
@@ -82,10 +82,8 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   const row1CenterY = startY + toggleHeight / 2;
   const row1StartX = (settings.canvasSize - firstRowWidth) / 2;
 
-  const toggleX = row1StartX;
-
-  // Determine pill style from settings
-  const pillStyle = settings.toggleVariant;
+  // Determine pill style and position from settings
+  const { position, style } = parseToggleVariant(settings.toggleVariant);
 
   const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2 - 2;
   const pillXOffset = logoSize * 0.0780 - 2;
@@ -93,10 +91,22 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
 
   // For static themes dot on right
   const pillTime = isAnimated ? settings.time : Math.PI / 2;
-  renderer.drawTogglePill(toggleX + pillXOffset, pillY, logoSize, textColor, pillTime, 0, true, pillStyle, bgColor);
+
+  // Position toggle and logo based on variant
+  let toggleX, logoX;
+  if (position === 'left') {
+    // Toggle on the left, logo on the right
+    toggleX = row1StartX;
+    logoX = row1StartX + toggleWidth + pillLogoSpacing;
+  } else {
+    // Logo on the left, toggle on the right
+    logoX = row1StartX;
+    toggleX = row1StartX + logoWidth + pillLogoSpacing;
+  }
+
+  renderer.drawTogglePill(toggleX + pillXOffset, pillY, logoSize, textColor, pillTime, 0, true, style, bgColor);
 
   // Draw logo text
-  const logoX = row1StartX + toggleWidth + pillLogoSpacing;
   renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, { baseline: 'middle' });
 
   // Draw Second Row: User Text with Condensed Feature

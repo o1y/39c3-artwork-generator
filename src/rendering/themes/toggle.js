@@ -1,4 +1,4 @@
-import { settings } from '../../config/settings.js';
+import { settings, parseToggleVariant } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 
@@ -12,7 +12,7 @@ export function renderToggleTheme(renderer, canvasSize) {
   const text = settings.text;
   if (!text) return;
 
-  const pillStyle = settings.toggleVariant;
+  const { position, style } = parseToggleVariant(settings.toggleVariant);
   const textColor = getColor(0, 0, text.length, settings.time);
 
   let textSize = 200;
@@ -38,17 +38,25 @@ export function renderToggleTheme(renderer, canvasSize) {
   // Center horizontally and vertically
   const startX = (settings.canvasSize - totalContentWidth) / 2;
   const centerY = settings.canvasSize / 2;
-
-  // Draw toggle on the left, aligned to baseline (constant speed)
-  const toggleX = startX;
-  const toggleY = centerY - (textSize * PILL_HEIGHT_RATIO) / 2;
   const bgColor = getBackgroundColor();
-  renderer.drawTogglePill(toggleX, toggleY, textSize, textColor, settings.time, 0, true, pillStyle, bgColor);
 
-  // Draw text on the right, aligned to center - render each character individually
-  let textX = startX + toggleWidth + spacing;
+  // Position toggle and text based on variant
+  let toggleX, textX;
+  if (position === 'left') {
+    // Draw toggle on the left, text on the right
+    toggleX = startX;
+    textX = startX + toggleWidth + spacing;
+  } else {
+    // Draw text on the left, toggle on the right
+    textX = startX;
+    toggleX = startX + textWidth + spacing;
+  }
+
+  const toggleY = centerY - (textSize * PILL_HEIGHT_RATIO) / 2;
+  renderer.drawTogglePill(toggleX, toggleY, textSize, textColor, settings.time, 0, true, style, bgColor);
 
   // Render each character with individual weight animation
+  let currentTextX = textX;
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
     const char = text[charIndex];
 
@@ -60,11 +68,11 @@ export function renderToggleTheme(renderer, canvasSize) {
 
     const color = getColor(charIndex, 0, text.length, settings.time);
 
-    renderer.drawText(char, textX, centerY, textSize, weight, color, { baseline: 'middle' });
+    renderer.drawText(char, currentTextX, centerY, textSize, weight, color, { baseline: 'middle' });
 
     // Move to next character position
     const charWidth = renderer.measureText(char, textSize, weight);
-    textX += charWidth;
+    currentTextX += charWidth;
   }
 }
 

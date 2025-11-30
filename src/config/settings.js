@@ -3,6 +3,15 @@ export const defaultTexts = {
   ccc: '\uE002',
 };
 
+// Parse toggleVariant into position and style
+export function parseToggleVariant(variant) {
+  const parts = variant.split('-');
+  return {
+    position: parts[0], // 'left' or 'right'
+    style: parts[1], // 'filled' or 'outlined'
+  };
+}
+
 export const settings = {
   text: defaultTexts.default,
   numLines: 11,
@@ -17,7 +26,7 @@ export const settings = {
   mode: 'wave',
   colorMode: 'violet-inv',
   theme: 'lines', // 'lines', 'toggle', 'toggle39c3Animated', 'toggle39c3Static', or 'ccc'
-  toggleVariant: 'filled', // 'filled' or 'outlined'
+  toggleVariant: 'left-filled', // 'left-filled', 'left-outlined', 'right-filled', or 'right-outlined'
   time: 0,
   // Theme capabilities - controls which UI elements and features are available
   capabilities: {
