@@ -88,18 +88,13 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   // Determine pill style from preset
   const pillStyle = preset && preset.pillStyle ? preset.pillStyle : 'outlined';
 
-  // Use font pill glyph for static themes, animated pill for animated themes
-  if (!isAnimated) {
-    // Use font pill glyph U+E000 (outlined) or U+E001 (filled)
-    const pillChar = pillStyle === 'filled' ? '\uE001' : '\uE000';
-    renderer.drawText(pillChar, toggleX, row1CenterY, logoSize, settings.maxWeight, textColor, { baseline: 'middle' });
-  } else {
-    // Use animated custom pill
-    const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2;
-    const pillXOffset = logoSize * 0.0780;
-    const bgColor = getBackgroundColor();
-    renderer.drawTogglePill(toggleX + pillXOffset, pillY, logoSize, textColor, settings.time, 0, true, pillStyle, bgColor);
-  }
+  const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2 - 2;
+  const pillXOffset = logoSize * 0.0780 - 2;
+  const bgColor = getBackgroundColor();
+
+  // For static themes dot on right
+  const pillTime = isAnimated ? settings.time : Math.PI / 2;
+  renderer.drawTogglePill(toggleX + pillXOffset, pillY, logoSize, textColor, pillTime, 0, true, pillStyle, bgColor);
 
   // Draw logo text
   const logoX = row1StartX + toggleWidth + pillLogoSpacing;
