@@ -41,5 +41,9 @@ export function createControlsComputed() {
     get availableResolutions() {
       return AVAILABLE_RESOLUTIONS;
     },
+
+    get showExportAdvancedToggle() {
+      return this.showResolutionControl || this.showDurationControl;
+    },
   };
 }

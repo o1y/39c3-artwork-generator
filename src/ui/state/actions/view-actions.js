@@ -1,7 +1,10 @@
 export function createViewActions() {
   return {
-    toggleExportSection() {
-      this.exportSectionCollapsed = !this.exportSectionCollapsed;
+    toggleExportAdvanced() {
+      this.exportAdvancedCollapsed = !this.exportAdvancedCollapsed;
+    },
+    toggleMobileHeader() {
+      this.mobileHeaderCollapsed = !this.mobileHeaderCollapsed;
     },
   };
 }

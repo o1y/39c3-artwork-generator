@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body x-data="appStore" :class="bodyThemeClass">
-    <div class="header">
-      <div class="controls">
+    <div class="header" :class="{ 'mobile-collapsed': mobileHeaderCollapsed }">
+      <div class="header-always-visible">
         <div class="control-group">
           <label>Text Input</label>
           <input
@@ -18,6 +18,12 @@
             @input="isTextDirty = true"
           />
         </div>
+        <button class="mobile-header-toggle" @click="toggleMobileHeader">
+          <span class="toggle-icon"></span>
+          <span x-text="mobileHeaderCollapsed ? 'Settings' : 'Hide'"></span>
+        </button>
+      </div>
+      <div class="controls">
         <div class="control-group">
           <label>Theme</label>
           <select x-model="theme">
@@ -77,55 +83,6 @@
           </select>
         </div>
       </div>
-
-      <div class="export-toggle-container">
-        <button
-          class="export-toggle-btn"
-          :class="{ 'active': !exportSectionCollapsed }"
-          @click="toggleExportSection"
-        >
-          <span class="toggle-text">Export Options</span>
-          <span class="toggle-icon"></span>
-        </button>
-      </div>
-
-      <div
-        class="download-section collapsed"
-        :class="{ 'collapsed': exportSectionCollapsed }"
-      >
-        <div class="control-group">
-          <label>Format</label>
-          <select x-model="exportFormat">
-            <option value="png">PNG Image (current frame)</option>
-            <option value="svg">SVG Vector (current frame)</option>
-            <option value="video" :disabled="videoExportDisabled">Video (WebM)</option>
-          </select>
-        </div>
-        <div class="control-group" x-show="showResolutionControl" x-cloak>
-          <label>Resolution</label>
-          <select x-model="exportResolution">
-            <template x-for="res in availableResolutions" :key="res.value">
-              <option :value="res.value" x-text="res.label"></option>
-            </template>
-          </select>
-        </div>
-        <div class="control-group" x-show="showDurationControl" x-cloak>
-          <label>Duration</label>
-          <select x-model="exportDuration">
-            <option value="3">3 seconds</option>
-            <option value="5">5 seconds</option>
-            <option value="10">10 seconds</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <button
-            class="download-btn"
-            @click="handleDownload"
-            :disabled="isExporting"
-            x-text="downloadButtonText"
-          ></button>
-        </div>
-      </div>
     </div>
 
     <div class="canvas-container">
@@ -142,8 +99,9 @@
       </div>
     </div>
 
-    <div class="playback-controls" x-show="showAnimationControls" x-cloak>
-      <div class="playback-controls-inner">
+    <div class="footer-bar">
+      <!-- Animation Controls (Left Side) -->
+      <div class="footer-section footer-animation" x-show="showAnimationControls" x-cloak>
         <button
           class="play-pause-btn"
           @click="togglePlayPause"
@@ -163,6 +121,40 @@
             <span class="frame-number" x-text="frameDisplay"></span>
           </div>
         </div>
+      </div>
+
+      <!-- Export Controls (Right Side) -->
+      <div class="footer-section footer-export">
+        <div class="control-group" x-show="showDurationControl" x-cloak>
+          <label>Duration</label>
+          <select x-model="exportDuration">
+            <option value="3">3 seconds</option>
+            <option value="5">5 seconds</option>
+            <option value="10">10 seconds</option>
+          </select>
+        </div>
+        <div class="control-group" x-show="showResolutionControl" x-cloak>
+          <label>Resolution</label>
+          <select x-model="exportResolution">
+            <template x-for="res in availableResolutions" :key="res.value">
+              <option :value="res.value" x-text="res.label"></option>
+            </template>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Format</label>
+          <select x-model="exportFormat">
+            <option value="png">PNG (frame)</option>
+            <option value="svg">SVG (frame)</option>
+            <option value="video" :disabled="videoExportDisabled">Video (WebM)</option>
+          </select>
+        </div>
+        <button
+          class="export-btn"
+          @click="handleDownload"
+          :disabled="isExporting"
+          x-text="downloadButtonText"
+        ></button>
       </div>
     </div>
 

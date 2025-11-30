@@ -5,7 +5,8 @@ export function createInitialState() {
     // View state
     isTextDirty: false,
     isColorModeDirty: false,
-    exportSectionCollapsed: true,
+    exportAdvancedCollapsed: true,
+    mobileHeaderCollapsed: true,
 
     // Settings state
     text: settings.text,
