@@ -23,6 +23,7 @@
   "homepage": "https://github.com/o1y/39c3-logo-animator#readme",
   "devDependencies": {
     "prettier": "^3.6.2",
+    "rollup-plugin-license": "^3.6.0",
     "vite": "^7.1.12",
     "vite-plugin-compression": "^0.5.1"
   },
