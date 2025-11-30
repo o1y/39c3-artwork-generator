@@ -1,4 +1,4 @@
-import { AVAILABLE_RESOLUTIONS } from '../constants.js';
+import { AVAILABLE_RESOLUTIONS, COLOR_MODE_OPTIONS } from '../constants.js';
 
 export function createControlsComputed() {
   return {
@@ -24,6 +24,16 @@ export function createControlsComputed() {
 
     get showToggleVariantControl() {
       return this.controls.showToggleVariant;
+    },
+
+    get availableColorModes() {
+      const showSmoothColorModes = this.controls.showSmoothColorModes !== false;
+
+      if (showSmoothColorModes) {
+        return COLOR_MODE_OPTIONS;
+      }
+
+      return COLOR_MODE_OPTIONS.filter(option => !option.value.includes('-smooth'));
     },
 
     get showAnimationControls() {

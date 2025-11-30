@@ -77,14 +77,9 @@
         <div class="control-group control-flex">
           <label>Color Mode</label>
           <select x-model="colorMode" class="control-base">
-            <option value="mono">Natural + Dark</option>
-            <option value="mono-inv">Dark + Natural</option>
-            <option value="green">Green + Dark</option>
-            <option value="green-smooth">Green Smooth + Dark</option>
-            <option value="green-inv">Dark + Green</option>
-            <option value="violet">Violet + Dark</option>
-            <option value="violet-smooth">Violet Smooth + Dark</option>
-            <option value="violet-inv">Dark + Violet</option>
+            <template x-for="mode in availableColorModes" :key="mode.value">
+              <option :value="mode.value" x-text="mode.label"></option>
+            </template>
           </select>
         </div>
       </div>

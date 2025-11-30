@@ -83,6 +83,7 @@ export const themePresets = {
       showWidth: false,
       showMode: false,
       showToggleVariant: true,
+      showSmoothColorModes: false,
     },
   },
   ccc: {
