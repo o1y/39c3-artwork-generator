@@ -1,4 +1,5 @@
 import { settings } from '../config/settings.js';
+import { getNormalizedTime } from '../animation/timing.js';
 
 // Reference to canvas context (set externally)
 let ctx = null;
@@ -74,7 +75,7 @@ export function calculateWeight(
 }
 
 export function applyAnimation(weight, charIndex, lineIndex, time) {
-  const t = time * settings.animationSpeed;
+  const t = getNormalizedTime(time);
 
   switch (settings.mode) {
     case 'wave':
@@ -90,7 +91,7 @@ export function applyAnimation(weight, charIndex, lineIndex, time) {
       return weight + rotate;
 
     case 'breathe':
-      const breathe = (Math.sin(t * 0.8) * 0.5 + 0.5) * 30;
+      const breathe = (Math.sin(t) * 0.5 + 0.5) * 30;
       return weight + breathe - 15;
 
     case 'bounce':

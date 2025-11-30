@@ -22,7 +22,7 @@ export const settings = {
   margin: 50,
   lineSpacingFactor: 0.92,
   verticalOffset: 3,
-  animationSpeed: 1.5,
+  animationSpeed: 1.0,
   mode: 'wave',
   colorMode: 'violet-inv',
   theme: 'lines', // 'lines', 'toggle', 'toggle39c3Animated', 'toggle39c3Static', or 'ccc'

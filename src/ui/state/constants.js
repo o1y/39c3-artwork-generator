@@ -1,6 +1,7 @@
 export const ANIMATION_FPS = 30;
-export const ANIMATION_CYCLE_SECONDS = 10;
+export const ANIMATION_CYCLE_SECONDS = 5; // Shorter loop duration
 export const TOTAL_FRAMES = ANIMATION_FPS * ANIMATION_CYCLE_SECONDS;
+export const MAX_EXPORT_FRAMES = 500; // Maximum frames for video export
 
 export const THEME_COLOR_CLASS_MAP = {
   green: 'theme-green',

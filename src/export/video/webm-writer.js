@@ -2,9 +2,11 @@ import WebMWriter from 'webm-writer';
 import { settings } from '../../config/settings.js';
 import { getCanvas, getContext, setCanvas } from '../../rendering/canvas.js';
 import { generateFilename } from '../filename.js';
-import { render, pauseAnimation, resumeAnimation } from '../../animation/loop.js';
+import { render, pauseAnimation, resumeAnimation, getIsPaused } from '../../animation/loop.js';
+import { ANIMATION_FPS, TOTAL_FRAMES } from '../../ui/state/constants.js';
 
-export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2, callbacks = {}) {
+export async function exportVideoWebMWriter(loops = 1, animationSpeed = 1.5, resolution = 2, callbacks = {}) {
+  const wasPaused = getIsPaused();
   pauseAnimation();
 
   if (callbacks.onStart) {
@@ -16,6 +18,11 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
     const originalCtx = getContext();
     const originalCanvasSize = settings.canvasSize;
     const originalMargin = settings.margin;
+    const originalTime = settings.time;
+    const originalAnimationSpeed = settings.animationSpeed;
+
+    settings.time = 0;
+    settings.animationSpeed = animationSpeed;
 
     let renderCanvas = originalCanvas;
     let tempCanvas = null;
@@ -47,7 +54,9 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
       frameDelay: null,
     });
 
-    const totalFrames = durationSeconds * targetFPS;
+    const maxFrames = Math.round(TOTAL_FRAMES / animationSpeed);
+    const actualDuration = (maxFrames * loops) / ANIMATION_FPS;
+    const totalFrames = Math.round(actualDuration * targetFPS);
     const timeIncrement = 1 / targetFPS;
     const batchSize = 5;
 
@@ -78,6 +87,9 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
       document.body.removeChild(tempCanvas);
     }
 
+    settings.time = originalTime;
+    settings.animationSpeed = originalAnimationSpeed;
+
     const blob = await videoWriter.complete();
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -92,7 +104,9 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
   } catch (error) {
     console.error('WebM export error:', error);
   } finally {
-    resumeAnimation();
+    if (!wasPaused) {
+      resumeAnimation();
+    }
 
     if (callbacks.onComplete) {
       callbacks.onComplete();

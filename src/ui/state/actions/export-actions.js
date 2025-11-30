@@ -6,7 +6,7 @@ export function createExportActions() {
   return {
     handleDownload() {
       const resolution = parseInt(this.exportResolution);
-      const duration = parseInt(this.exportDuration);
+      const loops = parseInt(this.exportLoops);
 
       if (this.exportFormat === 'png') {
         exportPNG(resolution);
@@ -26,7 +26,7 @@ export function createExportActions() {
             this.exportProgress = 0;
           },
         };
-        exportVideo(duration, resolution, callbacks);
+        exportVideo(loops, this.animationSpeed, resolution, callbacks);
       }
     },
   };

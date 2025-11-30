@@ -1,4 +1,5 @@
 import { settings, colors } from '../config/settings.js';
+import { getNormalizedTime } from '../animation/timing.js';
 
 function lerpColor(color1, color2, t) {
   t = Math.max(0, Math.min(1, t));
@@ -21,16 +22,26 @@ function lerpColor(color1, color2, t) {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
-function getAnimatedColor(palette, staticIndex, t, charIndex, lineIndex, smooth = false) {
-  const floatIndex = (t * 2 + charIndex * 0.5 + lineIndex * 0.3) % palette.length;
+function getAnimatedColor(palette, staticIndex, normalizedT, charIndex, lineIndex, smooth = false) {
+  // normalizedT is in [0, 1), scale it to cycle through palette
+  // Use a slowdown that maintains perfect looping (integer number of cycles)
+  const slowdownFactor = 0.2; // Target 20% of original speed
+  const cycles = Math.max(1, Math.round(palette.length * slowdownFactor));
+  const multiplier = cycles / palette.length;
+
+  const baseIndex = normalizedT * palette.length * multiplier;
+  const charOffset = (charIndex * 0.5) / palette.length;
+  const lineOffset = (lineIndex * 0.3) / palette.length;
+  const floatIndex = (baseIndex + charOffset + lineOffset) % 1.0;
+  const paletteIndex = floatIndex * palette.length;
 
   if (!smooth) {
-    return palette[Math.floor(floatIndex)];
+    return palette[Math.floor(paletteIndex)];
   }
 
-  const index1 = Math.floor(floatIndex);
+  const index1 = Math.floor(paletteIndex);
   const index2 = (index1 + 1) % palette.length;
-  const fraction = floatIndex - index1;
+  const fraction = paletteIndex - index1;
   return lerpColor(palette[index1], palette[index2], fraction);
 }
 
@@ -50,17 +61,17 @@ export function getBackgroundColor() {
 export function getColor(charIndex, lineIndex, textLength, time) {
   const isAnimated = settings.capabilities && settings.capabilities.animated;
   const effectiveTime = isAnimated ? time : 0;
-  const t = effectiveTime * settings.animationSpeed * 0.5;
+  const normalizedT = getNormalizedTime(effectiveTime) / (2 * Math.PI);
 
   switch (settings.colorMode) {
     case 'green':
       return isAnimated
-        ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex)
+        ? getAnimatedColor(colors.green, 3, normalizedT, charIndex, lineIndex)
         : colors.green[3];
 
     case 'green-smooth':
       return isAnimated
-        ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex, true)
+        ? getAnimatedColor(colors.green, 3, normalizedT, charIndex, lineIndex, true)
         : colors.green[3];
 
     case 'green-inv':
@@ -70,12 +81,12 @@ export function getColor(charIndex, lineIndex, textLength, time) {
 
     case 'violet':
       return isAnimated
-        ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex)
+        ? getAnimatedColor(colors.violet, 2, normalizedT, charIndex, lineIndex)
         : colors.violet[2];
 
     case 'violet-smooth':
       return isAnimated
-        ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex, true)
+        ? getAnimatedColor(colors.violet, 2, normalizedT, charIndex, lineIndex, true)
         : colors.violet[2];
 
     default:

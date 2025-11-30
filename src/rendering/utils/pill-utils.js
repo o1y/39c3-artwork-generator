@@ -1,3 +1,5 @@
+import { getNormalizedTime } from '../../animation/timing.js';
+
 export const PILL_HEIGHT_RATIO = 0.67;
 export const PILL_WIDTH_RATIO = 2.2;
 
@@ -14,9 +16,7 @@ export function calculatePillDimensions(fontSize) {
 
 export function calculateDotPosition(x, width, radius, time, phase, useConstantSpeed, animSpeed) {
   const dotTravel = width - radius * 2;
-  const speed = useConstantSpeed ? 1 : animSpeed;
-  const dotProgress = (Math.sin(time * speed + phase) + 1) / 2;
-  const dotX = x + radius + dotTravel * dotProgress;
-
-  return dotX;
+  const t = getNormalizedTime(time) * (useConstantSpeed ? 1 : animSpeed);
+  const dotProgress = (Math.sin(t + phase) + 1) / 2;
+  return x + radius + dotTravel * dotProgress;
 }

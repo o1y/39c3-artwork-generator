@@ -19,13 +19,13 @@ export function createInitialState() {
 
     // Animation state
     isPaused: false,
-    framePosition: 0,
+    currentFrame: 0,
 
     // Export state
     isExporting: false,
     exportProgress: 0,
     exportFormat: 'png',
     exportResolution: '2',
-    exportDuration: '5',
+    exportLoops: '1',
   };
 }

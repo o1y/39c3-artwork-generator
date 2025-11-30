@@ -1,11 +1,18 @@
 import { settings } from '../../config/settings.js';
 import { getCanvas, getContext, setCanvas } from '../../rendering/canvas.js';
 import { generateFilename } from '../filename.js';
+import { render, pauseAnimation, resumeAnimation, getIsPaused } from '../../animation/loop.js';
+import { ANIMATION_FPS, TOTAL_FRAMES } from '../../ui/state/constants.js';
 
 let mediaRecorder = null;
 let recordedChunks = [];
 
-export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, callbacks = {}) {
+export function exportVideoMediaRecorder(loops = 1, animationSpeed = 1.5, resolution = 2, callbacks = {}) {
+  const wasPaused = getIsPaused();
+  pauseAnimation();
+
+  const maxFrames = Math.round(TOTAL_FRAMES / animationSpeed);
+  const durationSeconds = (maxFrames * loops) / ANIMATION_FPS;
   const duration = durationSeconds * 1000;
 
   if (callbacks.onStart) {
@@ -18,6 +25,11 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
   let tempCanvas = null;
   const originalCanvasSize = settings.canvasSize;
   const originalMargin = settings.margin;
+  const originalTime = settings.time;
+  const originalAnimationSpeed = settings.animationSpeed;
+
+  settings.time = 0;
+  settings.animationSpeed = animationSpeed;
 
   if (resolution > 1) {
     const highResSize = settings.canvasSize * resolution;
@@ -82,6 +94,9 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
       document.body.removeChild(tempCanvas);
     }
 
+    settings.time = originalTime;
+    settings.animationSpeed = originalAnimationSpeed;
+
     const blob = new Blob(recordedChunks, { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -92,6 +107,10 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
     link.click();
     URL.revokeObjectURL(url);
 
+    if (!wasPaused) {
+      resumeAnimation();
+    }
+
     if (callbacks.onComplete) {
       callbacks.onComplete();
     }
@@ -100,24 +119,30 @@ export function exportVideoMediaRecorder(durationSeconds = 5, resolution = 2, ca
 
   mediaRecorder.start();
 
-  let elapsed = 0;
-  const progressInterval = setInterval(() => {
-    elapsed += 100;
-    const percentage = Math.min(100, (elapsed / duration) * 100);
+  let frameIndex = 0;
+  const totalFramesToRender = maxFrames * loops;
+  const timeIncrementPerFrame = 1 / ANIMATION_FPS;
 
-    if (callbacks.onProgress) {
-      callbacks.onProgress(Math.floor(percentage));
-    }
+  function renderNextFrame() {
+    if (frameIndex < totalFramesToRender) {
+      settings.time = frameIndex * timeIncrementPerFrame;
+      render();
+      frameIndex++;
 
-    if (elapsed >= duration) {
-      clearInterval(progressInterval);
-    }
-  }, 100);
+      if (callbacks.onProgress) {
+        const percentage = Math.floor((frameIndex / totalFramesToRender) * 100);
+        callbacks.onProgress(percentage);
+      }
 
-  setTimeout(() => {
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-      mediaRecorder.stop();
-      clearInterval(progressInterval);
+      setTimeout(renderNextFrame, 1000 / 60);
+    } else {
+      setTimeout(() => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+      }, 100);
     }
-  }, duration);
+  }
+
+  renderNextFrame();
 }

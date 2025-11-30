@@ -2,6 +2,12 @@ import { ANIMATION_FPS, TOTAL_FRAMES } from '../constants.js';
 
 export function createDisplayComputed() {
   return {
+    get maxFrames() {
+      // Calculate frames needed for a perfect loop at current animation speed
+      // This ensures that (baseT * animationSpeed) completes exactly 2π radians
+      return Math.round(TOTAL_FRAMES / this.animationSpeed);
+    },
+
     get speedDisplay() {
       return this.animationSpeed.toFixed(1) + 'x';
     },
@@ -11,16 +17,15 @@ export function createDisplayComputed() {
     },
 
     get currentFrameNumber() {
-      const frameNumber = Math.floor(this.framePosition * ANIMATION_FPS) % TOTAL_FRAMES;
-      return frameNumber;
+      return this.currentFrame;
     },
 
     get frameDisplay() {
-      return `Frame ${this.currentFrameNumber}/${TOTAL_FRAMES}`;
+      return `Frame ${this.currentFrameNumber + 1}/${this.maxFrames}`;
     },
 
     get framePercentDisplay() {
-      const percent = Math.round((this.currentFrameNumber / TOTAL_FRAMES) * 100);
+      const percent = Math.round((this.currentFrameNumber / (this.maxFrames - 1)) * 100);
       return percent + '%';
     },
 

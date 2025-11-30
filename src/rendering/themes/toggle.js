@@ -1,6 +1,7 @@
 import { settings, parseToggleVariant } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
+import { getNormalizedTime } from '../../animation/timing.js';
 
 /**
  * Render Toggle Theme
@@ -71,7 +72,7 @@ export function renderToggleTheme(renderer, canvasSize) {
     const char = text[charIndex];
 
     // Each character cycles through full weight range (min to max)
-    const t = settings.time * settings.animationSpeed;
+    const t = getNormalizedTime(settings.time);
     const phase = charIndex * 0.3;
     const cycle = (Math.sin(t + phase) + 1) / 2;
     const weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;
@@ -90,7 +91,7 @@ function measureTextWithAnimation(renderer, text, size) {
   let textWidth = 0;
 
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
-    const t = settings.time * settings.animationSpeed;
+    const t = getNormalizedTime(settings.time);
     const phase = charIndex * 0.3;
     const cycle = (Math.sin(t + phase) + 1) / 2;
     const weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;

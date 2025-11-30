@@ -1,5 +1,6 @@
 import { settings, themePresets } from '../../config/settings.js';
 import { setFramePosition, getIsPaused, render } from '../../animation/loop.js';
+import { ANIMATION_FPS, TOTAL_FRAMES } from './constants.js';
 
 export function setupWatchers(store) {
   store.$watch('text', (value) => {
@@ -39,6 +40,13 @@ export function setupWatchers(store) {
 
   store.$watch('animationSpeed', (value) => {
     settings.animationSpeed = value;
+
+    // Reset exportLoops if current selection is no longer available
+    const availableLoops = store.availableDurations.map((d) => d.value);
+    if (!availableLoops.includes(store.exportLoops)) {
+      store.exportLoops = availableLoops[0];
+    }
+
     if (store.isPaused) render();
   });
 
@@ -47,9 +55,10 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
-  store.$watch('framePosition', (value) => {
+  store.$watch('currentFrame', (value) => {
     if (store.isPaused) {
-      setFramePosition(value);
+      const time = value / ANIMATION_FPS;
+      setFramePosition(time);
     }
   });
 }
@@ -57,7 +66,9 @@ export function setupWatchers(store) {
 export function startFrameUpdateLoop(store) {
   const updateFramePosition = () => {
     if (!store.isPaused) {
-      store.framePosition = settings.time % 10;
+      const maxFrames = store.maxFrames;
+      const frameNumber = Math.floor(settings.time * ANIMATION_FPS) % maxFrames;
+      store.currentFrame = frameNumber;
     }
     store.isPaused = getIsPaused();
     requestAnimationFrame(updateFramePosition);

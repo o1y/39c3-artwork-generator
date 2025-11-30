@@ -1,6 +1,7 @@
 import { settings, defaultTexts, themePresets, parseToggleVariant } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
+import { getNormalizedTime } from '../../animation/timing.js';
 
 function getToggleWidth(fontSize) {
   const height = fontSize * PILL_HEIGHT_RATIO;
@@ -140,7 +141,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     // Determine weight based on animation capability
     let weight;
     if (isAnimated) {
-      const t = settings.time * settings.animationSpeed;
+      const t = getNormalizedTime(settings.time);
       const phase = charIndex * 0.3;
       const cycle = (Math.sin(t + phase) + 1) / 2;
       weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;

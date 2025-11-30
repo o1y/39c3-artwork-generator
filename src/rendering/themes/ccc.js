@@ -1,5 +1,6 @@
 import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
+import { getNormalizedTime } from '../../animation/timing.js';
 
 function getLogicalLength(text) {
   let length = 0;
@@ -150,17 +151,14 @@ export function renderCCCTheme(renderer, canvasSize) {
     // Center the line
     let x = (settings.canvasSize - lineWidth) / 2;
 
-    const cccSpeed = 1.0;
-    const tCCC = settings.time * cccSpeed;
+    const t = getNormalizedTime(settings.time);
 
     // Wave animation for <<CCC (cycles through full weight range)
-    const wave = Math.sin(tCCC);
+    const wave = Math.sin(t);
     const cccWeight =
       settings.minWeight + ((wave + 1) / 2) * (settings.maxWeight - settings.minWeight);
 
-    const tUser = settings.time * settings.animationSpeed;
-
-    const breathe = Math.sin(tUser * 0.8);
+    const breathe = Math.sin(t);
     const breatheWeight =
       settings.minWeight + ((breathe + 1) / 2) * (settings.maxWeight - settings.minWeight);
 

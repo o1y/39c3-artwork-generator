@@ -1,12 +1,12 @@
 import { exportVideoMediaRecorder } from './mediarecorder.js';
 import { exportVideoWebMWriter } from './webm-writer.js';
 
-export function exportVideo(durationSeconds = 5, resolution = 2, callbacks = {}) {
+export function exportVideo(loops = 1, animationSpeed = 1.5, resolution = 2, callbacks = {}) {
   const isChromium = /Chrome/.test(navigator.userAgent);
 
   if (isChromium) {
-    exportVideoWebMWriter(durationSeconds, resolution, callbacks);
+    exportVideoWebMWriter(loops, animationSpeed, resolution, callbacks);
   } else {
-    exportVideoMediaRecorder(durationSeconds, resolution, callbacks);
+    exportVideoMediaRecorder(loops, animationSpeed, resolution, callbacks);
   }
 }
