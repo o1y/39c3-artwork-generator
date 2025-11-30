@@ -159,6 +159,7 @@
           <select x-model="exportFormat" class="control-base">
             <option value="png">PNG (frame)</option>
             <option value="svg">SVG (frame)</option>
+            <option value="gif" :disabled="videoExportDisabled">GIF (animated)</option>
             <option value="video" :disabled="videoExportDisabled">Video (WebM)</option>
           </select>
         </div>

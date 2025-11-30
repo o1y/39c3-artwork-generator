@@ -1,4 +1,4 @@
-import { AVAILABLE_RESOLUTIONS, COLOR_MODE_OPTIONS, MAX_EXPORT_FRAMES, TOTAL_FRAMES } from '../constants.js';
+import { AVAILABLE_RESOLUTIONS, AVAILABLE_GIF_RESOLUTIONS, COLOR_MODE_OPTIONS, MAX_EXPORT_FRAMES, TOTAL_FRAMES } from '../constants.js';
 
 export function createControlsComputed() {
   return {
@@ -41,7 +41,7 @@ export function createControlsComputed() {
     },
 
     get showDurationControl() {
-      return this.exportFormat === 'video';
+      return this.exportFormat === 'video' || this.exportFormat === 'gif';
     },
 
     get showResolutionControl() {
@@ -53,7 +53,7 @@ export function createControlsComputed() {
     },
 
     get availableResolutions() {
-      return AVAILABLE_RESOLUTIONS;
+      return this.exportFormat === 'gif' ? AVAILABLE_GIF_RESOLUTIONS : AVAILABLE_RESOLUTIONS;
     },
 
     get availableDurations() {

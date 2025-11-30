@@ -55,6 +55,15 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('exportFormat', (value) => {
+    // Reset exportResolution if current selection is no longer available
+    const availableResolutions = store.availableResolutions.map((r) => r.value);
+    if (!availableResolutions.includes(store.exportResolution)) {
+      // Default to 1000px for GIF, 2x for others
+      store.exportResolution = value === 'gif' ? '1000' : '2';
+    }
+  });
+
   store.$watch('currentFrame', (value) => {
     if (store.isPaused) {
       const time = value / ANIMATION_FPS;

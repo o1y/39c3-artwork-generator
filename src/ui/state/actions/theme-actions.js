@@ -28,7 +28,7 @@ export function createThemeActions() {
         this.colorMode = preset.colorMode;
       }
 
-      if (!this.isAnimated && this.exportFormat === 'video') {
+      if (!this.isAnimated && (this.exportFormat === 'video' || this.exportFormat === 'gif')) {
         this.exportFormat = 'png';
       }
     },

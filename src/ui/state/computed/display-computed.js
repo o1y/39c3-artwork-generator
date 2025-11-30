@@ -37,8 +37,11 @@ export function createDisplayComputed() {
       if (!this.isExporting) return '';
       if (this.exportFormat === 'video') {
         if (this.isChrome) {
-          return 'Rendering (grab a coffee ☕)';
+          return 'Rendering (grab a Tschunk 🍹)';
         }
+        return 'Rendering';
+      }
+      if (this.exportFormat === 'gif') {
         return 'Rendering';
       }
       return 'Exporting';

@@ -30,3 +30,9 @@ export const AVAILABLE_RESOLUTIONS = [
   { value: '2', label: '2x (2000px)' },
   { value: '4', label: '4x (4000px)' },
 ];
+
+export const AVAILABLE_GIF_RESOLUTIONS = [
+  { value: '500', label: '500px' },
+  { value: '1000', label: '1000px' },
+  { value: '2000', label: '2000px' },
+];

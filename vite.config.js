@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 import license from 'rollup-plugin-license';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
   build: {
@@ -43,6 +44,15 @@ export default defineConfig({
   },
 
   plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/gif.js/dist/gif.worker.js',
+          dest: '',
+        },
+      ],
+      structured: false,
+    }),
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
