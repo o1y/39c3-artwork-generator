@@ -11,6 +11,7 @@ export function createInitialState() {
     // Settings state
     text: settings.text,
     theme: settings.theme,
+    toggleVariant: settings.toggleVariant,
     colorMode: settings.colorMode,
     numLines: settings.numLines,
     animationSpeed: settings.animationSpeed,

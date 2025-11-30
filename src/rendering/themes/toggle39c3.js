@@ -19,7 +19,6 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   if (!userText) return;
 
   const isAnimated = settings.capabilities && settings.capabilities.animated;
-  const preset = themePresets[settings.theme];
   const textColor = getColor(0, 0, 1, settings.time);
 
   // Scale initial sizes proportionally to canvas size
@@ -85,8 +84,8 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
 
   const toggleX = row1StartX;
 
-  // Determine pill style from preset
-  const pillStyle = preset && preset.pillStyle ? preset.pillStyle : 'outlined';
+  // Determine pill style from settings
+  const pillStyle = settings.toggleVariant;
 
   const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2 - 2;
   const pillXOffset = logoSize * 0.0780 - 2;
@@ -124,6 +123,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
       const cycle = (Math.sin(t + phase) + 1) / 2;
       weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;
     } else {
+      const preset = themePresets[settings.theme];
       weight = preset && preset.staticWeight ? preset.staticWeight : settings.maxWeight;
     }
 

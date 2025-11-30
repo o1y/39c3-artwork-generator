@@ -18,6 +18,11 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('toggleVariant', (value) => {
+    settings.toggleVariant = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('colorMode', (value) => {
     settings.colorMode = value;
     const preset = themePresets[store.theme];

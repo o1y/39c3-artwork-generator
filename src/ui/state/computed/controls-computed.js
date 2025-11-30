@@ -22,6 +22,10 @@ export function createControlsComputed() {
       return this.controls.showMode;
     },
 
+    get showToggleVariantControl() {
+      return this.controls.showToggleVariant;
+    },
+
     get showAnimationControls() {
       return this.isAnimated;
     },

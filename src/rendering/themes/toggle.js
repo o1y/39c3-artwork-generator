@@ -1,4 +1,4 @@
-import { settings, themePresets } from '../../config/settings.js';
+import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 
@@ -12,8 +12,7 @@ export function renderToggleTheme(renderer, canvasSize) {
   const text = settings.text;
   if (!text) return;
 
-  const preset = themePresets[settings.theme];
-  const pillStyle = preset && preset.pillStyle ? preset.pillStyle : 'outlined';
+  const pillStyle = settings.toggleVariant;
   const textColor = getColor(0, 0, text.length, settings.time);
 
   let textSize = 200;

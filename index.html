@@ -29,13 +29,17 @@
           <label>Theme</label>
           <select x-model="theme" class="control-base">
             <option value="lines">Nerdy Lines</option>
-            <option value="toggleFilled">Toggle (Filled)</option>
-            <option value="toggleOutlined">Toggle (Outlined)</option>
-            <option value="toggle39c3AnimatedFilled">39C3 Toggle Animated (Filled)</option>
-            <option value="toggle39c3AnimatedOutlined">39C3 Toggle Animated (Outlined)</option>
-            <option value="toggle39c3StaticFilled">39C3 Toggle Static (Filled)</option>
-            <option value="toggle39c3StaticOutlined">39C3 Toggle Static (Outlined)</option>
+            <option value="toggle">Toggle</option>
+            <option value="toggle39c3Animated">39C3 Toggle Animated</option>
+            <option value="toggle39c3Static">39C3 Toggle Static</option>
             <option value="ccc">CCC</option>
+          </select>
+        </div>
+        <div class="control-group control-medium" x-show="showToggleVariantControl" x-cloak>
+          <label>Toggle Variant</label>
+          <select x-model="toggleVariant" class="control-base">
+            <option value="filled">Filled</option>
+            <option value="outlined">Outlined</option>
           </select>
         </div>
         <div class="control-group control-medium" x-show="showLinesControl" x-cloak>
