@@ -32,7 +32,7 @@ export function renderToggleTheme(renderer, canvasSize) {
     toggleHeight = textSize * PILL_HEIGHT_RATIO;
     toggleWidth = toggleHeight * PILL_WIDTH_RATIO;
     textWidth = measureTextWithAnimation(renderer, text, textSize);
-    totalContentWidth = toggleWidth + (textSize * 0.2) + textWidth;
+    totalContentWidth = toggleWidth + textSize * 0.2 + textWidth;
   }
 
   // Center horizontally and vertically
@@ -53,7 +53,17 @@ export function renderToggleTheme(renderer, canvasSize) {
   }
 
   const toggleY = centerY - (textSize * PILL_HEIGHT_RATIO) / 2;
-  renderer.drawTogglePill(toggleX, toggleY, textSize, textColor, settings.time, 0, true, style, bgColor);
+  renderer.drawTogglePill(
+    toggleX,
+    toggleY,
+    textSize,
+    textColor,
+    settings.time,
+    0,
+    true,
+    style,
+    bgColor
+  );
 
   // Render each character with individual weight animation
   let currentTextX = textX;

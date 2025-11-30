@@ -52,7 +52,7 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
     const batchSize = 5;
 
     for (let i = 0; i < totalFrames; i += batchSize) {
-      await new Promise(resolve => setTimeout(resolve, 1));
+      await new Promise((resolve) => setTimeout(resolve, 1));
 
       const end = Math.min(i + batchSize, totalFrames);
       for (let j = i; j < end; j++) {
@@ -89,7 +89,6 @@ export async function exportVideoWebMWriter(durationSeconds = 5, resolution = 2,
     if (callbacks.onProgress) {
       callbacks.onProgress(100);
     }
-
   } catch (error) {
     console.error('WebM export error:', error);
   } finally {

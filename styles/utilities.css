@@ -86,7 +86,10 @@
   }
 
   .transition-colors {
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      color 0.2s;
   }
 
   .transition-transform {
@@ -103,7 +106,9 @@
   }
 
   .shadow-accent-glow {
-    box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-glow);
+    box-shadow:
+      0 0 40px var(--accent-glow),
+      0 0 80px var(--accent-glow);
   }
 
   .shadow-focus {

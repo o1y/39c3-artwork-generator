@@ -27,5 +27,5 @@ export const COLOR_MODE_OPTIONS = [
 export const AVAILABLE_RESOLUTIONS = [
   { value: '1', label: '1x (1000px)' },
   { value: '2', label: '2x (2000px)' },
-  { value: '4', label: '4x (4000px)' }
+  { value: '4', label: '4x (4000px)' },
 ];

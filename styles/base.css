@@ -36,7 +36,8 @@
     --breakpoint-tablet: 768px;
     --breakpoint-desktop: 1200px;
 
-    --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-stack:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
 
   /* Theme Overrides */

@@ -54,10 +54,14 @@ export function getColor(charIndex, lineIndex, textLength, time) {
 
   switch (settings.colorMode) {
     case 'green':
-      return isAnimated ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex) : colors.green[3];
+      return isAnimated
+        ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex)
+        : colors.green[3];
 
     case 'green-smooth':
-      return isAnimated ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex, true) : colors.green[3];
+      return isAnimated
+        ? getAnimatedColor(colors.green, 3, t, charIndex, lineIndex, true)
+        : colors.green[3];
 
     case 'green-inv':
     case 'violet-inv':
@@ -65,10 +69,14 @@ export function getColor(charIndex, lineIndex, textLength, time) {
       return colors.dark;
 
     case 'violet':
-      return isAnimated ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex) : colors.violet[2];
+      return isAnimated
+        ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex)
+        : colors.violet[2];
 
     case 'violet-smooth':
-      return isAnimated ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex, true) : colors.violet[2];
+      return isAnimated
+        ? getAnimatedColor(colors.violet, 2, t, charIndex, lineIndex, true)
+        : colors.violet[2];
 
     default:
       return colors.natural;

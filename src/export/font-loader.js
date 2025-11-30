@@ -70,7 +70,7 @@ export function textToPath(text, x, y, fontSize, weight) {
   return {
     pathData: path.toPathData(),
     path: path,
-    width: font.getAdvanceWidth(text, fontSize, { variation: variations })
+    width: font.getAdvanceWidth(text, fontSize, { variation: variations }),
   };
 }
 
@@ -123,7 +123,7 @@ export function textToCharacterPaths(text, startX, y, fontSize, weightFn, colorF
       color,
       x: currentX,
       y,
-      width
+      width,
     });
 
     currentX += width;

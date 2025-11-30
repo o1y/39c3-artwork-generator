@@ -151,7 +151,9 @@ export class SVGRenderer extends Renderer {
       L ${x + radius} ${y + height}
       A ${radius} ${radius} 0 0 1 ${x + radius} ${y}
       Z
-    `.replace(/\s+/g, ' ').trim();
+    `
+      .replace(/\s+/g, ' ')
+      .trim();
 
     const path = this.createSVGElement('path');
     path.setAttribute('d', d);
@@ -167,7 +169,15 @@ export class SVGRenderer extends Renderer {
     const target = this.currentGroup || this.svg;
     target.appendChild(path);
 
-    const dotX = calculateDotPosition(x, width, radius, time, phase, useConstantSpeed, settings.animationSpeed);
+    const dotX = calculateDotPosition(
+      x,
+      width,
+      radius,
+      time,
+      phase,
+      useConstantSpeed,
+      settings.animationSpeed
+    );
     const dotY = y + radius;
 
     if (pillStyle === 'filled') {
@@ -223,7 +233,7 @@ export class SVGRenderer extends Renderer {
 
     return {
       renderer: offscreenRenderer,
-      group: group
+      group: group,
     };
   }
 

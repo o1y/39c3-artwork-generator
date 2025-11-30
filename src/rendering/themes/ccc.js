@@ -12,8 +12,7 @@ function getLogicalLength(text) {
     // CCC logo glyphs (bold and thin)
     else if (charCode === 0xe003 || charCode === 0xe004) {
       length += 5; // CCC logos are about 5 characters wide
-    }
-    else {
+    } else {
       length += 1;
     }
   }
@@ -74,12 +73,7 @@ function drawUserText(
 
   for (let charIndex = 0; charIndex < userText.length; charIndex++) {
     const char = userText[charIndex];
-    const color = getColor(
-      globalCharIndex + charIndex,
-      lineIndex,
-      userText.length,
-      settings.time
-    );
+    const color = getColor(globalCharIndex + charIndex, lineIndex, userText.length, settings.time);
     renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, { baseline: 'top' });
 
     const charWidth = renderer.measureText(char, finalFontSize, avgWeight);
@@ -119,7 +113,14 @@ export function renderCCCTheme(renderer, canvasSize) {
 
   // Measure max line width using average weight
   const avgWeight = (settings.minWeight + settings.maxWeight) / 2;
-  const maxLineWidth = measurePatternWidth(renderer, parts, fixedTextUpper, userText, testSize, avgWeight);
+  const maxLineWidth = measurePatternWidth(
+    renderer,
+    parts,
+    fixedTextUpper,
+    userText,
+    testSize,
+    avgWeight
+  );
 
   const maxTextHeight = testSize + (settings.numLines - 1) * testSize * settings.lineSpacingFactor;
   const usableWidth = settings.canvasSize - 2 * settings.margin;
@@ -137,7 +138,14 @@ export function renderCCCTheme(renderer, canvasSize) {
     const y = startY - lineIndex * lineSpacing;
 
     // Measure line width with average weight (fixed spacing)
-    const lineWidth = measurePatternWidth(renderer, parts, fixedTextUpper, userText, finalFontSize, avgWeight);
+    const lineWidth = measurePatternWidth(
+      renderer,
+      parts,
+      fixedTextUpper,
+      userText,
+      finalFontSize,
+      avgWeight
+    );
 
     // Center the line
     let x = (settings.canvasSize - lineWidth) / 2;

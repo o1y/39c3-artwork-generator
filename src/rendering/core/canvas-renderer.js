@@ -85,7 +85,15 @@ export class CanvasRenderer extends Renderer {
       this.ctx.closePath();
       this.ctx.fill();
 
-      const dotX = calculateDotPosition(x, width, radius, time, phase, useConstantSpeed, settings.animationSpeed);
+      const dotX = calculateDotPosition(
+        x,
+        width,
+        radius,
+        time,
+        phase,
+        useConstantSpeed,
+        settings.animationSpeed
+      );
       const dotY = y + radius;
 
       this.ctx.fillStyle = bgColor;
@@ -101,7 +109,15 @@ export class CanvasRenderer extends Renderer {
       this.ctx.closePath();
       this.ctx.stroke();
 
-      const dotX = calculateDotPosition(x, width, radius, time, phase, useConstantSpeed, settings.animationSpeed);
+      const dotX = calculateDotPosition(
+        x,
+        width,
+        radius,
+        time,
+        phase,
+        useConstantSpeed,
+        settings.animationSpeed
+      );
       const dotY = y + radius;
 
       this.ctx.fillStyle = color;
@@ -134,16 +150,12 @@ export class CanvasRenderer extends Renderer {
     const offCtx = offscreen.getContext('2d', { alpha: true });
     return {
       renderer: new CanvasRenderer(offCtx),
-      canvas: offscreen
+      canvas: offscreen,
     };
   }
 
   drawOffscreen(offscreenData, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-    this.ctx.drawImage(
-      offscreenData.canvas,
-      sx, sy, sWidth, sHeight,
-      dx, dy, dWidth, dHeight
-    );
+    this.ctx.drawImage(offscreenData.canvas, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 
   getTarget() {

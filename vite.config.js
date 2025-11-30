@@ -9,7 +9,7 @@ export default defineConfig({
     minify: 'esbuild',
     cssCodeSplit: true,
     esbuild: {
-      legalComments: 'inline'
+      legalComments: 'inline',
     },
     rollupOptions: {
       output: {
@@ -34,9 +34,9 @@ export default defineConfig({
       plugins: [
         license({
           thirdParty: {
-            output: 'dist/LICENSES.txt'
-          }
-        })
+            output: 'dist/LICENSES.txt',
+          },
+        }),
       ],
     },
     chunkSizeWarningLimit: 1000,

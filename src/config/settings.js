@@ -31,7 +31,7 @@ export const settings = {
   // Theme capabilities - controls which UI elements and features are available
   capabilities: {
     animated: true,
-    variableWeight: true
+    variableWeight: true,
   },
 };
 

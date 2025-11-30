@@ -24,7 +24,7 @@ export function createExportActions() {
           onComplete: () => {
             this.isExporting = false;
             this.exportProgress = 0;
-          }
+          },
         };
         exportVideo(duration, resolution, callbacks);
       }

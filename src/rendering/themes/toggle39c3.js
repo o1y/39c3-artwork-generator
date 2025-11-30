@@ -45,7 +45,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     toggleWidth = getToggleWidth(logoSize);
     toggleHeight = logoSize * PILL_HEIGHT_RATIO;
     logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
-    firstRowWidth = toggleWidth + (logoSize * 0.2) + logoWidth;
+    firstRowWidth = toggleWidth + logoSize * 0.2 + logoWidth;
   }
 
   // Measure user text width
@@ -67,7 +67,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     toggleWidth = getToggleWidth(logoSize);
     toggleHeight = logoSize * PILL_HEIGHT_RATIO;
     logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
-    firstRowWidth = toggleWidth + (logoSize * 0.15) + logoWidth;
+    firstRowWidth = toggleWidth + logoSize * 0.15 + logoWidth;
 
     userTextSize *= globalScale;
     userTextWidth = renderer.measureText(userText, userTextSize, settings.maxWeight);
@@ -86,7 +86,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   const { position, style } = parseToggleVariant(settings.toggleVariant);
 
   const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2 - 2;
-  const pillXOffset = logoSize * 0.0780 - 2;
+  const pillXOffset = logoSize * 0.078 - 2;
   const bgColor = getBackgroundColor();
 
   // For static themes dot on right
@@ -104,10 +104,22 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     toggleX = row1StartX + logoWidth + pillLogoSpacing;
   }
 
-  renderer.drawTogglePill(toggleX + pillXOffset, pillY, logoSize, textColor, pillTime, 0, true, style, bgColor);
+  renderer.drawTogglePill(
+    toggleX + pillXOffset,
+    pillY,
+    logoSize,
+    textColor,
+    pillTime,
+    0,
+    true,
+    style,
+    bgColor
+  );
 
   // Draw logo text
-  renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, { baseline: 'middle' });
+  renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, {
+    baseline: 'middle',
+  });
 
   // Draw Second Row: User Text with Condensed Feature
   const row2Y = startY + toggleHeight + rowSpacing + userTextSize / 2;
@@ -138,7 +150,9 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     }
 
     const color = getColor(charIndex, 0, userText.length, settings.time);
-    offscreenRenderer.drawText(char, currentX, offscreenY, userTextSize, weight, color, { baseline: 'middle' });
+    offscreenRenderer.drawText(char, currentX, offscreenY, userTextSize, weight, color, {
+      baseline: 'middle',
+    });
 
     const charWidth = offscreenRenderer.measureText(char, userTextSize, weight);
     currentX += charWidth;
@@ -147,7 +161,13 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   // Draw the offscreen renderer once with horizontal scaling applied
   renderer.drawOffscreen(
     offscreenData,
-    0, 0, offscreenWidth, offscreenHeight,
-    row2StartX, row2Y - offscreenHeight / 2, offscreenWidth * widthScaleFactor, offscreenHeight
+    0,
+    0,
+    offscreenWidth,
+    offscreenHeight,
+    row2StartX,
+    row2Y - offscreenHeight / 2,
+    offscreenWidth * widthScaleFactor,
+    offscreenHeight
   );
 }

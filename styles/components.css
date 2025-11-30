@@ -13,13 +13,19 @@
         overflow: hidden;
         opacity: 0;
         margin: 0;
-        transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin 0.3s ease;
       }
 
       &:not(.mobile-collapsed) .controls {
         max-height: 2000px;
         opacity: 1;
-        transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin 0.3s ease;
       }
 
       &:not(.mobile-collapsed) .mobile-header-toggle .toggle-icon {

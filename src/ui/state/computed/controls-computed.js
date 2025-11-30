@@ -33,7 +33,7 @@ export function createControlsComputed() {
         return COLOR_MODE_OPTIONS;
       }
 
-      return COLOR_MODE_OPTIONS.filter(option => !option.value.includes('-smooth'));
+      return COLOR_MODE_OPTIONS.filter((option) => !option.value.includes('-smooth'));
     },
 
     get showAnimationControls() {
