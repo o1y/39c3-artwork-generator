@@ -21,7 +21,6 @@ export const settings = {
   canvasSize: 1000,
   margin: 50,
   lineSpacingFactor: 0.92,
-  verticalOffset: 3,
   animationSpeed: 1.0,
   mode: 'wave',
   colorMode: 'violet-inv',

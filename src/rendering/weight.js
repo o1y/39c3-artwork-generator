@@ -1,5 +1,6 @@
 import { settings } from '../config/settings.js';
 import { getNormalizedTime } from '../animation/timing.js';
+import { getTextWidth } from '../export/font-loader.js';
 
 // Reference to canvas context (set externally)
 let ctx = null;
@@ -31,10 +32,9 @@ export function getLineWidth(text, size, lineIndex, timeOffset = 0) {
       timeOffset
     );
 
-    // Set font with variable weight
-    ctx.font = `${weight} ${size}px Kario39C3`;
-    const metrics = ctx.measureText(char);
-    total += metrics.width;
+    // Use opentype.js to measure text width
+    const width = getTextWidth(char, size, weight);
+    total += width;
   }
   return total;
 }

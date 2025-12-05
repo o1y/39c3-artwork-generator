@@ -31,7 +31,7 @@ export function renderLinesTheme(renderer, canvasSize) {
   const finalFontSize = testSize * scaleFactor;
   const lineSpacing = finalFontSize * settings.lineSpacingFactor;
   const textBlockHeight = finalFontSize + (settings.numLines - 1) * lineSpacing;
-  const topY = (settings.canvasSize - textBlockHeight) / 2 + settings.verticalOffset;
+  const topY = (settings.canvasSize - textBlockHeight) / 2;
   const startY = topY + (settings.numLines - 1) * lineSpacing;
 
   const midIndex = (text.length - 1) / 2;

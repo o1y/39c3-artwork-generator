@@ -61,14 +61,15 @@ export function textToPath(text, x, y, fontSize, weight) {
   }
 
   // For variable fonts, we need to set the variation
-  // Only use wght axis - wdth axis has bugs in opentype.js causing NaN values
   const variations = { wght: weight };
 
   // Get the path for the text with variation
   const path = font.getPath(text, x, y, fontSize, { features: {}, variation: variations });
 
   return {
-    pathData: path.toPathData(),
+    // Use flipY: false because font.getPath() already returns screen coordinates (Y-down)
+    // and we'll handle the Y-flip ourselves in the renderers with scale(1, -1)
+    pathData: path.toPathData({ flipY: false }),
     path: path,
     width: font.getAdvanceWidth(text, fontSize, { variation: variations }),
   };
@@ -156,4 +157,34 @@ export function getMiddleBaselineOffset(fontSize) {
   const middleOffset = (font.ascender + font.descender) / 2;
   const scale = fontSize / font.unitsPerEm;
   return middleOffset * scale;
+}
+
+/**
+ * Get the ascender height for a given font size
+ * This is the distance from baseline to top of capital letters
+ * @param {number} fontSize - Font size in pixels
+ * @returns {number} Ascender height in pixels
+ */
+export function getAscenderHeight(fontSize) {
+  if (!font) {
+    throw new Error('Font not loaded. Call loadFont() first.');
+  }
+
+  const scale = fontSize / font.unitsPerEm;
+  return font.ascender * scale;
+}
+
+/**
+ * Get the descender height for a given font size
+ * This is the distance from baseline to bottom of descenders (negative value)
+ * @param {number} fontSize - Font size in pixels
+ * @returns {number} Descender height in pixels (negative)
+ */
+export function getDescenderHeight(fontSize) {
+  if (!font) {
+    throw new Error('Font not loaded. Call loadFont() first.');
+  }
+
+  const scale = fontSize / font.unitsPerEm;
+  return font.descender * scale;  // Usually negative
 }

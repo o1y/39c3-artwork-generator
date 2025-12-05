@@ -1,6 +1,7 @@
 import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
+import { getAscenderHeight, getDescenderHeight } from '../../export/font-loader.js';
 
 /**
  * Render Terminal Theme
@@ -161,12 +162,16 @@ export function renderTerminalTheme(renderer, canvasSize) {
   const scaleFactor = Math.min(usableWidth / maxLineWidth, usableHeight / maxTextHeight);
   const finalFontSize = testSize * scaleFactor;
   const lineSpacing = finalFontSize * settings.lineSpacingFactor;
-  const textBlockHeight = finalFontSize + (numTerminalLines - 1) * lineSpacing;
-  const topY = (settings.canvasSize - textBlockHeight) / 2 + settings.verticalOffset;
-  const startY = topY + (numTerminalLines - 1) * lineSpacing;
+
+  const ascender = getAscenderHeight(finalFontSize);
+  const descender = getDescenderHeight(finalFontSize); // negative value
+  const textBlockHeight = (numTerminalLines - 1) * lineSpacing + ascender - descender;
+
+  const topY = (settings.canvasSize - textBlockHeight) / 2;
+  const startY = topY + ascender + (numTerminalLines - 1) * lineSpacing;
 
   for (let lineIndex = 0; lineIndex < numTerminalLines; lineIndex++) {
-    const y = startY - lineIndex * lineSpacing + finalFontSize;
+    const y = startY - lineIndex * lineSpacing;
     const template = lineTemplates[lineIndex % lineTemplates.length];
 
     let actualPrefix = template.prefix || '';

@@ -1,6 +1,6 @@
 import { Renderer } from './renderer-interface.js';
 import { settings } from '../../config/settings.js';
-import { textToPath, getTextWidth, getMiddleBaselineOffset } from '../../export/font-loader.js';
+import { textToPath, getTextWidth, getMiddleBaselineOffset, getAscenderHeight } from '../../export/font-loader.js';
 import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class SVGRenderer extends Renderer {
@@ -26,39 +26,39 @@ export class SVGRenderer extends Renderer {
   }
 
   drawText(text, x, y, fontSize, weight, color, options = {}) {
-    const result = textToPath(text, 0, 0, fontSize, weight);
+    // Handle baseline alignment
+    let adjustedY = y;
 
-    // Build transform string
-    let transformParts = [];
+    if (options.baseline === 'middle') {
+      const offset = getMiddleBaselineOffset(fontSize);
+      // In screen coordinates (Y-down), to center text we need to move DOWN (add offset)
+      adjustedY = y + offset;
+    } else if (options.baseline === 'top') {
+      const ascender = getAscenderHeight(fontSize);
+      // For 'top' baseline, the top of the text should be at y
+      // So we need to move the baseline DOWN by the ascender height
+      adjustedY = y + ascender;
+    }
+    // If baseline is 'alphabetic' (default), use y as-is
 
-    // Apply saved transforms if they exist
+    const result = textToPath(text, x, adjustedY, fontSize, weight);
+
+    // Build transform string only for saved transforms
+    let transform = '';
     if (this.transform) {
+      const transformParts = [];
       transformParts.push(`translate(${this.transform.translateX}, ${this.transform.translateY})`);
       transformParts.push(`scale(${this.transform.scaleX}, ${this.transform.scaleY})`);
+      transform = transformParts.join(' ');
     }
-
-    // Handle baseline alignment
-    // OpenType paths have baseline at y=0, so when we flip with scale(1, -1),
-    // we need to adjust the Y position based on baseline setting
-    let adjustedY = y;
-    if (options.baseline === 'middle') {
-      // For middle baseline, offset by half the em-square height
-      // This centers the text vertically around the given Y coordinate
-      const offset = getMiddleBaselineOffset(fontSize);
-      adjustedY = y - offset;
-    }
-
-    // Add position and Y-flip
-    transformParts.push(`translate(${x}, ${adjustedY})`);
-    transformParts.push('scale(1, -1)');
-
-    const transform = transformParts.join(' ');
 
     const path = this.createSVGElement('path');
     path.setAttribute('d', result.pathData);
     path.setAttribute('fill', color);
     path.setAttribute('fill-rule', 'nonzero');
-    path.setAttribute('transform', transform);
+    if (transform) {
+      path.setAttribute('transform', transform);
+    }
 
     // Append to current group if exists, otherwise to main svg
     const target = this.currentGroup || this.svg;

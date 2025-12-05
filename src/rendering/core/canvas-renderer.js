@@ -1,5 +1,6 @@
 import { Renderer } from './renderer-interface.js';
 import { settings } from '../../config/settings.js';
+import { textToPath, getTextWidth, getMiddleBaselineOffset, getAscenderHeight } from '../../export/font-loader.js';
 import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class CanvasRenderer extends Renderer {
@@ -14,20 +15,24 @@ export class CanvasRenderer extends Renderer {
   }
 
   measureText(text, fontSize, weight) {
-    this.ctx.font = `${weight} ${fontSize}px Kario39C3`;
-    const metrics = this.ctx.measureText(text);
-    return metrics.width;
+    return getTextWidth(text, fontSize, weight);
   }
 
   drawText(text, x, y, fontSize, weight, color, options = {}) {
-    this.ctx.font = `${weight} ${fontSize}px Kario39C3`;
-    this.ctx.fillStyle = color;
+    let adjustedY = y;
 
-    if (options.baseline) {
-      this.ctx.textBaseline = options.baseline;
+    if (options.baseline === 'middle') {
+      const offset = getMiddleBaselineOffset(fontSize);
+      adjustedY = y + offset;
+    } else if (options.baseline === 'top') {
+      const ascender = getAscenderHeight(fontSize);
+      adjustedY = y + ascender;
     }
 
-    this.ctx.fillText(text, x, y);
+    const result = textToPath(text, x, adjustedY, fontSize, weight);
+
+    this.ctx.fillStyle = color;
+    this.ctx.fill(new Path2D(result.pathData));
   }
 
   drawRect(x, y, width, height, fillColor) {
@@ -75,7 +80,7 @@ export class CanvasRenderer extends Renderer {
   }
 
   drawTogglePill(x, y, fontSize, color, time, phase, useConstantSpeed, pillStyle, bgColor) {
-    const { height, width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
+    const { width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
 
     if (pillStyle === 'filled') {
       this.ctx.fillStyle = color;

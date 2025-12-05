@@ -18,6 +18,7 @@ export async function exportSVG() {
 
   const size = settings.canvasSize;
   const scaledMargin = settings.margin;
+  const svgScale = 1;
 
   // Create SVG document
   const svg = createSVGDocument(size);
