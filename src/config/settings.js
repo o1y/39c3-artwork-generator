@@ -17,7 +17,7 @@ export const settings = {
   numLines: 11,
   minWeight: 10,
   maxWeight: 100,
-  widthValue: 76,
+  widthValue: 100,
   canvasSize: 1000,
   margin: 50,
   lineSpacingFactor: 0.92,
@@ -46,7 +46,7 @@ export const themePresets = {
     },
     controls: {
       showLines: true,
-      showWidth: false,
+      showWidth: true,
       showMode: true,
       showToggleVariant: false,
     },

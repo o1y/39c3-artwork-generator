@@ -1,5 +1,6 @@
 import { parse } from 'opentype.js';
 import fontUrl from '/fonts/Kario39C3VarWEB-Roman.woff?url';
+import { settings } from '../config/settings.js';
 
 let font = null;
 let fontLoaded = false;
@@ -60,10 +61,7 @@ export function textToPath(text, x, y, fontSize, weight) {
     throw new Error('Font not loaded. Call loadFont() first.');
   }
 
-  // For variable fonts, we need to set the variation
-  const variations = { wght: weight };
-
-  // Get the path for the text with variation
+  const variations = { wght: weight, wdth: settings.widthValue };
   const path = font.getPath(text, x, y, fontSize, { features: {}, variation: variations });
 
   return {
@@ -87,7 +85,7 @@ export function getTextWidth(text, fontSize, weight) {
     throw new Error('Font not loaded. Call loadFont() first.');
   }
 
-  const variations = { wght: weight };
+  const variations = { wght: weight, wdth: settings.widthValue };
   return font.getAdvanceWidth(text, fontSize, { variation: variations });
 }
 
@@ -113,7 +111,7 @@ export function textToCharacterPaths(text, startX, y, fontSize, weightFn, colorF
     const char = text[i];
     const weight = weightFn(i);
     const color = colorFn(i);
-    const variations = { wght: weight };
+    const variations = { wght: weight, wdth: settings.widthValue };
 
     const path = font.getPath(char, currentX, y, fontSize, { features: {}, variation: variations });
     const width = font.getAdvanceWidth(char, fontSize, { variation: variations });

@@ -16,6 +16,10 @@ export function createDisplayComputed() {
       return this.numLines.toString();
     },
 
+    get widthDisplay() {
+      return this.widthValue.toString();
+    },
+
     get currentFrameNumber() {
       return this.currentFrame;
     },

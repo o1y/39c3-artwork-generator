@@ -73,6 +73,11 @@
           <input type="range" min="2" max="24" step="1" x-model.number="numLines" />
           <span class="value-display" x-text="linesDisplay"></span>
         </div>
+        <div class="control-group control-medium" x-show="showWidthControl" x-cloak>
+          <label>Font Width</label>
+          <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
+          <span class="value-display" x-text="widthDisplay"></span>
+        </div>
         <div class="control-group control-narrow" x-show="showSpeedControl" x-cloak>
           <label>Animation Speed</label>
           <input type="range" min="0.3" max="3" step="0.1" x-model.number="animationSpeed" />

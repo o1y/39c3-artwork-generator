@@ -38,6 +38,11 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('widthValue', (value) => {
+    settings.widthValue = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('animationSpeed', (value) => {
     settings.animationSpeed = value;
 
