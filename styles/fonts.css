@@ -1,0 +1,94 @@
+@layer base {
+  /* Officer Sans - Body Font */
+  @font-face {
+    font-family: 'Officer Sans';
+    src:
+      url('../fonts/OfficerSansWeb-Regular.woff2') format('woff2'),
+      url('../fonts/OfficerSansWeb-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans';
+    src:
+      url('../fonts/OfficerSansWeb-RegularItalic.woff2') format('woff2'),
+      url('../fonts/OfficerSansWeb-RegularItalic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans';
+    src:
+      url('../fonts/OfficerSansWeb-Bold.woff2') format('woff2'),
+      url('../fonts/OfficerSansWeb-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans';
+    src:
+      url('../fonts/OfficerSansWeb-BoldItalic.woff2') format('woff2'),
+      url('../fonts/OfficerSansWeb-BoldItalic.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Officer Sans Condensed */
+  @font-face {
+    font-family: 'Officer Sans Cond';
+    src:
+      url('../fonts/OfficerSansCondWeb-Regular.woff2') format('woff2'),
+      url('../fonts/OfficerSansCondWeb-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans Cond';
+    src:
+      url('../fonts/OfficerSansCondWeb-RegularItalic.woff2') format('woff2'),
+      url('../fonts/OfficerSansCondWeb-RegularItalic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans Cond';
+    src:
+      url('../fonts/OfficerSansCondWeb-Bold.woff2') format('woff2'),
+      url('../fonts/OfficerSansCondWeb-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Officer Sans Cond';
+    src:
+      url('../fonts/OfficerSansCondWeb-BoldItalic.woff2') format('woff2'),
+      url('../fonts/OfficerSansCondWeb-BoldItalic.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Kario39C3 - Heading/Highlight Font */
+  @font-face {
+    font-family: 'Kario39C3';
+    src:
+      url('../fonts/Kario39C3VarWEB-Roman.woff2') format('woff2'),
+      url('../fonts/Kario39C3VarWEB-Roman.woff') format('woff');
+    font-weight: 10 100;
+    font-stretch: 50% 200%;
+    font-display: block;
+  }
+}
