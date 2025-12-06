@@ -7,6 +7,7 @@ export function createInitialState() {
     isColorModeDirty: false,
     exportAdvancedCollapsed: true,
     mobileHeaderCollapsed: true,
+    isFullscreen: false,
 
     // Settings state
     text: settings.text,

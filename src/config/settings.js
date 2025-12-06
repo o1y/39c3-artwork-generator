@@ -115,4 +115,20 @@ export const themePresets = {
       showLines: true,
     },
   },
+  dvd: {
+    colorMode: 'mono',
+    text: '\uE002',
+    capabilities: {
+      ...DEFAULT_CAPABILITIES,
+      variableWeight: false,
+    },
+    controls: {
+      ...DEFAULT_CONTROLS,
+      showColorMode: false,
+      showAnimationSpeed: false,
+      showTextInput: false,
+      showPlayControls: false,
+      showExport: false,
+    },
+  },
 };

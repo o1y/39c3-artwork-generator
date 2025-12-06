@@ -131,3 +131,28 @@ export function getDescenderHeight(fontSize) {
   const scale = fontSize / font.unitsPerEm;
   return font.descender * scale;
 }
+
+/**
+ * Get the actual bounding box of a glyph/text
+ * @param {string} text - The text to measure
+ * @param {number} fontSize - Font size in pixels
+ * @param {number} weight - Font weight (10-100)
+ * @param {number} width - Font width (50-100), defaults to settings.widthValue
+ * @returns {Object} Object with height, ascender (distance from top to baseline)
+ */
+export function getGlyphBounds(text, fontSize, weight, width = settings.widthValue) {
+  ensureFontLoaded();
+
+  const variations = createVariations(weight, width);
+  const path = font.getPath(text, 0, 0, fontSize, { features: {}, variation: variations });
+  const bbox = path.getBoundingBox();
+
+  // bbox.y1 is the top (negative, above baseline), bbox.y2 is the bottom
+  // For glyphs that sit on the baseline, y2 should be ~0
+  return {
+    height: bbox.y2 - bbox.y1,
+    ascender: -bbox.y1, // distance from top of glyph to baseline
+    top: bbox.y1,
+    bottom: bbox.y2,
+  };
+}
