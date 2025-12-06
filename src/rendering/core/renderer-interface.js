@@ -39,8 +39,8 @@ export class Renderer {
     throw new Error('Method stroke() must be implemented');
   }
 
-  drawTogglePill(x, y, fontSize, color, time, phase, useConstantSpeed, pillStyle, bgColor) {
-    throw new Error('Method drawTogglePill() must be implemented');
+  drawPath(pathData, color) {
+    throw new Error('Method drawPath() must be implemented');
   }
 
   save() {

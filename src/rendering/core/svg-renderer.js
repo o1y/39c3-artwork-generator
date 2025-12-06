@@ -1,12 +1,10 @@
 import { Renderer } from './renderer-interface.js';
-import { settings } from '../../config/settings.js';
 import {
   textToPath,
   getTextWidth,
   getMiddleBaselineOffset,
   getAscenderHeight,
 } from '../../export/font-loader.js';
-import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class SVGRenderer extends Renderer {
   constructor(svgElement) {
@@ -52,6 +50,26 @@ export class SVGRenderer extends Renderer {
 
     const path = this.createSVGElement('path');
     path.setAttribute('d', result.pathData);
+    path.setAttribute('fill', color);
+    path.setAttribute('fill-rule', 'nonzero');
+    if (transform) {
+      path.setAttribute('transform', transform);
+    }
+
+    this.svg.appendChild(path);
+  }
+
+  drawPath(pathData, color) {
+    let transform = '';
+    if (this.transform) {
+      const transformParts = [];
+      transformParts.push(`translate(${this.transform.translateX}, ${this.transform.translateY})`);
+      transformParts.push(`scale(${this.transform.scaleX}, ${this.transform.scaleY})`);
+      transform = transformParts.join(' ');
+    }
+
+    const path = this.createSVGElement('path');
+    path.setAttribute('d', pathData);
     path.setAttribute('fill', color);
     path.setAttribute('fill-rule', 'nonzero');
     if (transform) {
@@ -131,52 +149,6 @@ export class SVGRenderer extends Renderer {
     path.setAttribute('stroke-width', width);
     this.svg.appendChild(path);
     this.currentPathData = '';
-  }
-
-  drawTogglePill(x, y, fontSize, color, time, phase, useConstantSpeed, pillStyle, bgColor) {
-    const { width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
-    const height = radius * 2;
-
-    const d = `
-      M ${x + radius} ${y}
-      L ${x + width - radius} ${y}
-      A ${radius} ${radius} 0 0 1 ${x + width - radius} ${y + height}
-      L ${x + radius} ${y + height}
-      A ${radius} ${radius} 0 0 1 ${x + radius} ${y}
-      Z
-    `
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    const path = this.createSVGElement('path');
-    path.setAttribute('d', d);
-
-    if (pillStyle === 'filled') {
-      path.setAttribute('fill', color);
-    } else {
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', color);
-      path.setAttribute('stroke-width', strokeWidth);
-    }
-
-    this.svg.appendChild(path);
-
-    const dotX = calculateDotPosition(
-      x,
-      width,
-      radius,
-      time,
-      phase,
-      useConstantSpeed,
-      settings.animationSpeed
-    );
-    const dotY = y + radius;
-
-    if (pillStyle === 'filled') {
-      this.drawCircle(dotX, dotY, dotRadius, bgColor);
-    } else {
-      this.drawCircle(dotX, dotY, dotRadius, color);
-    }
   }
 
   ensureTransform() {

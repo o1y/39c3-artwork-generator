@@ -1,12 +1,10 @@
 import { Renderer } from './renderer-interface.js';
-import { settings } from '../../config/settings.js';
 import {
   textToPath,
   getTextWidth,
   getMiddleBaselineOffset,
   getAscenderHeight,
 } from '../../export/font-loader.js';
-import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class CanvasRenderer extends Renderer {
   constructor(ctx) {
@@ -38,6 +36,11 @@ export class CanvasRenderer extends Renderer {
 
     this.ctx.fillStyle = color;
     this.ctx.fill(new Path2D(result.pathData));
+  }
+
+  drawPath(pathData, color) {
+    this.ctx.fillStyle = color;
+    this.ctx.fill(new Path2D(pathData));
   }
 
   drawRect(x, y, width, height, fillColor) {
@@ -82,59 +85,6 @@ export class CanvasRenderer extends Renderer {
     this.ctx.strokeStyle = color;
     this.ctx.lineWidth = width;
     this.ctx.stroke();
-  }
-
-  drawTogglePill(x, y, fontSize, color, time, phase, useConstantSpeed, pillStyle, bgColor) {
-    const { width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
-
-    if (pillStyle === 'filled') {
-      this.ctx.fillStyle = color;
-      this.ctx.beginPath();
-      this.ctx.arc(x + radius, y + radius, radius, Math.PI / 2, Math.PI * 1.5);
-      this.ctx.arc(x + width - radius, y + radius, radius, -Math.PI / 2, Math.PI / 2);
-      this.ctx.closePath();
-      this.ctx.fill();
-
-      const dotX = calculateDotPosition(
-        x,
-        width,
-        radius,
-        time,
-        phase,
-        useConstantSpeed,
-        settings.animationSpeed
-      );
-      const dotY = y + radius;
-
-      this.ctx.fillStyle = bgColor;
-      this.ctx.beginPath();
-      this.ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
-      this.ctx.fill();
-    } else {
-      this.ctx.strokeStyle = color;
-      this.ctx.lineWidth = strokeWidth;
-      this.ctx.beginPath();
-      this.ctx.arc(x + radius, y + radius, radius, Math.PI / 2, Math.PI * 1.5);
-      this.ctx.arc(x + width - radius, y + radius, radius, -Math.PI / 2, Math.PI / 2);
-      this.ctx.closePath();
-      this.ctx.stroke();
-
-      const dotX = calculateDotPosition(
-        x,
-        width,
-        radius,
-        time,
-        phase,
-        useConstantSpeed,
-        settings.animationSpeed
-      );
-      const dotY = y + radius;
-
-      this.ctx.fillStyle = color;
-      this.ctx.beginPath();
-      this.ctx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
-      this.ctx.fill();
-    }
   }
 
   save() {

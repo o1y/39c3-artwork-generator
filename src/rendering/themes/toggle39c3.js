@@ -1,13 +1,8 @@
 import { settings, defaultTexts, themePresets } from '../../config/settings.js';
-import { parseToggleVariant } from '../utils/toggle-utils.js';
 import { getBackgroundColor, getColor } from '../colors.js';
-import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 import { getNormalizedTime } from '../../animation/timing.js';
-
-function getToggleWidth(fontSize) {
-  const height = fontSize * PILL_HEIGHT_RATIO;
-  return height * PILL_WIDTH_RATIO;
-}
+import { getMiddleBaselineOffset } from '../../export/font-loader.js';
+import { getAnimatedTogglePath } from '../utils/toggle-glyph.js';
 
 export function renderToggle39C3Theme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
@@ -19,38 +14,33 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   const isAnimated = settings.capabilities && settings.capabilities.animated;
   const textColor = getColor(0, 0, 1, settings.time);
 
-  // Scale initial sizes proportionally to canvas size
+  const [position, style] = settings.toggleVariant.split('-');
+  const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';
+  const toggleWeight = (settings.minWeight + settings.maxWeight) / 2;
+
   const baseFactor = settings.canvasSize / 1000;
   let logoSize = 200 * baseFactor;
 
-  // Pill dimensions always match logo size
-  let toggleWidth = getToggleWidth(logoSize);
-  let toggleHeight = logoSize * PILL_HEIGHT_RATIO;
-
+  let toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
   let logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
 
-  // Add spacing between pill and logo
   const pillLogoSpacing = logoSize * 0.2;
   let firstRowWidth = toggleWidth + pillLogoSpacing + logoWidth;
 
   let userTextSize = 200 * baseFactor;
   const usableWidth = settings.canvasSize - 2 * settings.margin;
 
-  // Scale down first row if needed
   if (firstRowWidth > usableWidth) {
     const scaleFactorRow1 = usableWidth / firstRowWidth;
     logoSize *= scaleFactorRow1;
-    toggleWidth = getToggleWidth(logoSize);
-    toggleHeight = logoSize * PILL_HEIGHT_RATIO;
+    toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
     logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
     firstRowWidth = toggleWidth + logoSize * 0.2 + logoWidth;
   }
 
-  // Measure user text width
   let userTextWidth = renderer.measureText(userText, userTextSize, settings.maxWeight);
   let secondRowWidth = userTextWidth;
 
-  // Calculate width scale factor
   let widthScaleFactor = 1.0;
   if (secondRowWidth > usableWidth) {
     widthScaleFactor = usableWidth / secondRowWidth;
@@ -62,8 +52,7 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     const globalScale = usableWidth / maxRowWidth;
 
     logoSize *= globalScale;
-    toggleWidth = getToggleWidth(logoSize);
-    toggleHeight = logoSize * PILL_HEIGHT_RATIO;
+    toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
     logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
     firstRowWidth = toggleWidth + logoSize * 0.15 + logoWidth;
 
@@ -73,57 +62,54 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   }
 
   const rowSpacing = userTextSize * 0.15;
-  const totalHeight = toggleHeight + rowSpacing + userTextSize;
+  const totalHeight = logoSize + rowSpacing + userTextSize;
   const startY = (settings.canvasSize - totalHeight) / 2;
 
-  // Draw First Row: Toggle + Logo
-  const row1CenterY = startY + toggleHeight / 2;
+  const row1CenterY = startY + logoSize / 2;
   const row1StartX = (settings.canvasSize - firstRowWidth) / 2;
 
-  // Determine pill style and position from settings
-  const { position, style } = parseToggleVariant(settings.toggleVariant);
-
-  const pillY = row1CenterY - (logoSize * PILL_HEIGHT_RATIO) / 2 - 2;
-  const pillXOffset = logoSize * 0.078 - 2;
-  const bgColor = getBackgroundColor();
-
-  // For static themes dot on right
-  const pillTime = isAnimated ? settings.time : Math.PI / 2;
-
-  // Position toggle and logo based on variant
   let toggleX, logoX;
   if (position === 'left') {
-    // Toggle on the left, logo on the right
     toggleX = row1StartX;
     logoX = row1StartX + toggleWidth + pillLogoSpacing;
   } else {
-    // Logo on the left, toggle on the right
     logoX = row1StartX;
     toggleX = row1StartX + logoWidth + pillLogoSpacing;
   }
 
-  renderer.drawTogglePill(
-    toggleX + pillXOffset,
-    pillY,
-    logoSize,
-    textColor,
-    pillTime,
-    0,
-    true,
-    style,
-    bgColor
-  );
+  let progress = 1;
+  if (isAnimated) {
+    const t = getNormalizedTime(settings.time) * settings.animationSpeed;
+    const rawProgress = (Math.sin(t) + 1) / 2;
 
-  // Draw logo text
+    // Ease-in-out with sharper transition (switch flip effect)
+    const easeSwitch = (p) => {
+      return p < 0.5
+        ? 4 * p * p * p
+        : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    };
+
+    progress = easeSwitch(rawProgress);
+  }
+
+  const adjustedToggleY = row1CenterY + getMiddleBaselineOffset(logoSize);
+  const togglePath = getAnimatedTogglePath(
+    toggleGlyph,
+    toggleX,
+    adjustedToggleY,
+    logoSize,
+    toggleWeight,
+    progress
+  );
+  renderer.drawPath(togglePath.pathData, textColor);
+
   renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, {
     baseline: 'middle',
   });
 
-  // Draw Second Row: User Text with Condensed Feature
-  const row2Y = startY + toggleHeight + rowSpacing + userTextSize / 2;
+  const row2Y = startY + logoSize + rowSpacing + userTextSize / 2;
   const row2StartX = (settings.canvasSize - secondRowWidth) / 2;
 
-  // Create offscreen renderer to avoid Chrome glyph cache bug
   const offscreenWidth = userTextWidth * 1.2;
   const offscreenHeight = userTextSize * 2;
   const offscreenData = renderer.createOffscreen(offscreenWidth, offscreenHeight);
@@ -134,8 +120,6 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
   let currentX = 0;
   for (let charIndex = 0; charIndex < userText.length; charIndex++) {
     const char = userText[charIndex];
-
-    // Determine weight based on animation capability
     let weight;
     if (isAnimated) {
       const t = getNormalizedTime(settings.time);
@@ -156,7 +140,6 @@ export function renderToggle39C3Theme(renderer, canvasSize) {
     currentX += charWidth;
   }
 
-  // Draw the offscreen renderer once with horizontal scaling applied
   renderer.drawOffscreen(
     offscreenData,
     0,
