@@ -23,8 +23,8 @@ export class SVGRenderer extends Renderer {
     this.svg.appendChild(rect);
   }
 
-  measureText(text, fontSize, weight) {
-    return getTextWidth(text, fontSize, weight);
+  measureText(text, fontSize, weight, width) {
+    return getTextWidth(text, fontSize, weight, width);
   }
 
   drawText(text, x, y, fontSize, weight, color, options = {}) {
@@ -38,7 +38,8 @@ export class SVGRenderer extends Renderer {
       adjustedY = y + ascender;
     }
 
-    const result = textToPath(text, x, adjustedY, fontSize, weight);
+    const width = options.width;
+    const result = textToPath(text, x, adjustedY, fontSize, weight, width);
 
     let transform = '';
     if (this.transform) {

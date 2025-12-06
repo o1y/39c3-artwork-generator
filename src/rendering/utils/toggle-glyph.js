@@ -116,7 +116,7 @@ export function getAnimatedTogglePath(glyphChar, x, y, fontSize, weight, circleP
     glyphStructureCache.set(glyphChar, structure);
   }
 
-  const variations = { wght: weight, wdth: settings.widthValue };
+  const variations = { wght: weight, wdth: 100 };
   const glyph = font.charToGlyph(glyphChar);
   const glyphPath = glyph.getPath(x, y, fontSize, { variation: variations });
   const commands = glyphPath.commands;

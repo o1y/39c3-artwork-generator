@@ -17,8 +17,8 @@ export class CanvasRenderer extends Renderer {
     this.ctx.fillRect(0, 0, width, height);
   }
 
-  measureText(text, fontSize, weight) {
-    return getTextWidth(text, fontSize, weight);
+  measureText(text, fontSize, weight, width) {
+    return getTextWidth(text, fontSize, weight, width);
   }
 
   drawText(text, x, y, fontSize, weight, color, options = {}) {
@@ -32,7 +32,8 @@ export class CanvasRenderer extends Renderer {
       adjustedY = y + ascender;
     }
 
-    const result = textToPath(text, x, adjustedY, fontSize, weight);
+    const width = options.width;
+    const result = textToPath(text, x, adjustedY, fontSize, weight, width);
 
     this.ctx.fillStyle = color;
     this.ctx.fill(new Path2D(result.pathData));

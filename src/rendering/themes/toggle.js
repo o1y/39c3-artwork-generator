@@ -16,7 +16,7 @@ function calculateToggleProgress(isAnimated) {
   return easeSwitch(rawProgress);
 }
 
-function measureTextWithAnimation(renderer, text, size, isAnimated, staticWeight) {
+function measureTextWithAnimation(renderer, text, size, isAnimated, staticWeight, width) {
   let textWidth = 0;
 
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
@@ -30,13 +30,13 @@ function measureTextWithAnimation(renderer, text, size, isAnimated, staticWeight
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
-    textWidth += renderer.measureText(text[charIndex], size, weight);
+    textWidth += renderer.measureText(text[charIndex], size, weight, width);
   }
 
   return textWidth;
 }
 
-function renderAnimatedText(renderer, text, startX, centerY, textSize, isAnimated, staticWeight) {
+function renderAnimatedText(renderer, text, startX, centerY, textSize, isAnimated, staticWeight, width) {
   let currentX = startX;
 
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
@@ -53,9 +53,9 @@ function renderAnimatedText(renderer, text, startX, centerY, textSize, isAnimate
     }
 
     const color = getColor(charIndex, 0, text.length, settings.time);
-    renderer.drawText(char, currentX, centerY, textSize, weight, color, { baseline: 'middle' });
+    renderer.drawText(char, currentX, centerY, textSize, weight, color, { baseline: 'middle', width });
 
-    const charWidth = renderer.measureText(char, textSize, weight);
+    const charWidth = renderer.measureText(char, textSize, weight, width);
     currentX += charWidth;
   }
 }
@@ -72,8 +72,8 @@ function renderSingleRowLayout(renderer) {
 
   const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';
   const toggleWeight = (settings.minWeight + settings.maxWeight) / 2;
-  let textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated);
-  let toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight);
+  let textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, 100);
+  let toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
   const spacing = textSize * 0.12;
   let totalContentWidth = toggleWidth + spacing + textWidth;
 
@@ -81,8 +81,8 @@ function renderSingleRowLayout(renderer) {
   if (totalContentWidth > usableWidth) {
     const scaleFactorInitial = usableWidth / totalContentWidth;
     textSize *= scaleFactorInitial;
-    toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight);
-    textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated);
+    toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
+    textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, 100);
     totalContentWidth = toggleWidth + spacing + textWidth;
   }
 
@@ -110,7 +110,7 @@ function renderSingleRowLayout(renderer) {
   );
 
   renderer.drawPath(togglePath.pathData, textColor);
-  renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated);
+  renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated, undefined, 100);
 }
 
 function renderTwoRowLayout(renderer) {
@@ -128,8 +128,8 @@ function renderTwoRowLayout(renderer) {
   const baseFactor = settings.canvasSize / 1000;
   let logoSize = 200 * baseFactor;
 
-  let toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
-  let logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
+  let toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight, 100);
+  let logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight, 100);
 
   const pillLogoSpacing = logoSize * 0.2;
   let firstRowWidth = toggleWidth + pillLogoSpacing + logoWidth;
@@ -140,42 +140,64 @@ function renderTwoRowLayout(renderer) {
   if (firstRowWidth > usableWidth) {
     const scaleFactorRow1 = usableWidth / firstRowWidth;
     logoSize *= scaleFactorRow1;
-    toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
-    logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
+    toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight, 100);
+    logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight, 100);
     firstRowWidth = toggleWidth + logoSize * 0.2 + logoWidth;
   }
 
   const preset = themePresets[settings.theme];
   const staticWeight = preset?.staticWeight;
-  let userTextWidth = renderer.measureText(
+
+  const MIN_WIDTH = 50;
+  const MAX_WIDTH = 200;
+  const DEFAULT_WIDTH = 100;
+  const targetWidth = usableWidth;
+
+  let dynamicWidth = DEFAULT_WIDTH;
+  let userTextWidth = measureTextWithAnimation(
+    renderer,
     userText,
     userTextSize,
-    staticWeight || settings.maxWeight
+    isAnimated,
+    staticWeight,
+    dynamicWidth
   );
-  let secondRowWidth = userTextWidth;
 
-  let widthScaleFactor = 1.0;
-  if (secondRowWidth > usableWidth) {
-    widthScaleFactor = usableWidth / secondRowWidth;
-    secondRowWidth = usableWidth;
-  }
+  for (let i = 0; i < 5; i++) {
+    const currentRatio = targetWidth / userTextWidth;
 
-  const maxRowWidth = Math.max(firstRowWidth, secondRowWidth);
-  if (maxRowWidth > usableWidth) {
-    const globalScale = usableWidth / maxRowWidth;
+    if (Math.abs(currentRatio - 1.0) < 0.02) {
+      break;
+    }
 
-    logoSize *= globalScale;
-    toggleWidth = renderer.measureText(toggleGlyph, logoSize, toggleWeight);
-    logoWidth = renderer.measureText(logoText, logoSize, settings.maxWeight);
-    firstRowWidth = toggleWidth + logoSize * 0.15 + logoWidth;
+    const adjustment = (currentRatio - 1.0) * 0.5;
+    dynamicWidth = dynamicWidth * (1 + adjustment);
+    dynamicWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, dynamicWidth));
 
-    userTextSize *= globalScale;
-    userTextWidth = renderer.measureText(
+    userTextWidth = measureTextWithAnimation(
+      renderer,
       userText,
       userTextSize,
-      staticWeight || settings.maxWeight
+      isAnimated,
+      staticWeight,
+      dynamicWidth
     );
-    secondRowWidth = userTextWidth * widthScaleFactor;
+  }
+
+  let secondRowWidth = userTextWidth;
+
+  if (secondRowWidth > usableWidth) {
+    const scaleFactorRow2 = usableWidth / secondRowWidth;
+    userTextSize *= scaleFactorRow2;
+    userTextWidth = measureTextWithAnimation(
+      renderer,
+      userText,
+      userTextSize,
+      isAnimated,
+      staticWeight,
+      dynamicWidth
+    );
+    secondRowWidth = userTextWidth;
   }
 
   const rowSpacing = userTextSize * 0.15;
@@ -208,6 +230,7 @@ function renderTwoRowLayout(renderer) {
   renderer.drawPath(togglePath.pathData, textColor);
   renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, {
     baseline: 'middle',
+    width: 100,
   });
 
   const row2Y = startY + logoSize + rowSpacing + userTextSize / 2;
@@ -225,7 +248,8 @@ function renderTwoRowLayout(renderer) {
     offscreenHeight / 2,
     userTextSize,
     isAnimated,
-    staticWeight
+    staticWeight,
+    dynamicWidth
   );
 
   renderer.drawOffscreen(
@@ -236,7 +260,7 @@ function renderTwoRowLayout(renderer) {
     offscreenHeight,
     row2StartX,
     row2Y - offscreenHeight / 2,
-    offscreenWidth * widthScaleFactor,
+    offscreenWidth,
     offscreenHeight
   );
 }

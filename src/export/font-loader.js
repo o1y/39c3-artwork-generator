@@ -19,10 +19,11 @@ function ensureFontLoaded() {
 /**
  * Create variation object with weight and width
  * @param {number} weight - Font weight (10-100)
+ * @param {number} width - Font width (50-100), defaults to settings.widthValue
  * @returns {Object} Variation settings
  */
-function createVariations(weight) {
-  return { wght: weight, wdth: settings.widthValue };
+function createVariations(weight, width = settings.widthValue) {
+  return { wght: weight, wdth: width };
 }
 
 /**
@@ -61,12 +62,13 @@ export async function loadFont() {
  * @param {number} y - Y position
  * @param {number} fontSize - Font size in pixels
  * @param {number} weight - Font weight (10-100)
+ * @param {number} width - Font width (50-100), defaults to settings.widthValue
  * @returns {Object} Object containing path data and advance width
  */
-export function textToPath(text, x, y, fontSize, weight) {
+export function textToPath(text, x, y, fontSize, weight, width = settings.widthValue) {
   ensureFontLoaded();
 
-  const variations = createVariations(weight);
+  const variations = createVariations(weight, width);
   const path = font.getPath(text, x, y, fontSize, { features: {}, variation: variations });
 
   return {
@@ -80,12 +82,13 @@ export function textToPath(text, x, y, fontSize, weight) {
  * @param {string} text - The text to measure
  * @param {number} fontSize - Font size in pixels
  * @param {number} weight - Font weight (10-100)
+ * @param {number} width - Font width (50-100), defaults to settings.widthValue
  * @returns {number} Width in pixels
  */
-export function getTextWidth(text, fontSize, weight) {
+export function getTextWidth(text, fontSize, weight, width = settings.widthValue) {
   ensureFontLoaded();
 
-  const variations = createVariations(weight);
+  const variations = createVariations(weight, width);
   return font.getAdvanceWidth(text, fontSize, { variation: variations });
 }
 
