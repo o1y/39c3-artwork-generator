@@ -36,6 +36,7 @@ export function createAppStore() {
 
         setupWatchers(this);
         startFrameUpdateLoop(this);
+        this.initFullscreenListener();
       },
     }
   );

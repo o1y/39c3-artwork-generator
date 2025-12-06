@@ -3,6 +3,7 @@ import { renderToggleTheme } from '../rendering/themes/toggle.js';
 import { renderLinesTheme } from '../rendering/themes/lines.js';
 import { renderCCCTheme } from '../rendering/themes/ccc.js';
 import { renderTerminalTheme } from '../rendering/themes/terminal.js';
+import { renderDVDTheme } from '../rendering/themes/dvd.js';
 import { getCanvas, getContext } from '../rendering/canvas.js';
 import { CanvasRenderer } from '../rendering/core/canvas-renderer.js';
 
@@ -26,6 +27,8 @@ function render() {
     renderCCCTheme(renderer, canvas.width);
   } else if (settings.theme === 'terminal') {
     renderTerminalTheme(renderer, canvas.width);
+  } else if (settings.theme === 'dvd') {
+    renderDVDTheme(renderer, canvas.width);
   } else {
     renderLinesTheme(renderer, canvas.width);
   }

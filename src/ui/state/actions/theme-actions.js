@@ -1,4 +1,5 @@
 import { settings, themePresets, defaultTexts } from '../../../config/settings.js';
+import { resumeAnimation } from '../../../animation/loop.js';
 
 export function createThemeActions() {
   return {
@@ -24,8 +25,15 @@ export function createThemeActions() {
         }
       }
 
-      if (!this.isColorModeDirty && preset && preset.colorMode) {
-        this.colorMode = preset.colorMode;
+      if (preset && preset.colorMode) {
+        if (newTheme === 'dvd' || !this.isColorModeDirty) {
+          this.colorMode = preset.colorMode;
+        }
+      }
+
+      if (newTheme === 'dvd' && this.isPaused) {
+        resumeAnimation();
+        this.isPaused = false;
       }
 
       if (!this.isAnimated && (this.exportFormat === 'video' || this.exportFormat === 'gif')) {

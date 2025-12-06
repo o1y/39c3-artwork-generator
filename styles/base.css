@@ -77,4 +77,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  :fullscreen .header,
+  :fullscreen .footer-bar,
+  :fullscreen .stats,
+  :fullscreen .fullscreen-btn {
+    display: none !important;
+  }
+
+  :fullscreen .canvas-container {
+    padding: 0;
+  }
 }

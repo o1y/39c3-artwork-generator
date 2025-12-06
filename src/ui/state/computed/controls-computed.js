@@ -13,7 +13,7 @@ export function createControlsComputed() {
     },
 
     get showSpeedControl() {
-      return this.isAnimated;
+      return this.isAnimated && this.controls.showAnimationSpeed !== false;
     },
 
     get showLinesControl() {
@@ -32,6 +32,10 @@ export function createControlsComputed() {
       return this.controls.showToggleVariant;
     },
 
+    get showColorModeControl() {
+      return this.controls.showColorMode !== false;
+    },
+
     get availableColorModes() {
       const showSmoothColorModes = this.controls.showSmoothColorModes !== false;
 
@@ -42,20 +46,38 @@ export function createControlsComputed() {
       return COLOR_MODE_OPTIONS.filter((option) => !option.value.includes('-smooth'));
     },
 
+    get showTextInput() {
+      return this.controls.showTextInput !== false;
+    },
+
     get showAnimationControls() {
-      return this.isAnimated;
+      return this.isAnimated && this.controls.showPlayControls !== false;
+    },
+
+    get showExportControls() {
+      return this.controls.showExport !== false;
+    },
+
+    get showFooter() {
+      return this.showAnimationControls || this.showExportControls;
+    },
+
+    get showFullscreenButton() {
+      return this.controls.showFullscreen !== false;
     },
 
     get showDurationControl() {
-      return this.exportFormat === 'video' || this.exportFormat === 'gif';
+      return (
+        this.showExportControls && (this.exportFormat === 'video' || this.exportFormat === 'gif')
+      );
     },
 
     get showResolutionControl() {
-      return this.exportFormat !== 'svg';
+      return this.showExportControls && this.exportFormat !== 'svg';
     },
 
     get videoExportDisabled() {
-      return !this.isAnimated;
+      return !this.isAnimated || this.controls.showVideoExport === false;
     },
 
     get availableResolutions() {

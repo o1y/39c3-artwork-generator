@@ -36,7 +36,16 @@ function measureTextWithAnimation(renderer, text, size, isAnimated, staticWeight
   return textWidth;
 }
 
-function renderAnimatedText(renderer, text, startX, centerY, textSize, isAnimated, staticWeight, width) {
+function renderAnimatedText(
+  renderer,
+  text,
+  startX,
+  centerY,
+  textSize,
+  isAnimated,
+  staticWeight,
+  width
+) {
   let currentX = startX;
 
   for (let charIndex = 0; charIndex < text.length; charIndex++) {
@@ -53,7 +62,10 @@ function renderAnimatedText(renderer, text, startX, centerY, textSize, isAnimate
     }
 
     const color = getColor(charIndex, 0, text.length, settings.time);
-    renderer.drawText(char, currentX, centerY, textSize, weight, color, { baseline: 'middle', width });
+    renderer.drawText(char, currentX, centerY, textSize, weight, color, {
+      baseline: 'middle',
+      width,
+    });
 
     const charWidth = renderer.measureText(char, textSize, weight, width);
     currentX += charWidth;
