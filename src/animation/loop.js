@@ -14,7 +14,7 @@ let frameCount = 0;
 let lastFPSUpdate = performance.now();
 let fps = 30;
 let isPaused = false;
-let manualFrameControl = false;
+let pausedByVisibility = false;
 
 function render() {
   const canvas = getCanvas();
@@ -59,12 +59,10 @@ export function animate() {
 
 export function pauseAnimation() {
   isPaused = true;
-  manualFrameControl = true;
 }
 
 export function resumeAnimation() {
   isPaused = false;
-  manualFrameControl = false;
   lastFrameTime = performance.now();
 }
 
@@ -81,3 +79,22 @@ export function setFramePosition(time) {
 
 // Export render function for use in export functionality
 export { render };
+
+export function initVisibilityHandler() {
+  if (document.hidden) {
+    pausedByVisibility = true;
+    isPaused = true;
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (!isPaused) {
+        pausedByVisibility = true;
+        isPaused = true;
+      }
+    } else if (pausedByVisibility) {
+      pausedByVisibility = false;
+      resumeAnimation();
+    }
+  });
+}
