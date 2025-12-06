@@ -57,6 +57,7 @@ export const themePresets = {
   toggle: {
     colorMode: 'mono',
     text: defaultTexts.default,
+    layout: 'single-row',
     capabilities: DEFAULT_CAPABILITIES,
     controls: {
       ...DEFAULT_CONTROLS,
@@ -66,6 +67,7 @@ export const themePresets = {
   toggle39c3Animated: {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
+    layout: 'two-row',
     capabilities: {
       ...DEFAULT_CAPABILITIES,
       variableWeight: false,
@@ -78,6 +80,7 @@ export const themePresets = {
   toggle39c3Static: {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
+    layout: 'two-row',
     staticWeight: 80,
     capabilities: {
       animated: false,

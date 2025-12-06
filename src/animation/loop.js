@@ -1,6 +1,5 @@
 import { settings } from '../config/settings.js';
 import { renderToggleTheme } from '../rendering/themes/toggle.js';
-import { renderToggle39C3Theme } from '../rendering/themes/toggle39c3.js';
 import { renderLinesTheme } from '../rendering/themes/lines.js';
 import { renderCCCTheme } from '../rendering/themes/ccc.js';
 import { renderTerminalTheme } from '../rendering/themes/terminal.js';
@@ -21,9 +20,7 @@ function render() {
   const ctx = getContext();
   const renderer = new CanvasRenderer(ctx);
 
-  if (settings.theme.startsWith('toggle39c3')) {
-    renderToggle39C3Theme(renderer, canvas.width);
-  } else if (settings.theme.startsWith('toggle')) {
+  if (settings.theme.startsWith('toggle')) {
     renderToggleTheme(renderer, canvas.width);
   } else if (settings.theme === 'ccc') {
     renderCCCTheme(renderer, canvas.width);

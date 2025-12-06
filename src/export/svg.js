@@ -4,7 +4,6 @@ import { generateFilename, downloadBlob } from './utils/download.js';
 import { SVGRenderer } from '../rendering/core/svg-renderer.js';
 import { renderLinesTheme } from '../rendering/themes/lines.js';
 import { renderToggleTheme } from '../rendering/themes/toggle.js';
-import { renderToggle39C3Theme } from '../rendering/themes/toggle39c3.js';
 import { renderCCCTheme } from '../rendering/themes/ccc.js';
 import { renderTerminalTheme } from '../rendering/themes/terminal.js';
 
@@ -15,9 +14,7 @@ export async function exportSVG() {
   const svg = createSVGDocument(size);
   const renderer = new SVGRenderer(svg);
 
-  if (settings.theme.startsWith('toggle39c3')) {
-    renderToggle39C3Theme(renderer, size);
-  } else if (settings.theme.startsWith('toggle')) {
+  if (settings.theme.startsWith('toggle')) {
     renderToggleTheme(renderer, size);
   } else if (settings.theme === 'ccc') {
     renderCCCTheme(renderer, size);
