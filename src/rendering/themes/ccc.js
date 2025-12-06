@@ -154,7 +154,7 @@ export function renderCCCTheme(renderer, canvasSize) {
     const cccWeight =
       settings.minWeight + ((wave + 1) / 2) * (settings.maxWeight - settings.minWeight);
 
-    const breathe = Math.sin(t);
+    const breathe = -Math.sin(t);
     const breatheWeight =
       settings.minWeight + ((breathe + 1) / 2) * (settings.maxWeight - settings.minWeight);
 
