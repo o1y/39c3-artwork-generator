@@ -57,7 +57,7 @@ export function renderLinesTheme(renderer, canvasSize) {
         settings.time
       );
 
-      const color = getColor(charIndex, lineIndex, text.length, settings.time);
+      const color = getColor(charIndex, lineIndex, settings.time);
       renderer.drawText(char, x, y, finalFontSize, weight, color, { baseline: 'top' });
 
       const charWidth = renderer.measureText(char, finalFontSize, weight);

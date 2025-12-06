@@ -22,6 +22,7 @@ export function createInitialState() {
     // Animation state
     isPaused: false,
     currentFrame: 0,
+    fps: 0,
 
     // Export state
     isExporting: false,

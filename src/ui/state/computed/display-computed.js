@@ -1,4 +1,4 @@
-import { ANIMATION_FPS, TOTAL_FRAMES } from '../constants.js';
+import { TOTAL_FRAMES } from '../constants.js';
 
 export function createDisplayComputed() {
   return {

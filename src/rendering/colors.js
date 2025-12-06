@@ -1,5 +1,5 @@
 import { settings } from '../config/settings.js';
-import { BRAND_COLORS as colors } from '../config/colors.js';
+import { BRAND_COLORS as colors, COLOR_MODES } from '../config/colors.js';
 import { getNormalizedTime } from '../animation/timing.js';
 
 function lerpColor(color1, color2, t) {
@@ -23,10 +23,8 @@ function lerpColor(color1, color2, t) {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
-function getAnimatedColor(palette, staticIndex, normalizedT, charIndex, lineIndex, smooth = false) {
-  // normalizedT is in [0, 1), scale it to cycle through palette
-  // Use a slowdown that maintains perfect looping (integer number of cycles)
-  const slowdownFactor = 0.2; // Target 20% of original speed
+function getAnimatedColor(palette, normalizedT, charIndex, lineIndex, smooth = false) {
+  const slowdownFactor = 0.2;
   const cycles = Math.max(1, Math.round(palette.length * slowdownFactor));
   const multiplier = cycles / palette.length;
 
@@ -46,51 +44,42 @@ function getAnimatedColor(palette, staticIndex, normalizedT, charIndex, lineInde
   return lerpColor(palette[index1], palette[index2], fraction);
 }
 
-export function getBackgroundColor() {
-  switch (settings.colorMode) {
-    case 'mono-inv':
-      return colors.natural; // Natural background
-    case 'green-inv':
-      return '#00ff00'; // Neon Green background
-    case 'violet-inv':
-      return '#9673ff'; // Electric Violet background
-    default:
-      return colors.dark; // Muted Black background
+function resolveColor(colorRef) {
+  if (typeof colorRef === 'string') {
+    return colors[colorRef];
   }
+  if (colorRef && typeof colorRef === 'object' && colorRef.palette) {
+    return colors[colorRef.palette][colorRef.index];
+  }
+  return colors.dark;
 }
 
-export function getColor(charIndex, lineIndex, textLength, time) {
-  const isAnimated = settings.capabilities && settings.capabilities.animated;
-  const effectiveTime = isAnimated ? time : 0;
-  const normalizedT = getNormalizedTime(effectiveTime) / (2 * Math.PI);
+export function getBackgroundColor() {
+  const mode = COLOR_MODES[settings.colorMode];
+  if (!mode) return colors.dark;
+  return resolveColor(mode.background);
+}
 
-  switch (settings.colorMode) {
-    case 'green':
-      return isAnimated
-        ? getAnimatedColor(colors.green, 3, normalizedT, charIndex, lineIndex)
-        : colors.green[3];
+export function getColor(charIndex, lineIndex, time) {
+  const mode = COLOR_MODES[settings.colorMode];
+  if (!mode) return colors.natural;
 
-    case 'green-smooth':
-      return isAnimated
-        ? getAnimatedColor(colors.green, 3, normalizedT, charIndex, lineIndex, true)
-        : colors.green[3];
-
-    case 'green-inv':
-    case 'violet-inv':
-    case 'mono-inv':
-      return colors.dark;
-
-    case 'violet':
-      return isAnimated
-        ? getAnimatedColor(colors.violet, 2, normalizedT, charIndex, lineIndex)
-        : colors.violet[2];
-
-    case 'violet-smooth':
-      return isAnimated
-        ? getAnimatedColor(colors.violet, 2, normalizedT, charIndex, lineIndex, true)
-        : colors.violet[2];
-
-    default:
-      return colors.natural;
+  if (mode.foreground) {
+    return resolveColor(mode.foreground);
   }
+
+  if (mode.palette) {
+    const isAnimated = settings.capabilities && settings.capabilities.animated;
+    const palette = colors[mode.palette];
+    const staticColor = palette[mode.staticIndex];
+
+    if (!isAnimated) {
+      return staticColor;
+    }
+
+    const normalizedT = getNormalizedTime(time) / (2 * Math.PI);
+    return getAnimatedColor(palette, normalizedT, charIndex, lineIndex, mode.smooth);
+  }
+
+  return colors.natural;
 }

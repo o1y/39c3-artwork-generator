@@ -1,6 +1,6 @@
 import { settings, themePresets } from '../../config/settings.js';
 import { setFramePosition, getIsPaused, render } from '../../animation/loop.js';
-import { ANIMATION_FPS, TOTAL_FRAMES } from './constants.js';
+import { ANIMATION_FPS } from './constants.js';
 
 export function setupWatchers(store) {
   store.$watch('text', (value) => {

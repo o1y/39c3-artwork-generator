@@ -61,7 +61,7 @@ function renderAnimatedText(
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
-    const color = getColor(charIndex, 0, text.length, settings.time);
+    const color = getColor(charIndex, 0, settings.time);
     renderer.drawText(char, currentX, centerY, textSize, weight, color, {
       baseline: 'middle',
       width,
@@ -77,7 +77,7 @@ function renderSingleRowLayout(renderer) {
   if (!text) return;
 
   const [position, style] = settings.toggleVariant.split('-');
-  const textColor = getColor(0, 0, text.length, settings.time);
+  const textColor = getColor(0, 0, settings.time);
   const isAnimated = settings.capabilities?.animated !== false;
 
   let textSize = 200;
@@ -131,7 +131,7 @@ function renderTwoRowLayout(renderer) {
   if (!userText) return;
 
   const isAnimated = settings.capabilities?.animated !== false;
-  const textColor = getColor(0, 0, 1, settings.time);
+  const textColor = getColor(0, 0, settings.time);
 
   const [position, style] = settings.toggleVariant.split('-');
   const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';

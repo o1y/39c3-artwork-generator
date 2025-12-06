@@ -178,18 +178,21 @@ export function renderTerminalTheme(renderer, canvasSize) {
     let animWeight;
     const linePhase = (lineIndex / numTerminalLines) * Math.PI * 2;
     switch (template.animStyle) {
-      case 'pulse':
+      case 'pulse': {
         const pulse = (Math.sin(t * 1 + linePhase) + 1) / 2;
         animWeight = settings.minWeight + pulse * (settings.maxWeight - settings.minWeight);
         break;
-      case 'wave':
+      }
+      case 'wave': {
         const wave = (Math.sin(t * 1 + linePhase + Math.PI / 3) + 1) / 2;
         animWeight = settings.minWeight + wave * (settings.maxWeight - settings.minWeight);
         break;
-      case 'breathe':
+      }
+      case 'breathe': {
         const breathe = (Math.sin(t * 1 + linePhase + (Math.PI * 2) / 3) + 1) / 2;
         animWeight = settings.minWeight + breathe * (settings.maxWeight - settings.minWeight);
         break;
+      }
       default:
         animWeight = avgWeight;
     }
@@ -217,7 +220,7 @@ export function renderTerminalTheme(renderer, canvasSize) {
     let charIndex = 0;
 
     if (actualPrefix) {
-      const color = getColor(charIndex, lineIndex, userText.length + 10, settings.time);
+      const color = getColor(charIndex, lineIndex, settings.time);
       renderer.drawText(actualPrefix, x, y, finalFontSize, animWeight, color, {
         baseline: 'alphabetic',
       });
@@ -226,7 +229,7 @@ export function renderTerminalTheme(renderer, canvasSize) {
     }
 
     if (template.logo) {
-      const color = getColor(charIndex, lineIndex, userText.length + 10, settings.time);
+      const color = getColor(charIndex, lineIndex, settings.time);
       renderer.drawText(logo39C3, x, y, finalFontSize, animWeight, color, {
         baseline: 'alphabetic',
       });
@@ -235,7 +238,7 @@ export function renderTerminalTheme(renderer, canvasSize) {
     }
 
     if (template.separator) {
-      const color = getColor(charIndex, lineIndex, userText.length + 10, settings.time);
+      const color = getColor(charIndex, lineIndex, settings.time);
       renderer.drawText(template.separator, x, y, finalFontSize, animWeight, color, {
         baseline: 'alphabetic',
       });
@@ -254,12 +257,7 @@ export function renderTerminalTheme(renderer, canvasSize) {
       const charWave = (Math.sin(t + charPhase + linePhase) + 1) / 2;
       const charWeight = settings.minWeight + charWave * (settings.maxWeight - settings.minWeight);
 
-      const color = getColor(
-        charIndex + i,
-        lineIndex,
-        textWithAfterAndSuffix.length + 10,
-        settings.time
-      );
+      const color = getColor(charIndex + i, lineIndex, settings.time);
       renderer.drawText(char, x, y, finalFontSize, charWeight, color, { baseline: 'alphabetic' });
 
       x += renderer.measureText(char, finalFontSize, charWeight);

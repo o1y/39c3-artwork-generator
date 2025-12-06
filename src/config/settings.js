@@ -1,3 +1,9 @@
+import { renderToggleTheme } from '../rendering/themes/toggle.js';
+import { renderLinesTheme } from '../rendering/themes/lines.js';
+import { renderCCCTheme } from '../rendering/themes/ccc.js';
+import { renderTerminalTheme } from '../rendering/themes/terminal.js';
+import { renderDVDTheme } from '../rendering/themes/dvd.js';
+
 const DEFAULT_MIN_WEIGHT = 10;
 const DEFAULT_MAX_WEIGHT = 100;
 const DEFAULT_CANVAS_SIZE = 1000;
@@ -43,6 +49,7 @@ export const settings = {
 
 export const themePresets = {
   lines: {
+    renderer: renderLinesTheme,
     colorMode: 'violet-inv',
     numLines: 11,
     text: defaultTexts.default,
@@ -55,6 +62,7 @@ export const themePresets = {
     },
   },
   toggle: {
+    renderer: renderToggleTheme,
     colorMode: 'mono',
     text: defaultTexts.default,
     layout: 'single-row',
@@ -65,6 +73,7 @@ export const themePresets = {
     },
   },
   toggle39c3Animated: {
+    renderer: renderToggleTheme,
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     layout: 'two-row',
@@ -78,6 +87,7 @@ export const themePresets = {
     },
   },
   toggle39c3Static: {
+    renderer: renderToggleTheme,
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     layout: 'two-row',
@@ -93,6 +103,7 @@ export const themePresets = {
     },
   },
   ccc: {
+    renderer: renderCCCTheme,
     colorMode: 'mono',
     numLines: 22,
     text: defaultTexts.ccc,
@@ -106,6 +117,7 @@ export const themePresets = {
     },
   },
   terminal: {
+    renderer: renderTerminalTheme,
     colorMode: 'green',
     numLines: 7,
     text: 'POWER CYCLES',
@@ -116,6 +128,7 @@ export const themePresets = {
     },
   },
   dvd: {
+    renderer: renderDVDTheme,
     colorMode: 'mono',
     text: '\uE002',
     capabilities: {

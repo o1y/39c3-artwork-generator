@@ -47,7 +47,7 @@ function drawCCC(
   lineIndex,
   globalCharIndex
 ) {
-  const color = getColor(globalCharIndex, lineIndex, settings.text.length, settings.time);
+  const color = getColor(globalCharIndex, lineIndex, settings.time);
   renderer.drawText(fixedText, x, y, finalFontSize, cccWeight, color, { baseline: 'top' });
 
   const fixedWidth = renderer.measureText(fixedTextUpper, finalFontSize, avgWeight);
@@ -74,7 +74,7 @@ function drawUserText(
 
   for (let charIndex = 0; charIndex < userText.length; charIndex++) {
     const char = userText[charIndex];
-    const color = getColor(globalCharIndex + charIndex, lineIndex, userText.length, settings.time);
+    const color = getColor(globalCharIndex + charIndex, lineIndex, settings.time);
     renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, { baseline: 'top' });
 
     const charWidth = renderer.measureText(char, finalFontSize, avgWeight);

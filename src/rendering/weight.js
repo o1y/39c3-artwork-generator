@@ -2,13 +2,6 @@ import { settings } from '../config/settings.js';
 import { getNormalizedTime } from '../animation/timing.js';
 import { getTextWidth } from '../export/font-loader.js';
 
-// Reference to canvas context (set externally)
-let ctx = null;
-
-export function setContext(context) {
-  ctx = context;
-}
-
 // Measure text width for a specific line (exact port from DrawBot)
 export function getLineWidth(text, size, lineIndex, timeOffset = 0) {
   let total = 0;
@@ -78,26 +71,26 @@ export function applyAnimation(weight, charIndex, lineIndex, time) {
   const t = getNormalizedTime(time);
 
   switch (settings.mode) {
-    case 'wave':
+    case 'wave': {
       const wave = Math.sin(t + charIndex * 0.3 + lineIndex * 0.5) * 15;
       return weight + wave;
-
-    case 'pulse':
+    }
+    case 'pulse': {
       const pulse = Math.sin(t * 2) * 20;
       return weight + pulse;
-
-    case 'rotate':
+    }
+    case 'rotate': {
       const rotate = Math.sin(t + (charIndex + lineIndex) * 0.4) * 20;
       return weight + rotate;
-
-    case 'breathe':
+    }
+    case 'breathe': {
       const breathe = (Math.sin(t) * 0.5 + 0.5) * 30;
       return weight + breathe - 15;
-
-    case 'bounce':
+    }
+    case 'bounce': {
       const bounce = Math.abs(Math.sin(t + charIndex * 0.2)) * 25;
       return weight + bounce;
-
+    }
     default:
       return weight;
   }

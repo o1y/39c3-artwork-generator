@@ -137,7 +137,7 @@ export function renderDVDTheme(renderer, canvasSize) {
 
   for (let i = 0; i < logo39C3.length; i++) {
     const char = logo39C3[i];
-    const color = isScreenFlashing ? BRAND_COLORS.dark : getColor(i, 0, logo39C3.length, time);
+    const color = isScreenFlashing ? BRAND_COLORS.dark : getColor(i, 0, time);
     const charPhase = i * 0.4;
     const charPulse = (Math.sin(t + charPhase) + 1) / 2;
     const charWeight = settings.minWeight + (settings.maxWeight - settings.minWeight) * charPulse;

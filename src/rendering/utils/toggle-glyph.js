@@ -1,5 +1,3 @@
-import { settings } from '../../config/settings.js';
-
 let font = null;
 const glyphStructureCache = new Map();
 
