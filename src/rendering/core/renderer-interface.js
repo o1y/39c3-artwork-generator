@@ -1,21 +1,21 @@
 export class Renderer {
-  drawBackground(width, height, color) {
+  drawBackground(_width, _height, _color) {
     throw new Error('Method drawBackground() must be implemented');
   }
 
-  measureText(text, fontSize, weight) {
+  measureText(_text, _fontSize, _weight) {
     throw new Error('Method measureText() must be implemented');
   }
 
-  drawText(text, x, y, fontSize, weight, color, options = {}) {
+  drawText(_text, _x, _y, _fontSize, _weight, _color, _options = {}) {
     throw new Error('Method drawText() must be implemented');
   }
 
-  drawRect(x, y, width, height, fillColor) {
+  drawRect(_x, _y, _width, _height, _fillColor) {
     throw new Error('Method drawRect() must be implemented');
   }
 
-  drawCircle(cx, cy, r, fillColor = null, strokeColor = null, strokeWidth = 1) {
+  drawCircle(_cx, _cy, _r, _fillColor = null, _strokeColor = null, _strokeWidth = 1) {
     throw new Error('Method drawCircle() must be implemented');
   }
 
@@ -23,7 +23,7 @@ export class Renderer {
     throw new Error('Method beginPath() must be implemented');
   }
 
-  arc(x, y, radius, startAngle, endAngle) {
+  arc(_x, _y, _radius, _startAngle, _endAngle) {
     throw new Error('Method arc() must be implemented');
   }
 
@@ -31,15 +31,15 @@ export class Renderer {
     throw new Error('Method closePath() must be implemented');
   }
 
-  fill(color) {
+  fill(_color) {
     throw new Error('Method fill() must be implemented');
   }
 
-  stroke(color, width) {
+  stroke(_color, _width) {
     throw new Error('Method stroke() must be implemented');
   }
 
-  drawPath(pathData, color) {
+  drawPath(_pathData, _color) {
     throw new Error('Method drawPath() must be implemented');
   }
 
@@ -51,19 +51,19 @@ export class Renderer {
     throw new Error('Method restore() must be implemented');
   }
 
-  translate(x, y) {
+  translate(_x, _y) {
     throw new Error('Method translate() must be implemented');
   }
 
-  scale(x, y) {
+  scale(_x, _y) {
     throw new Error('Method scale() must be implemented');
   }
 
-  createOffscreen(width, height) {
+  createOffscreen(_width, _height) {
     throw new Error('Method createOffscreen() must be implemented');
   }
 
-  drawOffscreen(offscreenRenderer, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+  drawOffscreen(_offscreenRenderer, _sx, _sy, _sWidth, _sHeight, _dx, _dy, _dWidth, _dHeight) {
     throw new Error('Method drawOffscreen() must be implemented');
   }
 
