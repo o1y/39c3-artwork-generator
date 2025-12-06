@@ -1,4 +1,10 @@
-import { AVAILABLE_RESOLUTIONS, AVAILABLE_GIF_RESOLUTIONS, COLOR_MODE_OPTIONS, MAX_EXPORT_FRAMES, TOTAL_FRAMES } from '../constants.js';
+import {
+  AVAILABLE_RESOLUTIONS,
+  AVAILABLE_GIF_RESOLUTIONS,
+  COLOR_MODE_OPTIONS,
+  MAX_EXPORT_FRAMES,
+  TOTAL_FRAMES,
+} from '../constants.js';
 
 export function createControlsComputed() {
   return {

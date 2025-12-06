@@ -1,13 +1,25 @@
 import GIF from 'gif.js';
 import { settings } from '../config/settings.js';
 import { getCanvas, getContext, setCanvas } from '../rendering/canvas.js';
-import { generateFilename } from './filename.js';
-import { render, pauseAnimation, resumeAnimation, getIsPaused } from '../animation/loop.js';
+import { render } from '../animation/loop.js';
 import { ANIMATION_FPS, TOTAL_FRAMES } from '../ui/state/constants.js';
+import { createTempCanvas, cleanupTempCanvas, calculateGifScale } from './utils/canvas-manager.js';
+import {
+  captureSettingsState,
+  restoreSettingsState,
+  applyScaledSettings,
+  resetAnimationTime,
+} from './utils/settings-state.js';
+import { pauseWithState, restoreAnimationState } from './utils/animation-control.js';
+import { generateFilename, downloadBlob } from './utils/download.js';
 
-export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 1000, callbacks = {}) {
-  const wasPaused = getIsPaused();
-  pauseAnimation();
+export async function exportGIF(
+  loops = 1,
+  animationSpeed = 1.5,
+  resolution = 1000,
+  callbacks = {}
+) {
+  const wasPaused = pauseWithState();
 
   if (callbacks.onStart) {
     callbacks.onStart();
@@ -16,42 +28,22 @@ export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 10
   try {
     const originalCanvas = getCanvas();
     const originalCtx = getContext();
-    const originalCanvasSize = settings.canvasSize;
-    const originalMargin = settings.margin;
-    const originalTime = settings.time;
-    const originalAnimationSpeed = settings.animationSpeed;
+    const settingsState = captureSettingsState();
 
-    settings.time = 0;
-    settings.animationSpeed = animationSpeed;
+    resetAnimationTime(animationSpeed);
 
-    let renderCanvas = originalCanvas;
-    let tempCanvas = null;
+    const gifScale = calculateGifScale(resolution);
+    const { canvas: tempCanvas, context: recordingCtx } = createTempCanvas(gifScale, true, false);
 
-    const gifScale = resolution / settings.canvasSize;
-
-    tempCanvas = document.createElement('canvas');
-    tempCanvas.width = resolution;
-    tempCanvas.height = resolution;
-
-    tempCanvas.style.position = 'absolute';
-    tempCanvas.style.left = '-9999px';
-    document.body.appendChild(tempCanvas);
-
-    renderCanvas = tempCanvas;
-    const recordingCtx = tempCanvas.getContext('2d', { alpha: false });
-
-    settings.canvasSize = resolution;
-    settings.margin = settings.margin * gifScale;
-
+    applyScaledSettings(resolution, gifScale);
     setCanvas(tempCanvas, recordingCtx);
 
-    // Use 15 FPS for GIFs to reduce file size while maintaining smoothness
     const targetFPS = 15;
     const gif = new GIF({
       workers: 2,
       quality: 10,
-      width: renderCanvas.width,
-      height: renderCanvas.height,
+      width: tempCanvas.width,
+      height: tempCanvas.height,
       workerScript: '/gif.worker.js',
     });
 
@@ -69,7 +61,7 @@ export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 10
       for (let j = i; j < end; j++) {
         settings.time += timeIncrement;
         render();
-        gif.addFrame(renderCanvas, { copy: true, delay });
+        gif.addFrame(tempCanvas, { copy: true, delay });
       }
 
       const percentage = Math.floor((end / totalFrames) * 70);
@@ -83,12 +75,8 @@ export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 10
     }
 
     setCanvas(originalCanvas, originalCtx);
-    settings.canvasSize = originalCanvasSize;
-    settings.margin = originalMargin;
-    document.body.removeChild(tempCanvas);
-
-    settings.time = originalTime;
-    settings.animationSpeed = originalAnimationSpeed;
+    restoreSettingsState(settingsState);
+    cleanupTempCanvas(tempCanvas);
 
     gif.on('progress', (progress) => {
       const percentage = 75 + Math.floor(progress * 20);
@@ -98,20 +86,13 @@ export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 10
     });
 
     gif.on('finished', (blob) => {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = generateFilename('gif');
-      link.href = url;
-      link.click();
-      URL.revokeObjectURL(url);
+      downloadBlob(blob, generateFilename('gif'));
 
       if (callbacks.onProgress) {
         callbacks.onProgress(100);
       }
 
-      if (!wasPaused) {
-        resumeAnimation();
-      }
+      restoreAnimationState(wasPaused);
 
       if (callbacks.onComplete) {
         callbacks.onComplete();
@@ -122,9 +103,7 @@ export async function exportGIF(loops = 1, animationSpeed = 1.5, resolution = 10
   } catch (error) {
     console.error('GIF export error:', error);
 
-    if (!wasPaused) {
-      resumeAnimation();
-    }
+    restoreAnimationState(wasPaused);
 
     if (callbacks.onComplete) {
       callbacks.onComplete();

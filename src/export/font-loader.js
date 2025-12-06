@@ -3,15 +3,33 @@ import fontUrl from '/fonts/Kario39C3VarWEB-Roman.woff?url';
 import { settings } from '../config/settings.js';
 
 let font = null;
-let fontLoaded = false;
 let loadPromise = null;
+
+/**
+ * Check if font is loaded and throw if not
+ * @throws {Error} If font is not loaded
+ */
+function ensureFontLoaded() {
+  if (!font) {
+    throw new Error('Font not loaded. Call loadFont() first.');
+  }
+}
+
+/**
+ * Create variation object with weight and width
+ * @param {number} weight - Font weight (10-100)
+ * @returns {Object} Variation settings
+ */
+function createVariations(weight) {
+  return { wght: weight, wdth: settings.widthValue };
+}
 
 /**
  * Load the Kario39C3 variable font
  * @returns {Promise<opentype.Font>}
  */
 export async function loadFont() {
-  if (fontLoaded && font) {
+  if (font) {
     return font;
   }
 
@@ -21,11 +39,9 @@ export async function loadFont() {
 
   loadPromise = (async () => {
     try {
-      // Load the woff font file (opentype.js doesn't support woff2)
       const response = await fetch(fontUrl);
       const arrayBuffer = await response.arrayBuffer();
       font = parse(arrayBuffer);
-      fontLoaded = true;
       return font;
     } catch (error) {
       console.error('Failed to load font:', error);
@@ -34,17 +50,6 @@ export async function loadFont() {
   })();
 
   return loadPromise;
-}
-
-/**
- * Get the loaded font (must call loadFont first)
- * @returns {opentype.Font}
- */
-export function getFont() {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
-  return font;
 }
 
 /**
@@ -57,18 +62,13 @@ export function getFont() {
  * @returns {Object} Object containing path data and advance width
  */
 export function textToPath(text, x, y, fontSize, weight) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
+  ensureFontLoaded();
 
-  const variations = { wght: weight, wdth: settings.widthValue };
+  const variations = createVariations(weight);
   const path = font.getPath(text, x, y, fontSize, { features: {}, variation: variations });
 
   return {
-    // Use flipY: false because font.getPath() already returns screen coordinates (Y-down)
-    // and we'll handle the Y-flip ourselves in the renderers with scale(1, -1)
     pathData: path.toPathData({ flipY: false }),
-    path: path,
     width: font.getAdvanceWidth(text, fontSize, { variation: variations }),
   };
 }
@@ -81,62 +81,10 @@ export function textToPath(text, x, y, fontSize, weight) {
  * @returns {number} Width in pixels
  */
 export function getTextWidth(text, fontSize, weight) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
+  ensureFontLoaded();
 
-  const variations = { wght: weight, wdth: settings.widthValue };
+  const variations = createVariations(weight);
   return font.getAdvanceWidth(text, fontSize, { variation: variations });
-}
-
-/**
- * Get individual character paths with their positions
- * @param {string} text - The text to convert
- * @param {number} startX - Starting X position
- * @param {number} y - Y position
- * @param {number} fontSize - Font size in pixels
- * @param {function} weightFn - Function that takes char index and returns weight
- * @param {function} colorFn - Function that takes char index and returns color
- * @returns {Array} Array of objects with pathData, color, and transform info
- */
-export function textToCharacterPaths(text, startX, y, fontSize, weightFn, colorFn) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
-
-  const characters = [];
-  let currentX = startX;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const weight = weightFn(i);
-    const color = colorFn(i);
-    const variations = { wght: weight, wdth: settings.widthValue };
-
-    const path = font.getPath(char, currentX, y, fontSize, { features: {}, variation: variations });
-    const width = font.getAdvanceWidth(char, fontSize, { variation: variations });
-
-    characters.push({
-      char,
-      pathData: path.toPathData(),
-      color,
-      x: currentX,
-      y,
-      width,
-    });
-
-    currentX += width;
-  }
-
-  return characters;
-}
-
-/**
- * Check if font is loaded
- * @returns {boolean}
- */
-export function isFontLoaded() {
-  return fontLoaded;
 }
 
 /**
@@ -146,12 +94,8 @@ export function isFontLoaded() {
  * @returns {number} Offset in pixels
  */
 export function getMiddleBaselineOffset(fontSize) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
+  ensureFontLoaded();
 
-  // Middle baseline is typically (ascender + descender) / 2
-  // In OpenType coordinates, descender is usually negative
   const middleOffset = (font.ascender + font.descender) / 2;
   const scale = fontSize / font.unitsPerEm;
   return middleOffset * scale;
@@ -164,9 +108,7 @@ export function getMiddleBaselineOffset(fontSize) {
  * @returns {number} Ascender height in pixels
  */
 export function getAscenderHeight(fontSize) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
+  ensureFontLoaded();
 
   const scale = fontSize / font.unitsPerEm;
   return font.ascender * scale;
@@ -179,10 +121,8 @@ export function getAscenderHeight(fontSize) {
  * @returns {number} Descender height in pixels (negative)
  */
 export function getDescenderHeight(fontSize) {
-  if (!font) {
-    throw new Error('Font not loaded. Call loadFont() first.');
-  }
+  ensureFontLoaded();
 
   const scale = fontSize / font.unitsPerEm;
-  return font.descender * scale;  // Usually negative
+  return font.descender * scale;
 }

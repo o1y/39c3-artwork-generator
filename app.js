@@ -13,9 +13,11 @@ const { ctx } = initCanvas();
 setContext(ctx);
 
 // Load font before starting animation
-loadFont().then(() => {
-  animate();
-}).catch(error => {
-  console.error('Failed to load font, starting animation anyway:', error);
-  animate();
-});
+loadFont()
+  .then(() => {
+    animate();
+  })
+  .catch((error) => {
+    console.error('Failed to load font, starting animation anyway:', error);
+    animate();
+  });

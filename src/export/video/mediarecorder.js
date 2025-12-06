@@ -1,53 +1,51 @@
 import { settings } from '../../config/settings.js';
 import { getCanvas, getContext, setCanvas } from '../../rendering/canvas.js';
-import { generateFilename } from '../filename.js';
-import { render, pauseAnimation, resumeAnimation, getIsPaused } from '../../animation/loop.js';
+import { render } from '../../animation/loop.js';
 import { ANIMATION_FPS, TOTAL_FRAMES } from '../../ui/state/constants.js';
+import { createTempCanvas, cleanupTempCanvas } from '../utils/canvas-manager.js';
+import {
+  captureSettingsState,
+  restoreSettingsState,
+  applyScaledSettings,
+  resetAnimationTime,
+} from '../utils/settings-state.js';
+import { pauseWithState, restoreAnimationState } from '../utils/animation-control.js';
+import { generateFilename, downloadBlob } from '../utils/download.js';
 
 let mediaRecorder = null;
 let recordedChunks = [];
 
-export function exportVideoMediaRecorder(loops = 1, animationSpeed = 1.5, resolution = 2, callbacks = {}) {
-  const wasPaused = getIsPaused();
-  pauseAnimation();
+export function exportVideoMediaRecorder(
+  loops = 1,
+  animationSpeed = 1.5,
+  resolution = 2,
+  callbacks = {}
+) {
+  const wasPaused = pauseWithState();
 
   const maxFrames = Math.round(TOTAL_FRAMES / animationSpeed);
-  const durationSeconds = (maxFrames * loops) / ANIMATION_FPS;
-  const duration = durationSeconds * 1000;
 
   if (callbacks.onStart) {
     callbacks.onStart();
   }
 
-  let recordingCanvas = getCanvas();
   const originalCanvas = getCanvas();
   const originalCtx = getContext();
-  let tempCanvas = null;
-  const originalCanvasSize = settings.canvasSize;
-  const originalMargin = settings.margin;
-  const originalTime = settings.time;
-  const originalAnimationSpeed = settings.animationSpeed;
+  const settingsState = captureSettingsState();
 
-  settings.time = 0;
-  settings.animationSpeed = animationSpeed;
+  resetAnimationTime(animationSpeed);
+
+  let recordingCanvas = originalCanvas;
+  let tempCanvas = null;
 
   if (resolution > 1) {
-    const highResSize = settings.canvasSize * resolution;
-    tempCanvas = document.createElement('canvas');
-    tempCanvas.width = highResSize;
-    tempCanvas.height = highResSize;
-
-    tempCanvas.style.position = 'absolute';
-    tempCanvas.style.left = '-9999px';
-    tempCanvas.style.top = '-9999px';
-    document.body.appendChild(tempCanvas);
+    const temp = createTempCanvas(resolution, true, false);
+    tempCanvas = temp.canvas;
+    const recordingCtx = temp.context;
+    const scaledSize = temp.scaledSize;
 
     recordingCanvas = tempCanvas;
-    const recordingCtx = tempCanvas.getContext('2d', { alpha: false });
-
-    settings.canvasSize = highResSize;
-    settings.margin = settings.margin * resolution;
-
+    applyScaledSettings(scaledSize, resolution);
     setCanvas(tempCanvas, recordingCtx);
   }
 
@@ -89,27 +87,16 @@ export function exportVideoMediaRecorder(loops = 1, animationSpeed = 1.5, resolu
   mediaRecorder.onstop = () => {
     if (tempCanvas) {
       setCanvas(originalCanvas, originalCtx);
-      settings.canvasSize = originalCanvasSize;
-      settings.margin = originalMargin;
-      document.body.removeChild(tempCanvas);
+      cleanupTempCanvas(tempCanvas);
     }
 
-    settings.time = originalTime;
-    settings.animationSpeed = originalAnimationSpeed;
+    restoreSettingsState(settingsState);
 
     const blob = new Blob(recordedChunks, { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
     const extension = mimeType.includes('mp4') ? 'mp4' : 'webm';
-    link.download = generateFilename(extension);
-    link.href = url;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(blob, generateFilename(extension));
 
-    if (!wasPaused) {
-      resumeAnimation();
-    }
+    restoreAnimationState(wasPaused);
 
     if (callbacks.onComplete) {
       callbacks.onComplete();

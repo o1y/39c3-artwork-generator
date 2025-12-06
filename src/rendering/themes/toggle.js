@@ -3,12 +3,8 @@ import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 
-/**
- * Render Toggle Theme
- * Works with any renderer (Canvas or SVG)
- */
 export function renderToggleTheme(renderer, canvasSize) {
-  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
+  renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const text = settings.text;
   if (!text) return;

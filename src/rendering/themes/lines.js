@@ -2,13 +2,8 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { calculateWeight } from '../weight.js';
 
-/**
- * Render Lines Theme
- * Works with any renderer (Canvas or SVG)
- */
 export function renderLinesTheme(renderer, canvasSize) {
-  // Clear canvas with appropriate background color
-  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
+  renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const text = settings.text;
   if (!text) return;

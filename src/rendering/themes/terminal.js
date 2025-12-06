@@ -3,12 +3,8 @@ import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getAscenderHeight, getDescenderHeight } from '../../export/font-loader.js';
 
-/**
- * Render Terminal Theme
- * Works with any renderer (Canvas or SVG)
- */
 export function renderTerminalTheme(renderer, canvasSize) {
-  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
+  renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
   if (!userText) return;

@@ -8,12 +8,8 @@ function getToggleWidth(fontSize) {
   return height * PILL_WIDTH_RATIO;
 }
 
-/**
- * Render Toggle 39C3 Theme
- * Works with any renderer (Canvas or SVG)
- */
 export function renderToggle39C3Theme(renderer, canvasSize) {
-  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
+  renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const logoText = defaultTexts.ccc;
   const userText = settings.text;

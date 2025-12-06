@@ -1,6 +1,11 @@
 import { Renderer } from './renderer-interface.js';
 import { settings } from '../../config/settings.js';
-import { textToPath, getTextWidth, getMiddleBaselineOffset, getAscenderHeight } from '../../export/font-loader.js';
+import {
+  textToPath,
+  getTextWidth,
+  getMiddleBaselineOffset,
+  getAscenderHeight,
+} from '../../export/font-loader.js';
 import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class SVGRenderer extends Renderer {
@@ -10,15 +15,14 @@ export class SVGRenderer extends Renderer {
     this.currentPathData = '';
   }
 
-  clearCanvas(width, height, color) {
+  drawBackground(width, height, color) {
     const rect = this.createSVGElement('rect');
     rect.setAttribute('x', 0);
     rect.setAttribute('y', 0);
     rect.setAttribute('width', width);
     rect.setAttribute('height', height);
     rect.setAttribute('fill', color);
-    const target = this.currentGroup || this.svg;
-    target.appendChild(rect);
+    this.svg.appendChild(rect);
   }
 
   measureText(text, fontSize, weight) {
@@ -26,24 +30,18 @@ export class SVGRenderer extends Renderer {
   }
 
   drawText(text, x, y, fontSize, weight, color, options = {}) {
-    // Handle baseline alignment
     let adjustedY = y;
 
     if (options.baseline === 'middle') {
       const offset = getMiddleBaselineOffset(fontSize);
-      // In screen coordinates (Y-down), to center text we need to move DOWN (add offset)
       adjustedY = y + offset;
     } else if (options.baseline === 'top') {
       const ascender = getAscenderHeight(fontSize);
-      // For 'top' baseline, the top of the text should be at y
-      // So we need to move the baseline DOWN by the ascender height
       adjustedY = y + ascender;
     }
-    // If baseline is 'alphabetic' (default), use y as-is
 
     const result = textToPath(text, x, adjustedY, fontSize, weight);
 
-    // Build transform string only for saved transforms
     let transform = '';
     if (this.transform) {
       const transformParts = [];
@@ -60,9 +58,7 @@ export class SVGRenderer extends Renderer {
       path.setAttribute('transform', transform);
     }
 
-    // Append to current group if exists, otherwise to main svg
-    const target = this.currentGroup || this.svg;
-    target.appendChild(path);
+    this.svg.appendChild(path);
   }
 
   drawRect(x, y, width, height, fillColor) {
@@ -72,8 +68,7 @@ export class SVGRenderer extends Renderer {
     rect.setAttribute('width', width);
     rect.setAttribute('height', height);
     rect.setAttribute('fill', fillColor);
-    const target = this.currentGroup || this.svg;
-    target.appendChild(rect);
+    this.svg.appendChild(rect);
   }
 
   drawCircle(cx, cy, r, fillColor = null, strokeColor = null, strokeWidth = 1) {
@@ -93,8 +88,7 @@ export class SVGRenderer extends Renderer {
       circle.setAttribute('stroke-width', strokeWidth);
     }
 
-    const target = this.currentGroup || this.svg;
-    target.appendChild(circle);
+    this.svg.appendChild(circle);
   }
 
   beginPath() {
@@ -125,8 +119,7 @@ export class SVGRenderer extends Renderer {
     const path = this.createSVGElement('path');
     path.setAttribute('d', this.currentPathData.trim());
     path.setAttribute('fill', color);
-    const target = this.currentGroup || this.svg;
-    target.appendChild(path);
+    this.svg.appendChild(path);
     this.currentPathData = '';
   }
 
@@ -136,13 +129,13 @@ export class SVGRenderer extends Renderer {
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', color);
     path.setAttribute('stroke-width', width);
-    const target = this.currentGroup || this.svg;
-    target.appendChild(path);
+    this.svg.appendChild(path);
     this.currentPathData = '';
   }
 
   drawTogglePill(x, y, fontSize, color, time, phase, useConstantSpeed, pillStyle, bgColor) {
-    const { height, width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
+    const { width, radius, strokeWidth, dotRadius } = calculatePillDimensions(fontSize);
+    const height = radius * 2;
 
     const d = `
       M ${x + radius} ${y}
@@ -166,8 +159,7 @@ export class SVGRenderer extends Renderer {
       path.setAttribute('stroke-width', strokeWidth);
     }
 
-    const target = this.currentGroup || this.svg;
-    target.appendChild(path);
+    this.svg.appendChild(path);
 
     const dotX = calculateDotPosition(
       x,
@@ -244,8 +236,7 @@ export class SVGRenderer extends Renderer {
     const transform = `translate(${dx}, ${dy}) scale(${scaleX}, ${scaleY})`;
     offscreenData.group.setAttribute('transform', transform);
 
-    const target = this.currentGroup || this.svg;
-    target.appendChild(offscreenData.group);
+    this.svg.appendChild(offscreenData.group);
   }
 
   getTarget() {

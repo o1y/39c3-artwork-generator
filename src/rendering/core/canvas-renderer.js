@@ -1,6 +1,11 @@
 import { Renderer } from './renderer-interface.js';
 import { settings } from '../../config/settings.js';
-import { textToPath, getTextWidth, getMiddleBaselineOffset, getAscenderHeight } from '../../export/font-loader.js';
+import {
+  textToPath,
+  getTextWidth,
+  getMiddleBaselineOffset,
+  getAscenderHeight,
+} from '../../export/font-loader.js';
 import { calculatePillDimensions, calculateDotPosition } from '../utils/pill-utils.js';
 
 export class CanvasRenderer extends Renderer {
@@ -9,7 +14,7 @@ export class CanvasRenderer extends Renderer {
     this.ctx = ctx;
   }
 
-  clearCanvas(width, height, color) {
+  drawBackground(width, height, color) {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(0, 0, width, height);
   }

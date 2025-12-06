@@ -88,12 +88,8 @@ function drawUserText(
   };
 }
 
-/**
- * Render CCC Theme
- * Works with any renderer (Canvas or SVG)
- */
 export function renderCCCTheme(renderer, canvasSize) {
-  renderer.clearCanvas(canvasSize, canvasSize, getBackgroundColor());
+  renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
   if (!userText) return;
