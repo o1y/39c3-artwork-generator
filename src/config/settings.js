@@ -1,66 +1,65 @@
+const DEFAULT_MIN_WEIGHT = 10;
+const DEFAULT_MAX_WEIGHT = 100;
+const DEFAULT_CANVAS_SIZE = 1000;
+const DEFAULT_MARGIN = 50;
+const DEFAULT_LINE_SPACING_FACTOR = 0.92;
+const DEFAULT_WIDTH_VALUE = 100;
+const DEFAULT_ANIMATION_SPEED = 1.0;
+
+const DEFAULT_CONTROLS = {
+  showLines: false,
+  showWidth: false,
+  showMode: false,
+  showToggleVariant: false,
+  showSmoothColorModes: true,
+};
+
+const DEFAULT_CAPABILITIES = {
+  animated: true,
+  variableWeight: true,
+};
+
 export const defaultTexts = {
   default: '39C3 POWER CYCLES',
   ccc: '\uE002',
 };
 
-// Parse toggleVariant into position and style
-export function parseToggleVariant(variant) {
-  const parts = variant.split('-');
-  return {
-    position: parts[0], // 'left' or 'right'
-    style: parts[1], // 'filled' or 'outlined'
-  };
-}
-
 export const settings = {
   text: defaultTexts.default,
   numLines: 11,
-  minWeight: 10,
-  maxWeight: 100,
-  widthValue: 100,
-  canvasSize: 1000,
-  margin: 50,
-  lineSpacingFactor: 0.92,
-  animationSpeed: 1.0,
-  mode: 'wave',
-  colorMode: 'violet-inv',
-  theme: 'lines', // 'lines', 'toggle', 'toggle39c3Animated', 'toggle39c3Static', or 'ccc'
-  toggleVariant: 'left-filled', // 'left-filled', 'left-outlined', 'right-filled', or 'right-outlined'
+  minWeight: DEFAULT_MIN_WEIGHT,
+  maxWeight: DEFAULT_MAX_WEIGHT,
+  widthValue: DEFAULT_WIDTH_VALUE,
+  lineSpacingFactor: DEFAULT_LINE_SPACING_FACTOR,
+  canvasSize: DEFAULT_CANVAS_SIZE,
+  margin: DEFAULT_MARGIN,
   time: 0,
-  // Theme capabilities - controls which UI elements and features are available
-  capabilities: {
-    animated: true,
-    variableWeight: true,
-  },
+  animationSpeed: DEFAULT_ANIMATION_SPEED,
+  mode: 'wave',
+  theme: 'lines',
+  toggleVariant: 'left-filled',
+  colorMode: 'violet-inv',
 };
 
-// Theme presets
 export const themePresets = {
   lines: {
     colorMode: 'violet-inv',
     numLines: 11,
     text: defaultTexts.default,
-    capabilities: {
-      animated: true,
-      variableWeight: true,
-    },
+    capabilities: DEFAULT_CAPABILITIES,
     controls: {
+      ...DEFAULT_CONTROLS,
       showLines: true,
       showWidth: true,
       showMode: true,
-      showToggleVariant: false,
     },
   },
   toggle: {
     colorMode: 'mono',
     text: defaultTexts.default,
-    capabilities: {
-      animated: true,
-      variableWeight: true,
-    },
+    capabilities: DEFAULT_CAPABILITIES,
     controls: {
-      showLines: false,
-      showMode: false,
+      ...DEFAULT_CONTROLS,
       showToggleVariant: true,
     },
   },
@@ -68,13 +67,11 @@ export const themePresets = {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     capabilities: {
-      animated: true,
+      ...DEFAULT_CAPABILITIES,
       variableWeight: false,
     },
     controls: {
-      showLines: false,
-      showWidth: false,
-      showMode: false,
+      ...DEFAULT_CONTROLS,
       showToggleVariant: true,
     },
   },
@@ -87,9 +84,7 @@ export const themePresets = {
       variableWeight: false,
     },
     controls: {
-      showLines: false,
-      showWidth: false,
-      showMode: false,
+      ...DEFAULT_CONTROLS,
       showToggleVariant: true,
       showSmoothColorModes: false,
     },
@@ -99,57 +94,22 @@ export const themePresets = {
     numLines: 22,
     text: defaultTexts.ccc,
     capabilities: {
-      animated: true,
+      ...DEFAULT_CAPABILITIES,
       variableWeight: false,
     },
     controls: {
+      ...DEFAULT_CONTROLS,
       showLines: true,
-      showWidth: false,
-      showMode: false,
-      showToggleVariant: false,
     },
   },
   terminal: {
     colorMode: 'green',
     numLines: 7,
     text: 'POWER CYCLES',
-    capabilities: {
-      animated: true,
-      variableWeight: true,
-    },
+    capabilities: DEFAULT_CAPABILITIES,
     controls: {
+      ...DEFAULT_CONTROLS,
       showLines: true,
-      showWidth: false,
-      showMode: false,
-      showToggleVariant: false,
     },
   },
-};
-
-// 39C3 Brand Colors (one color + dark rule)
-export const colors = {
-  // Neon Green tints (for UI variation)
-  green: [
-    '#009900', // 900
-    '#00d300', // 700
-    '#00ea00', // 600
-    '#00ff00', // 400 - Primary
-    '#a3ff90', // 200
-    '#ccffbe', // 100
-    '#ebffe5', // 50
-  ],
-  // Electric Violet tints (for UI variation)
-  violet: [
-    '#4d2eed', // 600
-    '#5c33f4', // 500
-    '#7952fe', // 400
-    '#9673ff', // 300 - Secondary
-    '#b69dfe', // 200
-    '#d4c4fe', // 100
-    '#efe7ff', // 50
-  ],
-  // Natural (monochrome)
-  natural: '#faf5f5',
-  // Muted Black (background)
-  dark: '#141414',
 };

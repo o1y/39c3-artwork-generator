@@ -1,4 +1,5 @@
-import { settings, colors } from '../config/settings.js';
+import { settings } from '../config/settings.js';
+import { BRAND_COLORS as colors } from '../config/colors.js';
 import { getNormalizedTime } from '../animation/timing.js';
 
 function lerpColor(color1, color2, t) {

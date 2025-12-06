@@ -1,4 +1,5 @@
-import { settings, parseToggleVariant } from '../../config/settings.js';
+import { settings } from '../../config/settings.js';
+import { parseToggleVariant } from '../utils/toggle-utils.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { PILL_HEIGHT_RATIO, PILL_WIDTH_RATIO } from '../utils/pill-utils.js';
 import { getNormalizedTime } from '../../animation/timing.js';
