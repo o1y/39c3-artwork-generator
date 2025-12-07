@@ -24,6 +24,10 @@ export function createControlsComputed() {
       return this.controls.showWidth;
     },
 
+    get showOpszControl() {
+      return this.controls.showOpsz;
+    },
+
     get showModeControl() {
       return this.controls.showMode;
     },

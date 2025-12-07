@@ -17,13 +17,14 @@ function ensureFontLoaded() {
 }
 
 /**
- * Create variation object with weight and width
+ * Create variation object with weight, width, and optical size
  * @param {number} weight - Font weight (10-100)
- * @param {number} width - Font width (50-100), defaults to settings.widthValue
+ * @param {number} width - Font width (50-160), defaults to settings.widthValue
+ * @param {number} opsz - Optical size / ascender and descenders (8-140), defaults to settings.opszValue
  * @returns {Object} Variation settings
  */
-function createVariations(weight, width = settings.widthValue) {
-  return { wght: weight, wdth: width };
+function createVariations(weight, width = settings.widthValue, opsz = settings.opszValue) {
+  return { wght: weight, wdth: width, opsz: opsz };
 }
 
 /**

@@ -18,6 +18,7 @@ export function createInitialState() {
     colorMode: settings.colorMode,
     numLines: settings.numLines,
     widthValue: settings.widthValue,
+    opszValue: settings.opszValue,
     animationSpeed: settings.animationSpeed,
     mode: settings.mode,
 

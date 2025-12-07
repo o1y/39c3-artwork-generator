@@ -408,7 +408,9 @@
 
   /* Popover transitions (Desktop) */
   .popover-enter {
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
   }
 
   .popover-enter-start {
@@ -422,7 +424,9 @@
   }
 
   .popover-leave {
-    transition: opacity 0.1s ease, transform 0.1s ease;
+    transition:
+      opacity 0.1s ease,
+      transform 0.1s ease;
   }
 
   .popover-leave-start {
@@ -503,7 +507,6 @@
     border-color: var(--accent-color);
     color: var(--accent-color);
   }
-
 
   /* Bottom sheet transitions */
   .sheet-backdrop-enter {

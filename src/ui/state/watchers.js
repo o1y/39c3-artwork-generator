@@ -50,6 +50,11 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('opszValue', (value) => {
+    settings.opszValue = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('animationSpeed', (value) => {
     settings.animationSpeed = value;
 

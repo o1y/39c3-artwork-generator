@@ -20,6 +20,10 @@ export function createDisplayComputed() {
       return this.widthValue.toString();
     },
 
+    get opszDisplay() {
+      return this.opszValue.toString();
+    },
+
     get currentFrameNumber() {
       return this.currentFrame;
     },

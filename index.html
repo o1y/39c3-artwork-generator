@@ -118,7 +118,7 @@
             <path d="M9 9 3 3" />
           </svg>
         </button>
-        <div class="toolbar-btn-wrapper" x-show="showWidthControl" x-cloak>
+        <div class="toolbar-btn-wrapper" x-show="showWidthControl || showOpszControl" x-cloak>
           <button
             class="toolbar-btn typography-btn"
             @click="toggleTypographyPopover"
@@ -154,11 +154,18 @@
             @click.outside="closeTypographyPopover"
           >
             <div class="popover-header">Typography</div>
-            <div class="control-group">
+            <div class="control-group" x-show="showWidthControl">
               <label>Font Width</label>
               <div class="control-base-default">
                 <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
                 <span class="value-display" x-text="widthDisplay"></span>
+              </div>
+            </div>
+            <div class="control-group" x-show="showOpszControl">
+              <label>Ascenders & Descenders</label>
+              <div class="control-base-default">
+                <input type="range" min="8" max="140" step="1" x-model.number="opszValue" />
+                <span class="value-display" x-text="opszDisplay"></span>
               </div>
             </div>
           </div>
@@ -335,11 +342,18 @@
           </svg>
         </button>
       </div>
-      <div class="control-group">
+      <div class="control-group" x-show="showWidthControl">
         <label>Font Width</label>
         <div class="control-base-default">
           <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
           <span class="value-display" x-text="widthDisplay"></span>
+        </div>
+      </div>
+      <div class="control-group" x-show="showOpszControl">
+        <label>Ascenders & Descenders</label>
+        <div class="control-base-default">
+          <input type="range" min="8" max="140" step="1" x-model.number="opszValue" />
+          <span class="value-display" x-text="opszDisplay"></span>
         </div>
       </div>
     </div>

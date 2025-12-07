@@ -10,11 +10,13 @@ const DEFAULT_CANVAS_SIZE = 1000;
 const DEFAULT_MARGIN = 50;
 const DEFAULT_LINE_SPACING_FACTOR = 0.92;
 const DEFAULT_WIDTH_VALUE = 100;
+const DEFAULT_OPSZ_VALUE = 14;
 const DEFAULT_ANIMATION_SPEED = 1.0;
 
 const DEFAULT_CONTROLS = {
   showLines: false,
   showWidth: false,
+  showOpsz: false,
   showMode: false,
   showToggleVariant: false,
   showSmoothColorModes: true,
@@ -36,6 +38,7 @@ export const settings = {
   minWeight: DEFAULT_MIN_WEIGHT,
   maxWeight: DEFAULT_MAX_WEIGHT,
   widthValue: DEFAULT_WIDTH_VALUE,
+  opszValue: DEFAULT_OPSZ_VALUE,
   lineSpacingFactor: DEFAULT_LINE_SPACING_FACTOR,
   canvasSize: DEFAULT_CANVAS_SIZE,
   margin: DEFAULT_MARGIN,
@@ -59,6 +62,7 @@ export const themePresets = {
       ...DEFAULT_CONTROLS,
       showLines: true,
       showWidth: true,
+      showOpsz: true,
       showMode: true,
     },
   },
@@ -72,6 +76,7 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showToggleVariant: true,
+      showOpsz: true,
     },
   },
   toggle39c3Animated: {
