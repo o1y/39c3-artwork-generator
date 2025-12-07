@@ -25,7 +25,9 @@ export function createControlsComputed() {
     },
 
     get showOpszControl() {
-      return this.controls.showOpsz;
+      if (!this.controls.showOpsz) return false;
+      const ascenderDescenderChars = /[bdfhkltgijpqy]/;
+      return ascenderDescenderChars.test(this.text);
     },
 
     get showMinWeightControl() {
