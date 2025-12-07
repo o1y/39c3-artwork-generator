@@ -8,6 +8,8 @@ export function createInitialState() {
     exportAdvancedCollapsed: true,
     mobileHeaderCollapsed: true,
     isFullscreen: false,
+    typographyPopoverOpen: false,
+    animationPopoverOpen: false,
 
     // Settings state
     text: settings.text,

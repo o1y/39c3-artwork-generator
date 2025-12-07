@@ -1,5 +1,22 @@
 @layer utilities {
   /* Form Controls */
+  .control-base-default {
+    padding: 17px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    & input[type='range'] {
+      flex: 1;
+    }
+
+    & .value-display {
+      position: static;
+      flex-shrink: 0;
+      min-width: 32px;
+    }
+  }
+
   .control-base {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);

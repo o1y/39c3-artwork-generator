@@ -31,8 +31,8 @@
   </head>
   <body x-data="appStore" :class="bodyThemeClass">
     <div class="header glass-surface" :class="{ 'mobile-collapsed': mobileHeaderCollapsed }">
-      <div class="header-always-visible">
-        <div class="control-group" x-show="showTextInput" x-cloak>
+      <div class="header-row">
+        <div class="control-group control-text-input" x-show="showTextInput" x-cloak>
           <label>Text Input</label>
           <input
             type="text"
@@ -46,76 +46,180 @@
           <span class="toggle-icon"></span>
           <span x-text="mobileHeaderCollapsed ? 'Settings' : 'Hide'"></span>
         </button>
-      </div>
-      <div class="controls" :class="{ 'no-text-input': !showTextInput }">
-        <div class="control-group control-wide">
-          <label>Theme</label>
-          <select x-model="theme" class="control-base">
-            <option value="lines">Nerdy Lines</option>
-            <option value="toggle">Toggle</option>
-            <option value="toggle39c3Animated">39C3 Toggle Animated</option>
-            <option value="toggle39c3Static">39C3 Toggle Static</option>
-            <option value="ccc">CCC</option>
-            <option value="terminal">Terminal</option>
-            <option value="dvd">?</option>
-          </select>
-        </div>
-        <div class="control-group control-medium" x-show="showToggleVariantControl" x-cloak>
-          <label>Toggle Variant</label>
-          <select x-model="toggleVariant" class="control-base">
-            <option value="left-filled">Left Filled</option>
-            <option value="left-outlined">Left Outlined</option>
-            <option value="right-filled">Right Filled</option>
-            <option value="right-outlined">Right Outlined</option>
-          </select>
-        </div>
-        <div class="control-group control-medium" x-show="showLinesControl" x-cloak>
-          <label>Lines</label>
-          <input type="range" min="2" max="24" step="1" x-model.number="numLines" />
-          <span class="value-display" x-text="linesDisplay"></span>
-        </div>
-        <div class="control-group control-medium" x-show="showWidthControl" x-cloak>
-          <label>Font Width</label>
-          <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
-          <span class="value-display" x-text="widthDisplay"></span>
-        </div>
-        <div class="control-group control-narrow" x-show="showSpeedControl" x-cloak>
-          <label>Animation Speed</label>
-          <input type="range" min="0.3" max="3" step="0.1" x-model.number="animationSpeed" />
-          <span class="value-display" x-text="speedDisplay"></span>
-        </div>
-        <div class="control-group control-narrow" x-show="showModeControl" x-cloak>
-          <label>Animation Mode</label>
-          <select x-model="mode" class="control-base">
-            <option value="wave">Wave</option>
-            <option value="pulse">Pulse</option>
-            <option value="rotate">Rotate</option>
-            <option value="breathe">Breathe</option>
-            <option value="bounce">Bounce</option>
-          </select>
-        </div>
-        <div class="control-group control-flex" x-show="showColorModeControl" x-cloak>
-          <label>Color Mode</label>
-          <select x-model="colorMode" class="control-base">
-            <template x-for="mode in availableColorModes" :key="mode.value">
-              <option :value="mode.value" x-text="mode.label"></option>
-            </template>
-          </select>
+        <div class="controls-collapsible">
+          <div class="control-group control-theme">
+            <label>Theme</label>
+            <select x-model="theme" class="control-base">
+              <option value="lines">Nerdy Lines</option>
+              <option value="toggle">Toggle</option>
+              <option value="toggle39c3Animated">39C3 Toggle Animated</option>
+              <option value="toggle39c3Static">39C3 Toggle Static</option>
+              <option value="ccc">CCC</option>
+              <option value="terminal">Terminal</option>
+              <option value="dvd">?</option>
+            </select>
+          </div>
+          <div class="control-group control-theme-option" x-show="showToggleVariantControl" x-cloak>
+            <label>Toggle Variant</label>
+            <select x-model="toggleVariant" class="control-base">
+              <option value="left-filled">Left Filled</option>
+              <option value="left-outlined">Left Outlined</option>
+              <option value="right-filled">Right Filled</option>
+              <option value="right-outlined">Right Outlined</option>
+            </select>
+          </div>
+          <div class="control-group control-theme-option" x-show="showLinesControl" x-cloak>
+            <label>Lines</label>
+            <div class="control-base-default">
+              <input type="range" min="2" max="24" step="1" x-model.number="numLines" />
+              <span class="value-display" x-text="linesDisplay"></span>
+            </div>
+          </div>
+          <div class="control-group control-color-mode" x-show="showColorModeControl" x-cloak>
+            <label>Color Mode</label>
+            <select x-model="colorMode" class="control-base">
+              <template x-for="mode in availableColorModes" :key="mode.value">
+                <option :value="mode.value" x-text="mode.label"></option>
+              </template>
+            </select>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="canvas-container">
       <canvas id="canvas" class="shadow-accent-glow"></canvas>
-      <button
-        class="fullscreen-btn"
-        x-show="showFullscreenButton"
-        x-cloak
-        @click="toggleFullscreen"
-        :title="isFullscreen ? 'Exit Fullscreen (Esc)' : 'Enter Fullscreen'"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 15 6 6"/><path d="m15 9 6-6"/><path d="M21 16v5h-5"/><path d="M21 8V3h-5"/><path d="M3 16v5h5"/><path d="m3 21 6-6"/><path d="M3 8V3h5"/><path d="M9 9 3 3"/></svg>
-      </button>
+      <div class="canvas-toolbar" x-show="!isFullscreen" x-cloak>
+        <button
+          class="toolbar-btn fullscreen-btn"
+          x-show="showFullscreenButton"
+          x-cloak
+          @click="toggleFullscreen"
+          :title="isFullscreen ? 'Exit Fullscreen (Esc)' : 'Enter Fullscreen'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m15 15 6 6" />
+            <path d="m15 9 6-6" />
+            <path d="M21 16v5h-5" />
+            <path d="M21 8V3h-5" />
+            <path d="M3 16v5h5" />
+            <path d="m3 21 6-6" />
+            <path d="M3 8V3h5" />
+            <path d="M9 9 3 3" />
+          </svg>
+        </button>
+        <div class="toolbar-btn-wrapper" x-show="showWidthControl" x-cloak>
+          <button
+            class="toolbar-btn typography-btn"
+            @click="toggleTypographyPopover"
+            :class="{ 'active': typographyPopoverOpen }"
+            title="Typography Options"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 4v16" />
+              <path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" />
+              <path d="M9 20h6" />
+            </svg>
+          </button>
+          <div
+            class="settings-popover glass-surface"
+            x-show="typographyPopoverOpen"
+            x-cloak
+            x-transition:enter="popover-enter"
+            x-transition:enter-start="popover-enter-start"
+            x-transition:enter-end="popover-enter-end"
+            x-transition:leave="popover-leave"
+            x-transition:leave-start="popover-leave-start"
+            x-transition:leave-end="popover-leave-end"
+            @click.outside="closeTypographyPopover"
+          >
+            <div class="popover-header">Typography</div>
+            <div class="control-group">
+              <label>Font Width</label>
+              <div class="control-base-default">
+                <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
+                <span class="value-display" x-text="widthDisplay"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="toolbar-btn-wrapper" x-show="showSpeedControl || showModeControl" x-cloak>
+          <button
+            class="toolbar-btn animation-btn"
+            @click="toggleAnimationPopover"
+            :class="{ 'active': animationPopoverOpen }"
+            title="Animation Options"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z" />
+              <path d="m6.2 5.3 3.1 3.9" />
+              <path d="m12.4 3.4 3.1 4" />
+              <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+            </svg>
+          </button>
+          <div
+            class="settings-popover glass-surface"
+            x-show="animationPopoverOpen"
+            x-cloak
+            x-transition:enter="popover-enter"
+            x-transition:enter-start="popover-enter-start"
+            x-transition:enter-end="popover-enter-end"
+            x-transition:leave="popover-leave"
+            x-transition:leave-start="popover-leave-start"
+            x-transition:leave-end="popover-leave-end"
+            @click.outside="closeAnimationPopover"
+          >
+            <div class="popover-header">Animation</div>
+            <div class="control-group" x-show="showSpeedControl">
+              <label>Speed</label>
+              <div class="control-base-default">
+                <input type="range" min="0.3" max="3" step="0.1" x-model.number="animationSpeed" />
+                <span class="value-display" x-text="speedDisplay"></span>
+              </div>
+            </div>
+            <div class="control-group" x-show="showModeControl">
+              <label>Mode</label>
+              <select x-model="mode" class="control-base">
+                <option value="wave">Wave</option>
+                <option value="pulse">Pulse</option>
+                <option value="rotate">Rotate</option>
+                <option value="breathe">Breathe</option>
+                <option value="bounce">Bounce</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="stats" id="stats">
         FPS: <span x-text="fps">0</span>
         <a
@@ -185,6 +289,120 @@
           :disabled="isExporting"
           x-text="downloadButtonText"
         ></button>
+      </div>
+    </div>
+
+    <!-- Typography Bottom Sheet (Mobile) -->
+    <div
+      class="bottom-sheet-backdrop"
+      x-show="typographyPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="closeTypographyPopover"
+    ></div>
+    <div
+      class="bottom-sheet"
+      x-show="typographyPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-enter"
+      x-transition:enter-start="sheet-enter-start"
+      x-transition:enter-end="sheet-enter-end"
+      x-transition:leave="sheet-leave"
+      x-transition:leave-start="sheet-leave-start"
+      x-transition:leave-end="sheet-leave-end"
+    >
+      <div class="bottom-sheet-header">
+        <span class="bottom-sheet-title">Typography</span>
+        <button class="bottom-sheet-close" @click="closeTypographyPopover" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="control-group">
+        <label>Font Width</label>
+        <div class="control-base-default">
+          <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
+          <span class="value-display" x-text="widthDisplay"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Animation Bottom Sheet (Mobile) -->
+    <div
+      class="bottom-sheet-backdrop"
+      x-show="animationPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="closeAnimationPopover"
+    ></div>
+    <div
+      class="bottom-sheet"
+      x-show="animationPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-enter"
+      x-transition:enter-start="sheet-enter-start"
+      x-transition:enter-end="sheet-enter-end"
+      x-transition:leave="sheet-leave"
+      x-transition:leave-start="sheet-leave-start"
+      x-transition:leave-end="sheet-leave-end"
+    >
+      <div class="bottom-sheet-header">
+        <span class="bottom-sheet-title">Animation</span>
+        <button class="bottom-sheet-close" @click="closeAnimationPopover" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="control-group" x-show="showSpeedControl">
+        <label>Speed</label>
+        <div class="control-base-default">
+          <input type="range" min="0.3" max="3" step="0.1" x-model.number="animationSpeed" />
+          <span class="value-display" x-text="speedDisplay"></span>
+        </div>
+      </div>
+      <div class="control-group" x-show="showModeControl">
+        <label>Mode</label>
+        <select x-model="mode" class="control-base">
+          <option value="wave">Wave</option>
+          <option value="pulse">Pulse</option>
+          <option value="rotate">Rotate</option>
+          <option value="breathe">Breathe</option>
+          <option value="bounce">Bounce</option>
+        </select>
       </div>
     </div>
 
