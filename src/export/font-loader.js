@@ -1,7 +1,6 @@
 import { parse } from 'opentype.js';
 import fontUrl from '/fonts/Kario39C3VarWEB-Roman.woff?url';
 import { settings } from '../config/settings.js';
-import { setFont } from '../rendering/utils/toggle-glyph.js';
 
 let font = null;
 let loadPromise = null;
@@ -45,7 +44,6 @@ export async function loadFont() {
       const response = await fetch(fontUrl);
       const arrayBuffer = await response.arrayBuffer();
       font = parse(arrayBuffer);
-      setFont(font);
       return font;
     } catch (error) {
       console.error('Failed to load font:', error);

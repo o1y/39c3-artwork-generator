@@ -1,8 +1,6 @@
 import { settings, defaultTexts, themePresets } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
-import { getMiddleBaselineOffset } from '../../export/font-loader.js';
-import { getAnimatedTogglePath } from '../utils/toggle-glyph.js';
 
 function easeSwitch(p) {
   return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
@@ -111,17 +109,11 @@ function renderSingleRowLayout(renderer) {
   }
 
   const progress = calculateToggleProgress(isAnimated);
-  const adjustedY = centerY + getMiddleBaselineOffset(textSize);
-  const togglePath = getAnimatedTogglePath(
-    toggleGlyph,
-    toggleX,
-    adjustedY,
-    textSize,
-    toggleWeight,
-    progress
-  );
-
-  renderer.drawPath(togglePath.pathData, textColor);
+  const animatedWeight = 100 - 90 * progress; // wght 10 = left, 100 = right
+  renderer.drawText(toggleGlyph, toggleX, centerY, textSize, animatedWeight, textColor, {
+    baseline: 'middle',
+    width: 100,
+  });
   renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated, undefined, 100);
 }
 
@@ -229,17 +221,11 @@ function renderTwoRowLayout(renderer) {
   }
 
   const progress = calculateToggleProgress(isAnimated);
-  const adjustedToggleY = row1CenterY + getMiddleBaselineOffset(logoSize);
-  const togglePath = getAnimatedTogglePath(
-    toggleGlyph,
-    toggleX,
-    adjustedToggleY,
-    logoSize,
-    toggleWeight,
-    progress
-  );
-
-  renderer.drawPath(togglePath.pathData, textColor);
+  const animatedWeight = 100 - 90 * progress; // wght 10 = left, 100 = right
+  renderer.drawText(toggleGlyph, toggleX, row1CenterY, logoSize, animatedWeight, textColor, {
+    baseline: 'middle',
+    width: 100,
+  });
   renderer.drawText(logoText, logoX, row1CenterY, logoSize, settings.maxWeight, textColor, {
     baseline: 'middle',
     width: 100,
