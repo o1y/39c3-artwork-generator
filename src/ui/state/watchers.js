@@ -4,13 +4,20 @@ import { ANIMATION_FPS } from './constants.js';
 
 export function setupWatchers(store) {
   store.$watch('text', (value) => {
-    const upperValue = value.toUpperCase();
-    if (value !== upperValue) {
-      store.$nextTick(() => {
-        store.text = upperValue;
-      });
+    const preset = themePresets[store.theme];
+    const forceUppercase = preset?.forceUppercase !== false;
+
+    if (forceUppercase) {
+      const upperValue = value.toUpperCase();
+      if (value !== upperValue) {
+        store.$nextTick(() => {
+          store.text = upperValue;
+        });
+      }
+      settings.text = upperValue;
+    } else {
+      settings.text = value;
     }
-    settings.text = upperValue;
     if (store.isPaused) render();
   });
 

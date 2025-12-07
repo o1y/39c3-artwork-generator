@@ -53,6 +53,7 @@ export const themePresets = {
     colorMode: 'violet-inv',
     numLines: 11,
     text: defaultTexts.default,
+    forceUppercase: false,
     capabilities: DEFAULT_CAPABILITIES,
     controls: {
       ...DEFAULT_CONTROLS,
@@ -66,6 +67,7 @@ export const themePresets = {
     colorMode: 'mono',
     text: defaultTexts.default,
     layout: 'single-row',
+    forceUppercase: false,
     capabilities: DEFAULT_CAPABILITIES,
     controls: {
       ...DEFAULT_CONTROLS,
@@ -77,6 +79,7 @@ export const themePresets = {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     layout: 'two-row',
+    forceUppercase: false,
     capabilities: {
       ...DEFAULT_CAPABILITIES,
       variableWeight: false,
@@ -92,6 +95,7 @@ export const themePresets = {
     text: 'POWER CYCLES',
     layout: 'two-row',
     staticWeight: 80,
+    forceUppercase: false,
     capabilities: {
       animated: false,
       variableWeight: false,
