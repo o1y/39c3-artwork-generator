@@ -44,7 +44,7 @@ export const settings = {
   margin: DEFAULT_MARGIN,
   time: 0,
   animationSpeed: DEFAULT_ANIMATION_SPEED,
-  mode: 'spotlight',
+  mode: 'wave',
   theme: 'lines',
   toggleVariant: 'left-filled',
   colorMode: 'violet-inv',

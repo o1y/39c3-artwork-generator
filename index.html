@@ -92,8 +92,22 @@
         id="canvas"
         class="shadow-accent-glow"
         :class="{ 'cursor-crosshair': mode === 'spotlight' }"
-        @click="handleCanvasClick($event)"
+        @click="handleCanvasClick($event); spotlightHintDismissed = true"
       ></canvas>
+      <div
+        class="spotlight-hint"
+        x-show="mode === 'spotlight' && showModeControl && !spotlightHintDismissed"
+        x-cloak
+        x-transition:enter="hint-enter"
+        x-transition:enter-start="hint-enter-start"
+        x-transition:enter-end="hint-enter-end"
+        x-transition:leave="hint-leave"
+        x-transition:leave-start="hint-leave-start"
+        x-transition:leave-end="hint-leave-end"
+      >
+        <span class="hint-icon">+</span>
+        <span class="hint-text">Click anywhere to set focus point</span>
+      </div>
       <div class="canvas-toolbar" x-show="!isFullscreen" x-cloak>
         <button
           class="toolbar-btn fullscreen-btn"
@@ -240,8 +254,8 @@
             <div class="control-group" x-show="showModeControl">
               <label>Mode</label>
               <select x-model="mode" class="control-base">
-                <option value="spotlight">Spotlight</option>
                 <option value="wave">Wave</option>
+                <option value="spotlight">Spotlight (New!)</option>
                 <option value="pulse">Pulse</option>
                 <option value="rotate">Rotate</option>
                 <option value="breathe">Breathe</option>

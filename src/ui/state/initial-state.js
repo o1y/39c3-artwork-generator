@@ -10,6 +10,7 @@ export function createInitialState() {
     isFullscreen: false,
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
+    spotlightHintDismissed: false,
 
     // Settings state
     text: settings.text,
