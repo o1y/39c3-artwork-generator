@@ -45,6 +45,10 @@ export function createThemeActions() {
         this.animationOriginX = 1;
         this.animationOriginY = 1;
       }
+
+      if (preset?.controls?.showWidth === false) {
+        this.widthValue = 100;
+      }
     },
   };
 }
