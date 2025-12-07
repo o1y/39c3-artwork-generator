@@ -731,10 +731,9 @@
   .stats {
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     font-size: 10px;
     opacity: 0.3;
-    font-family: 'Courier New', monospace;
     text-align: right;
     line-height: 1.6;
     white-space: nowrap;
