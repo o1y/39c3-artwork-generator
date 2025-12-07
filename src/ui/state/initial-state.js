@@ -19,6 +19,8 @@ export function createInitialState() {
     numLines: settings.numLines,
     widthValue: settings.widthValue,
     opszValue: settings.opszValue,
+    minWeight: settings.minWeight,
+    maxWeight: settings.maxWeight,
     animationSpeed: settings.animationSpeed,
     mode: settings.mode,
     animationOriginX: settings.animationOriginX,

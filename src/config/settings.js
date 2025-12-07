@@ -67,6 +67,8 @@ export const themePresets = {
       showWidth: true,
       showOpsz: true,
       showMode: true,
+      showMinWeight: true,
+      showMaxWeight: true,
     },
   },
   toggle: {

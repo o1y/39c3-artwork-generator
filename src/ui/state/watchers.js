@@ -55,6 +55,16 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('minWeight', (value) => {
+    settings.minWeight = value;
+    if (store.isPaused) render();
+  });
+
+  store.$watch('maxWeight', (value) => {
+    settings.maxWeight = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('animationSpeed', (value) => {
     settings.animationSpeed = value;
 

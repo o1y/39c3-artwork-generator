@@ -24,6 +24,14 @@ export function createDisplayComputed() {
       return this.opszValue.toString();
     },
 
+    get minWeightDisplay() {
+      return this.minWeight.toString();
+    },
+
+    get maxWeightDisplay() {
+      return this.maxWeight.toString();
+    },
+
     get currentFrameNumber() {
       return this.currentFrame;
     },

@@ -28,6 +28,14 @@ export function createControlsComputed() {
       return this.controls.showOpsz;
     },
 
+    get showMinWeightControl() {
+      return this.controls.showMinWeight;
+    },
+
+    get showMaxWeightControl() {
+      return this.controls.showMaxWeight;
+    },
+
     get showModeControl() {
       return this.controls.showMode;
     },
