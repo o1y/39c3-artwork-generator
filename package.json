@@ -37,7 +37,7 @@
   "dependencies": {
     "alpinejs": "^3.15.1",
     "gif.js": "^0.2.0",
-    "opentype.js": "https://github.com/o1y/opentype.js#5026bffd0a1f7bdd70c0294b6dfdc1f8aead074b",
+    "opentype.js": "https://github.com/o1y/opentype.js#d55f13d82c1c3f65466b060bcdf898d502ea5da3",
     "webm-writer": "^1.0.0"
   }
 }
