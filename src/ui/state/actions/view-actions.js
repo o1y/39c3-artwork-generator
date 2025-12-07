@@ -36,7 +36,7 @@ export function createViewActions() {
       });
     },
     handleCanvasClick(event) {
-      if (this.mode !== 'spotlight') return;
+      if (this.mode !== 'spotlight' || !this.showModeControl) return;
 
       const rect = event.target.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width;

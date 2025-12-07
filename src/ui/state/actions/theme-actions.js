@@ -39,6 +39,12 @@ export function createThemeActions() {
       if (!this.isAnimated && (this.exportFormat === 'video' || this.exportFormat === 'gif')) {
         this.exportFormat = 'png';
       }
+
+      if (preset?.controls?.showMode === false) {
+        this.mode = 'wave';
+        this.animationOriginX = 1;
+        this.animationOriginY = 1;
+      }
     },
   };
 }
