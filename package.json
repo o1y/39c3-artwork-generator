@@ -39,5 +39,9 @@
     "gif.js": "^0.2.0",
     "opentype.js": "https://github.com/o1y/opentype.js#6f9d8a0747c0618d5d0e79d2f8649980be6ca0c7",
     "webm-writer": "^1.0.0"
+  },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "^0.25.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.41.0"
   }
 }
