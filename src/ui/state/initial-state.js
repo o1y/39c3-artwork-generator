@@ -1,4 +1,5 @@
 import { settings } from '../../config/settings.js';
+import { preferences } from '../../config/preferences.js';
 
 export function createInitialState() {
   return {
@@ -10,7 +11,8 @@ export function createInitialState() {
     isFullscreen: false,
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
-    spotlightHintDismissed: false,
+    spotlightHintDismissed: preferences.get('dismissedHints.spotlight'),
+    toolbarHintDismissed: preferences.get('dismissedHints.toolbar'),
 
     // Settings state
     text: settings.text,

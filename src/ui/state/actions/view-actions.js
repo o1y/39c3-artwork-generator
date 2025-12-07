@@ -1,8 +1,18 @@
 import { settings } from '../../../config/settings.js';
 import { getNormalizedTime } from '../../../animation/timing.js';
+import { preferences } from '../../../config/preferences.js';
 
 export function createViewActions() {
   return {
+    dismissHint(hint) {
+      if (hint === 'toolbar') {
+        this.toolbarHintDismissed = true;
+        preferences.set('dismissedHints.toolbar', true);
+      } else if (hint === 'spotlight') {
+        this.spotlightHintDismissed = true;
+        preferences.set('dismissedHints.spotlight', true);
+      }
+    },
     toggleExportAdvanced() {
       this.exportAdvancedCollapsed = !this.exportAdvancedCollapsed;
     },

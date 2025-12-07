@@ -92,7 +92,7 @@
         id="canvas"
         class="shadow-accent-glow"
         :class="{ 'cursor-crosshair': mode === 'spotlight' }"
-        @click="handleCanvasClick($event); spotlightHintDismissed = true"
+        @click="handleCanvasClick($event); dismissHint('spotlight')"
       ></canvas>
       <div
         class="spotlight-hint"
@@ -144,7 +144,7 @@
         >
           <button
             class="toolbar-btn typography-btn"
-            @click="toggleTypographyPopover"
+            @click="toggleTypographyPopover(); dismissHint('toolbar')"
             :class="{ 'active': typographyPopoverOpen }"
             title="Typography Options"
           >
@@ -210,7 +210,7 @@
         <div class="toolbar-btn-wrapper" x-show="showSpeedControl || showModeControl" x-cloak>
           <button
             class="toolbar-btn animation-btn"
-            @click="toggleAnimationPopover"
+            @click="toggleAnimationPopover(); dismissHint('toolbar')"
             :class="{ 'active': animationPopoverOpen }"
             title="Animation Options"
           >
@@ -264,6 +264,20 @@
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="toolbar-hint"
+        x-show="!toolbarHintDismissed && (showWidthControl || showOpszControl || showSpeedControl || showModeControl)"
+        x-cloak
+        x-transition:enter="toolbar-hint-enter"
+        x-transition:enter-start="toolbar-hint-enter-start"
+        x-transition:enter-end="toolbar-hint-enter-end"
+        x-transition:leave="toolbar-hint-leave"
+        x-transition:leave-start="toolbar-hint-leave-start"
+        x-transition:leave-end="toolbar-hint-leave-end"
+      >
+        <span class="toolbar-hint-arrow"></span>
+        <span class="toolbar-hint-text">More Options!</span>
       </div>
       <div class="stats" id="stats">
         FPS: <span x-text="fps">0</span>
