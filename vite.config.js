@@ -21,6 +21,9 @@ export default defineConfig({
  * Kario39C3VarWEB font is free for 39C3-related use only
  * Commercial use requires license from Show me Fonts (https://www.showmefonts.com/)
  *
+ * Officer Sans font is free for 39C3 and personal use
+ * Commercial use requires permission from Hannes von Döhren (https://www.hvdfonts.com/)
+ *
  * Third-party dependencies - see LICENSES.txt for details
  */`,
         entryFileNames: 'assets/[name].[hash].js',

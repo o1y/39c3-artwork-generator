@@ -4,6 +4,16 @@ Interactive web-based artwork generator for the 39C3 variable font, featuring dy
 
 ![39C3 Artwork Generator Demo](.github/screen.gif)
 
+## Donate
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/o1y_)
+
+![Bitcoin](https://img.shields.io/badge/Bitcoin-FF9900?style=for-the-badge&logo=bitcoin&logoColor=white)
+
+```
+bitcoin:13NuFBY2unkZjbH1CXDs1R8muJRpuQkJ4P?message=39C3%20Artwork
+```
+
 ## Development
 
 ### Prerequisites
