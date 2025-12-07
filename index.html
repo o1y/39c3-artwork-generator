@@ -88,7 +88,12 @@
     </div>
 
     <div class="canvas-container">
-      <canvas id="canvas" class="shadow-accent-glow"></canvas>
+      <canvas
+        id="canvas"
+        class="shadow-accent-glow"
+        :class="{ 'cursor-crosshair': mode === 'spotlight' }"
+        @click="handleCanvasClick($event)"
+      ></canvas>
       <div class="canvas-toolbar" x-show="!isFullscreen" x-cloak>
         <button
           class="toolbar-btn fullscreen-btn"
@@ -217,6 +222,7 @@
             <div class="control-group" x-show="showModeControl">
               <label>Mode</label>
               <select x-model="mode" class="control-base">
+                <option value="spotlight">Spotlight</option>
                 <option value="wave">Wave</option>
                 <option value="pulse">Pulse</option>
                 <option value="rotate">Rotate</option>
@@ -416,6 +422,7 @@
           <option value="rotate">Rotate</option>
           <option value="breathe">Breathe</option>
           <option value="bounce">Bounce</option>
+          <option value="spotlight">Spotlight</option>
         </select>
       </div>
     </div>

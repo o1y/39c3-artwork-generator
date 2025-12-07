@@ -23,15 +23,27 @@ function lerpColor(color1, color2, t) {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
-function getAnimatedColor(palette, normalizedT, charIndex, lineIndex, smooth = false) {
+function getAnimatedColor(palette, normalizedT, charIndex, lineIndex, smooth = false, textLength = 16) {
   const slowdownFactor = 0.2;
   const cycles = Math.max(1, Math.round(palette.length * slowdownFactor));
   const multiplier = cycles / palette.length;
-
   const baseIndex = normalizedT * palette.length * multiplier;
-  const charOffset = (charIndex * 0.5) / palette.length;
-  const lineOffset = (lineIndex * 0.3) / palette.length;
-  const floatIndex = (baseIndex + charOffset + lineOffset) % 1.0;
+
+  let offset;
+  if (settings.mode === 'spotlight') {
+    const normalizedX = textLength > 1 ? charIndex / (textLength - 1) : 0.5;
+    const normalizedY = settings.numLines > 1 ? lineIndex / (settings.numLines - 1) : 0.5;
+    const dx = normalizedX - settings.animationOriginX;
+    const dy = normalizedY - settings.animationOriginY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    offset = distance * 0.8;
+  } else {
+    const charOffset = (charIndex * 0.5) / palette.length;
+    const lineOffset = (lineIndex * 0.3) / palette.length;
+    offset = charOffset + lineOffset;
+  }
+
+  const floatIndex = (baseIndex + offset) % 1.0;
   const paletteIndex = floatIndex * palette.length;
 
   if (!smooth) {
@@ -60,7 +72,7 @@ export function getBackgroundColor() {
   return resolveColor(mode.background);
 }
 
-export function getColor(charIndex, lineIndex, time) {
+export function getColor(charIndex, lineIndex, time, textLength = 16) {
   const mode = COLOR_MODES[settings.colorMode];
   if (!mode) return colors.natural;
 
@@ -78,7 +90,7 @@ export function getColor(charIndex, lineIndex, time) {
     }
 
     const normalizedT = getNormalizedTime(time) / (2 * Math.PI);
-    return getAnimatedColor(palette, normalizedT, charIndex, lineIndex, mode.smooth);
+    return getAnimatedColor(palette, normalizedT, charIndex, lineIndex, mode.smooth, textLength);
   }
 
   return colors.natural;

@@ -72,6 +72,16 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('animationOriginX', (value) => {
+    settings.animationOriginX = value;
+    if (store.isPaused) render();
+  });
+
+  store.$watch('animationOriginY', (value) => {
+    settings.animationOriginY = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('exportFormat', (value) => {
     // Reset exportResolution if current selection is no longer available
     const availableResolutions = store.availableResolutions.map((r) => r.value);

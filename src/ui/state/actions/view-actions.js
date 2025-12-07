@@ -1,3 +1,6 @@
+import { settings } from '../../../config/settings.js';
+import { getNormalizedTime } from '../../../animation/timing.js';
+
 export function createViewActions() {
   return {
     toggleExportAdvanced() {
@@ -31,6 +34,17 @@ export function createViewActions() {
       document.addEventListener('fullscreenchange', () => {
         this.isFullscreen = !!document.fullscreenElement;
       });
+    },
+    handleCanvasClick(event) {
+      if (this.mode !== 'spotlight') return;
+
+      const rect = event.target.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+
+      this.animationOriginX = Math.max(0, Math.min(1, x));
+      this.animationOriginY = 1 - Math.max(0, Math.min(1, y));
+      settings.animationPhaseOffset = getNormalizedTime(settings.time) - Math.PI / 2;
     },
   };
 }

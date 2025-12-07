@@ -142,4 +142,9 @@
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(10px);
   }
+
+  /* Cursor Utilities */
+  .cursor-crosshair {
+    cursor: crosshair;
+  }
 }

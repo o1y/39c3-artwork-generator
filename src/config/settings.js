@@ -44,10 +44,13 @@ export const settings = {
   margin: DEFAULT_MARGIN,
   time: 0,
   animationSpeed: DEFAULT_ANIMATION_SPEED,
-  mode: 'wave',
+  mode: 'spotlight',
   theme: 'lines',
   toggleVariant: 'left-filled',
   colorMode: 'violet-inv',
+  animationOriginX: 1,
+  animationOriginY: 1,
+  animationPhaseOffset: 0,
 };
 
 export const themePresets = {

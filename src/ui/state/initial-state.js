@@ -21,6 +21,8 @@ export function createInitialState() {
     opszValue: settings.opszValue,
     animationSpeed: settings.animationSpeed,
     mode: settings.mode,
+    animationOriginX: settings.animationOriginX,
+    animationOriginY: settings.animationOriginY,
 
     // Animation state
     isPaused: false,
