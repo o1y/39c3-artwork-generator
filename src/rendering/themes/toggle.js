@@ -77,12 +77,13 @@ function renderSingleRowLayout(renderer) {
   const [position, style] = settings.toggleVariant.split('-');
   const textColor = getColor(0, 0, settings.time);
   const isAnimated = settings.capabilities?.animated !== false;
+  const width = settings.widthValue;
 
   let textSize = 200;
 
   const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';
   const toggleWeight = (settings.minWeight + settings.maxWeight) / 2;
-  let textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, 100);
+  let textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, width);
   let toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
   const spacing = textSize * 0.12;
   let totalContentWidth = toggleWidth + spacing + textWidth;
@@ -92,7 +93,7 @@ function renderSingleRowLayout(renderer) {
     const scaleFactorInitial = usableWidth / totalContentWidth;
     textSize *= scaleFactorInitial;
     toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
-    textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, 100);
+    textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, width);
     totalContentWidth = toggleWidth + spacing + textWidth;
   }
 
@@ -114,7 +115,7 @@ function renderSingleRowLayout(renderer) {
     baseline: 'middle',
     width: 100,
   });
-  renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated, undefined, 100);
+  renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated, undefined, width);
 }
 
 function renderTwoRowLayout(renderer) {

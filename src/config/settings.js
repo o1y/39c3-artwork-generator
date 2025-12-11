@@ -83,6 +83,7 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showToggleVariant: true,
+      showWidth: true,
       showOpsz: true,
       showMinWeight: true,
       showMaxWeight: true,
