@@ -6,6 +6,7 @@ import { renderDVDTheme } from '../rendering/themes/dvd.js';
 
 const DEFAULT_MIN_WEIGHT = 10;
 const DEFAULT_MAX_WEIGHT = 100;
+const DEFAULT_STATIC_WEIGHT = 80;
 const DEFAULT_CANVAS_SIZE = 1000;
 const DEFAULT_MARGIN = 50;
 const DEFAULT_LINE_SPACING_FACTOR = 0.92;
@@ -37,6 +38,7 @@ export const settings = {
   numLines: 11,
   minWeight: DEFAULT_MIN_WEIGHT,
   maxWeight: DEFAULT_MAX_WEIGHT,
+  staticWeight: DEFAULT_STATIC_WEIGHT,
   widthValue: DEFAULT_WIDTH_VALUE,
   opszValue: DEFAULT_OPSZ_VALUE,
   lineSpacingFactor: DEFAULT_LINE_SPACING_FACTOR,
@@ -82,6 +84,8 @@ export const themePresets = {
       ...DEFAULT_CONTROLS,
       showToggleVariant: true,
       showOpsz: true,
+      showMinWeight: true,
+      showMaxWeight: true,
     },
   },
   toggle39c3Animated: {
@@ -97,6 +101,9 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showToggleVariant: true,
+      showOpsz: true,
+      showMinWeight: true,
+      showMaxWeight: true,
     },
   },
   toggle39c3Static: {
@@ -104,7 +111,6 @@ export const themePresets = {
     colorMode: 'mono-inv',
     text: 'POWER CYCLES',
     layout: 'two-row',
-    staticWeight: 80,
     forceUppercase: false,
     capabilities: {
       animated: false,
@@ -113,6 +119,8 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showToggleVariant: true,
+      showOpsz: true,
+      showStaticWeight: true,
       showSmoothColorModes: false,
     },
   },

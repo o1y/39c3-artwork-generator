@@ -24,6 +24,7 @@ export function createInitialState() {
     opszValue: settings.opszValue,
     minWeight: settings.minWeight,
     maxWeight: settings.maxWeight,
+    staticWeight: settings.staticWeight,
     animationSpeed: settings.animationSpeed,
     mode: settings.mode,
     animationOriginX: settings.animationOriginX,

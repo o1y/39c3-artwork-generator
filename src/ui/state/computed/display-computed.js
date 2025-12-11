@@ -32,6 +32,10 @@ export function createDisplayComputed() {
       return this.maxWeight.toString();
     },
 
+    get staticWeightDisplay() {
+      return this.staticWeight.toString();
+    },
+
     get currentFrameNumber() {
       return this.currentFrame;
     },

@@ -139,7 +139,7 @@
         </button>
         <div
           class="toolbar-btn-wrapper"
-          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
           x-cloak
         >
           <button
@@ -203,6 +203,13 @@
               <div class="control-base-default">
                 <input type="range" min="10" max="100" step="1" x-model.number="maxWeight" />
                 <span class="value-display" x-text="maxWeightDisplay"></span>
+              </div>
+            </div>
+            <div class="control-group" x-show="showStaticWeightControl">
+              <label>Weight</label>
+              <div class="control-base-default">
+                <input type="range" min="10" max="100" step="1" x-model.number="staticWeight" />
+                <span class="value-display" x-text="staticWeightDisplay"></span>
               </div>
             </div>
           </div>
@@ -420,6 +427,13 @@
         <div class="control-base-default">
           <input type="range" min="10" max="100" step="1" x-model.number="maxWeight" />
           <span class="value-display" x-text="maxWeightDisplay"></span>
+        </div>
+      </div>
+      <div class="control-group" x-show="showStaticWeightControl">
+        <label>Weight</label>
+        <div class="control-base-default">
+          <input type="range" min="10" max="100" step="1" x-model.number="staticWeight" />
+          <span class="value-display" x-text="staticWeightDisplay"></span>
         </div>
       </div>
     </div>

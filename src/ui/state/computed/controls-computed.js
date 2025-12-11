@@ -38,6 +38,10 @@ export function createControlsComputed() {
       return this.controls.showMaxWeight;
     },
 
+    get showStaticWeightControl() {
+      return this.controls.showStaticWeight;
+    },
+
     get showModeControl() {
       return this.controls.showMode;
     },

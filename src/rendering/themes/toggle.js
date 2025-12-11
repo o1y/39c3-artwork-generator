@@ -149,8 +149,7 @@ function renderTwoRowLayout(renderer) {
     firstRowWidth = toggleWidth + logoSize * 0.2 + logoWidth;
   }
 
-  const preset = themePresets[settings.theme];
-  const staticWeight = preset?.staticWeight;
+  const staticWeight = settings.staticWeight;
 
   const MIN_WIDTH = 50;
   const MAX_WIDTH = 200;
