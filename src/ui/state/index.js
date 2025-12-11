@@ -3,6 +3,7 @@ import { createInitialState } from './initial-state.js';
 import { createThemeComputed } from './computed/theme-computed.js';
 import { createDisplayComputed } from './computed/display-computed.js';
 import { createControlsComputed } from './computed/controls-computed.js';
+import { createGlyphComputed } from './computed/glyph-computed.js';
 import { createViewActions } from './actions/view-actions.js';
 import { createThemeActions } from './actions/theme-actions.js';
 import { createAnimationActions } from './actions/animation-actions.js';
@@ -24,6 +25,7 @@ export function createAppStore() {
     createThemeComputed(),
     createDisplayComputed(),
     createControlsComputed(),
+    createGlyphComputed(),
     createViewActions(),
     createThemeActions(),
     createAnimationActions(),

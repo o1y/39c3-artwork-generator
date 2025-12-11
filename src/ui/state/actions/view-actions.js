@@ -28,17 +28,40 @@ export function createViewActions() {
     },
     toggleTypographyPopover() {
       this.typographyPopoverOpen = !this.typographyPopoverOpen;
-      if (this.typographyPopoverOpen) this.animationPopoverOpen = false;
+      if (this.typographyPopoverOpen) {
+        this.animationPopoverOpen = false;
+        this.glyphPopoverOpen = false;
+      }
     },
     closeTypographyPopover() {
       this.typographyPopoverOpen = false;
     },
     toggleAnimationPopover() {
       this.animationPopoverOpen = !this.animationPopoverOpen;
-      if (this.animationPopoverOpen) this.typographyPopoverOpen = false;
+      if (this.animationPopoverOpen) {
+        this.typographyPopoverOpen = false;
+        this.glyphPopoverOpen = false;
+      }
     },
     closeAnimationPopover() {
       this.animationPopoverOpen = false;
+    },
+    toggleGlyphPopover() {
+      this.glyphPopoverOpen = !this.glyphPopoverOpen;
+      if (this.glyphPopoverOpen) {
+        this.typographyPopoverOpen = false;
+        this.animationPopoverOpen = false;
+        this.loadGlyphCategories();
+      }
+    },
+    closeGlyphPopover() {
+      this.glyphPopoverOpen = false;
+    },
+    appendToText(char) {
+      if (this.text.length < 30) {
+        this.text += char;
+        this.isTextDirty = true;
+      }
     },
     initFullscreenListener() {
       document.addEventListener('fullscreenchange', () => {

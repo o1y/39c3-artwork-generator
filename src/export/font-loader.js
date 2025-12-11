@@ -155,3 +155,24 @@ export function getGlyphBounds(text, fontSize, weight, width = settings.widthVal
     bottom: bbox.y2,
   };
 }
+
+/**
+ * Get all glyphs from the font with their unicode values
+ * @returns {Array<{unicode: number, char: string, name: string}>} Array of glyph info
+ */
+export function getAllGlyphs() {
+  if (!font) return [];
+
+  const glyphs = [];
+  for (let i = 0; i < font.glyphs.length; i++) {
+    const glyph = font.glyphs.get(i);
+    if (glyph.unicode !== undefined && glyph.unicode > 0) {
+      glyphs.push({
+        unicode: glyph.unicode,
+        char: String.fromCodePoint(glyph.unicode),
+        name: glyph.name || '',
+      });
+    }
+  }
+  return glyphs;
+}

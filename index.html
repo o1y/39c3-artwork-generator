@@ -34,13 +34,78 @@
       <div class="header-row">
         <div class="control-group control-text-input" x-show="showTextInput" x-cloak>
           <label>Text Input</label>
-          <input
-            type="text"
-            maxlength="30"
-            x-model="text"
-            @input="isTextDirty = true"
-            class="control-base"
-          />
+          <div class="text-input-wrapper">
+            <input
+              type="text"
+              maxlength="30"
+              x-model="text"
+              @input="isTextDirty = true"
+              class="control-base"
+            />
+            <div class="glyph-btn-wrapper desktop-only">
+              <button
+                type="button"
+                class="glyph-picker-btn"
+                @click="toggleGlyphPopover"
+                :class="{ 'active': glyphPopoverOpen }"
+                title="Insert Special Character"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m15 16 2.536-7.328a1.02 1.02 1 0 1 1.928 0L22 16" />
+                  <path d="M15.697 14h5.606" />
+                  <path d="m2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16" />
+                  <path d="M3.304 13h6.392" />
+                </svg>
+              </button>
+              <div
+                class="glyph-popover glass-surface"
+                x-show="glyphPopoverOpen"
+                x-cloak
+                x-transition:enter="popover-enter"
+                x-transition:enter-start="popover-enter-start"
+                x-transition:enter-end="popover-enter-end"
+                x-transition:leave="popover-leave"
+                x-transition:leave-start="popover-leave-start"
+                x-transition:leave-end="popover-leave-end"
+                @click.outside="closeGlyphPopover"
+              >
+                <div class="popover-header">Glyphs</div>
+                <div class="glyph-popover-content">
+                  <template x-for="category in glyphCategories" :key="category.name">
+                    <div class="glyph-category">
+                      <div class="glyph-category-name" x-text="category.name"></div>
+                      <div class="glyph-grid">
+                        <template x-for="glyph in category.glyphs" :key="glyph.unicode">
+                          <button
+                            type="button"
+                            class="glyph-cell"
+                            @click="appendToText(glyph.char)"
+                            :title="`U+${glyph.unicode.toString(16).toUpperCase().padStart(4, '0')} ${glyph.name}`"
+                          >
+                            <span
+                              class="glyph-char"
+                              :class="{ 'glyph-char-wide': glyph.unicode === 0xE002 }"
+                              x-text="glyph.char"
+                            ></span>
+                          </button>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <button class="btn-secondary btn-base mobile-header-toggle" @click="toggleMobileHeader">
           <span class="toggle-icon"></span>

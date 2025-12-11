@@ -11,6 +11,7 @@ export function createInitialState() {
     isFullscreen: false,
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
+    glyphPopoverOpen: false,
     spotlightHintDismissed: preferences.get('dismissedHints.spotlight'),
     toolbarHintDismissed: preferences.get('dismissedHints.toolbar'),
 
