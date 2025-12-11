@@ -130,6 +130,7 @@ export const themePresets = {
     colorMode: 'mono',
     numLines: 22,
     text: defaultTexts.ccc,
+    forceUppercase: false,
     capabilities: {
       ...DEFAULT_CAPABILITIES,
       variableWeight: false,
@@ -137,6 +138,10 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showLines: true,
+      showWidth: true,
+      showOpsz: true,
+      showMinWeight: true,
+      showMaxWeight: true,
     },
   },
   terminal: {

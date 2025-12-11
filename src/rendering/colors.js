@@ -23,7 +23,14 @@ function lerpColor(color1, color2, t) {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
-function getAnimatedColor(palette, normalizedT, charIndex, lineIndex, smooth = false, textLength = 16) {
+function getAnimatedColor(
+  palette,
+  normalizedT,
+  charIndex,
+  lineIndex,
+  smooth = false,
+  textLength = 16
+) {
   const slowdownFactor = 0.2;
   const cycles = Math.max(1, Math.round(palette.length * slowdownFactor));
   const multiplier = cycles / palette.length;

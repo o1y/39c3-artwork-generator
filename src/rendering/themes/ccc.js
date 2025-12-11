@@ -20,16 +20,24 @@ function getLogicalLength(text) {
   return length;
 }
 
-function measurePatternWidth(renderer, parts, fixedTextUpper, userText, fontSize, avgWeight) {
+function measurePatternWidth(
+  renderer,
+  parts,
+  fixedTextUpper,
+  userText,
+  fontSize,
+  avgWeight,
+  width
+) {
   let totalWidth = 0;
 
   for (let i = 0; i < parts; i++) {
-    const fixedWidth = renderer.measureText(fixedTextUpper, fontSize, avgWeight);
-    let userWidth = 0;
+    const fixedWidth = renderer.measureText(fixedTextUpper, fontSize, avgWeight, width);
+    let userTextWidth = 0;
     for (let j = 0; j < userText.length; j++) {
-      userWidth += renderer.measureText(userText[j], fontSize, avgWeight);
+      userTextWidth += renderer.measureText(userText[j], fontSize, avgWeight, width);
     }
-    totalWidth += fixedWidth + userWidth;
+    totalWidth += fixedWidth + userTextWidth;
   }
 
   return totalWidth;
@@ -45,12 +53,16 @@ function drawCCC(
   avgWeight,
   finalFontSize,
   lineIndex,
-  globalCharIndex
+  globalCharIndex,
+  width
 ) {
   const color = getColor(globalCharIndex, lineIndex, settings.time);
-  renderer.drawText(fixedText, x, y, finalFontSize, cccWeight, color, { baseline: 'top' });
+  renderer.drawText(fixedText, x, y, finalFontSize, cccWeight, color, {
+    baseline: 'top',
+    width,
+  });
 
-  const fixedWidth = renderer.measureText(fixedTextUpper, finalFontSize, avgWeight);
+  const fixedWidth = renderer.measureText(fixedTextUpper, finalFontSize, avgWeight, width);
 
   return {
     width: fixedWidth,
@@ -67,7 +79,8 @@ function drawUserText(
   avgWeight,
   finalFontSize,
   lineIndex,
-  globalCharIndex
+  globalCharIndex,
+  width
 ) {
   let currentX = x;
   let charCount = 0;
@@ -75,9 +88,12 @@ function drawUserText(
   for (let charIndex = 0; charIndex < userText.length; charIndex++) {
     const char = userText[charIndex];
     const color = getColor(globalCharIndex + charIndex, lineIndex, settings.time);
-    renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, { baseline: 'top' });
+    renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, {
+      baseline: 'top',
+      width,
+    });
 
-    const charWidth = renderer.measureText(char, finalFontSize, avgWeight);
+    const charWidth = renderer.measureText(char, finalFontSize, avgWeight, width);
     currentX += charWidth;
     charCount++;
   }
@@ -110,13 +126,15 @@ export function renderCCCTheme(renderer, canvasSize) {
 
   // Measure max line width using average weight
   const avgWeight = (settings.minWeight + settings.maxWeight) / 2;
+  const userTextWidth = settings.widthValue;
   const maxLineWidth = measurePatternWidth(
     renderer,
     parts,
     fixedTextUpper,
     userText,
     testSize,
-    avgWeight
+    avgWeight,
+    userTextWidth
   );
 
   const maxTextHeight = testSize + (settings.numLines - 1) * testSize * settings.lineSpacingFactor;
@@ -141,7 +159,8 @@ export function renderCCCTheme(renderer, canvasSize) {
       fixedTextUpper,
       userText,
       finalFontSize,
-      avgWeight
+      avgWeight,
+      userTextWidth
     );
 
     // Center the line
@@ -149,10 +168,9 @@ export function renderCCCTheme(renderer, canvasSize) {
 
     const t = getNormalizedTime(settings.time);
 
-    // Wave animation for <<CCC (cycles through full weight range)
+    // Wave animation for <<CCC (fixed weight range 10-100)
     const wave = Math.sin(t);
-    const cccWeight =
-      settings.minWeight + ((wave + 1) / 2) * (settings.maxWeight - settings.minWeight);
+    const cccWeight = 10 + ((wave + 1) / 2) * 90;
 
     const breathe = -Math.sin(t);
     const breatheWeight =
@@ -180,7 +198,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           avgWeight,
           finalFontSize,
           lineIndex,
-          globalCharIndex
+          globalCharIndex,
+          userTextWidth
         );
         x += cccResult.width;
         globalCharIndex += cccResult.charCount;
@@ -194,7 +213,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           avgWeight,
           finalFontSize,
           lineIndex,
-          globalCharIndex
+          globalCharIndex,
+          userTextWidth
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;
@@ -209,7 +229,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           avgWeight,
           finalFontSize,
           lineIndex,
-          globalCharIndex
+          globalCharIndex,
+          userTextWidth
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;
@@ -224,7 +245,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           avgWeight,
           finalFontSize,
           lineIndex,
-          globalCharIndex
+          globalCharIndex,
+          userTextWidth
         );
         x += cccResult.width;
         globalCharIndex += cccResult.charCount;
