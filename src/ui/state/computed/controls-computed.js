@@ -26,7 +26,7 @@ export function createControlsComputed() {
 
     get showOpszControl() {
       if (!this.controls.showOpsz) return false;
-      const ascenderDescenderChars = /[bdfhkltgijpqy]/;
+      const ascenderDescenderChars = /[bdfhkltgijpqy\uE002]/;
       return ascenderDescenderChars.test(this.text);
     },
 
