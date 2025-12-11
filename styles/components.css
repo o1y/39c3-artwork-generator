@@ -368,6 +368,20 @@
     }
   }
 
+  .toolbar-btn.share-btn {
+    margin-top: 20px;
+
+    @media (max-width: 768px) {
+      margin-top: 0;
+    }
+  }
+
+  .toolbar-btn.share-btn .share-btn-text {
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
   .toolbar-btn svg {
     width: 24px;
     height: 24px;

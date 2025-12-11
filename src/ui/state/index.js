@@ -9,7 +9,8 @@ import { createThemeActions } from './actions/theme-actions.js';
 import { createAnimationActions } from './actions/animation-actions.js';
 import { createExportActions } from './actions/export-actions.js';
 import { setupWatchers, startFrameUpdateLoop } from './watchers.js';
-import { initVisibilityHandler, setAlpineStore } from '../../animation/loop.js';
+import { initVisibilityHandler, setAlpineStore, pauseAnimation } from '../../animation/loop.js';
+import { ANIMATION_FPS } from './constants.js';
 
 function mergeStoreModules(...modules) {
   const result = {};
@@ -42,6 +43,17 @@ export function createAppStore() {
         initVisibilityHandler();
         setAlpineStore(this);
         this.initFullscreenListener();
+
+        if (this.isPaused) {
+          pauseAnimation();
+          settings.time = this.currentFrame / ANIMATION_FPS;
+        }
+
+        this.$nextTick(() => {
+          const colorMode = this.colorMode;
+          this.colorMode = '';
+          this.colorMode = colorMode;
+        });
       },
     }
   );

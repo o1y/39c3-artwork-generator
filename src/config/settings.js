@@ -4,8 +4,23 @@ import { renderCCCTheme } from '../rendering/themes/ccc.js';
 import { renderTerminalTheme } from '../rendering/themes/terminal.js';
 import { renderDVDTheme } from '../rendering/themes/dvd.js';
 
-const DEFAULT_MIN_WEIGHT = 10;
-const DEFAULT_MAX_WEIGHT = 100;
+export const FONT_AXES = {
+  weight: [10, 100],
+  width: [50, 160],
+  opticalSize: [8, 140],
+};
+
+export const VALID_MODES = ['wave', 'pulse', 'rotate', 'breathe', 'bounce', 'spotlight'];
+export const VALID_TOGGLE_VARIANTS = [
+  'left-filled',
+  'left-outlined',
+  'right-filled',
+  'right-outlined',
+];
+export const MAX_TEXT_LENGTH = 30;
+
+const DEFAULT_MIN_WEIGHT = FONT_AXES.weight[0];
+const DEFAULT_MAX_WEIGHT = FONT_AXES.weight[1];
 const DEFAULT_STATIC_WEIGHT = 80;
 const DEFAULT_CANVAS_SIZE = 1000;
 const DEFAULT_MARGIN = 50;

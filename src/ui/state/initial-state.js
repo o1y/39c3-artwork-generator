@@ -1,39 +1,160 @@
-import { settings } from '../../config/settings.js';
+import {
+  settings,
+  themePresets,
+  FONT_AXES,
+  VALID_MODES,
+  VALID_TOGGLE_VARIANTS,
+  MAX_TEXT_LENGTH,
+} from '../../config/settings.js';
 import { preferences } from '../../config/preferences.js';
+import { COLOR_MODES } from '../../config/colors.js';
+import { KEY_MAP } from '../../config/url-keys.js';
+import { TOTAL_FRAMES } from './constants.js';
+
+const NUMERIC_BOUNDS = {
+  numLines: [1, 100],
+  widthValue: FONT_AXES.width,
+  opszValue: FONT_AXES.opticalSize,
+  minWeight: FONT_AXES.weight,
+  maxWeight: FONT_AXES.weight,
+  staticWeight: FONT_AXES.weight,
+  animationSpeed: [0.1, 10],
+  animationOriginX: [0, 1],
+  animationOriginY: [0, 1],
+  currentFrame: [0, TOTAL_FRAMES],
+};
+
+const SETTINGS_KEYS = [
+  'text',
+  'theme',
+  'toggleVariant',
+  'colorMode',
+  'mode',
+  'numLines',
+  'widthValue',
+  'opszValue',
+  'minWeight',
+  'maxWeight',
+  'staticWeight',
+  'animationSpeed',
+  'animationOriginX',
+  'animationOriginY',
+  'animationPhaseOffset',
+];
+
+const STRING_PARAMS = ['text', 'theme', 'toggleVariant', 'colorMode', 'mode'];
+const BOOLEAN_PARAMS = ['isPaused'];
+const NUMERIC_PARAMS = [
+  'numLines',
+  'widthValue',
+  'opszValue',
+  'minWeight',
+  'maxWeight',
+  'staticWeight',
+  'animationSpeed',
+  'animationOriginX',
+  'animationOriginY',
+  'animationPhaseOffset',
+  'currentFrame',
+];
+
+function getParam(params, key) {
+  const shortKey = KEY_MAP[key];
+  return params.has(shortKey) ? params.get(shortKey) : null;
+}
+
+function getUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const result = {};
+
+  for (const key of STRING_PARAMS) {
+    const value = getParam(params, key);
+    if (value !== null) {
+      result[key] = value;
+    }
+  }
+
+  for (const key of BOOLEAN_PARAMS) {
+    const value = getParam(params, key);
+    if (value !== null) {
+      result[key] = value === 'true' || value === '1';
+    }
+  }
+
+  for (const key of NUMERIC_PARAMS) {
+    const value = getParam(params, key);
+    if (value !== null) {
+      const numValue = parseFloat(value);
+      if (!isNaN(numValue)) {
+        const bounds = NUMERIC_BOUNDS[key];
+        result[key] = bounds ? Math.max(bounds[0], Math.min(bounds[1], numValue)) : numValue;
+      }
+    }
+  }
+
+  if (result.text && result.text.length > MAX_TEXT_LENGTH)
+    result.text = result.text.slice(0, MAX_TEXT_LENGTH);
+  if (result.theme && !themePresets[result.theme]) delete result.theme;
+  if (result.mode && !VALID_MODES.includes(result.mode)) delete result.mode;
+  if (result.colorMode && !COLOR_MODES[result.colorMode]) delete result.colorMode;
+  if (result.toggleVariant && !VALID_TOGGLE_VARIANTS.includes(result.toggleVariant))
+    delete result.toggleVariant;
+
+  for (const key of SETTINGS_KEYS) {
+    if (key in result) {
+      settings[key] = result[key];
+    }
+  }
+
+  if (result.theme) {
+    const preset = themePresets[result.theme];
+    if (preset?.capabilities) {
+      settings.capabilities = { ...preset.capabilities };
+    }
+  }
+
+  return result;
+}
 
 export function createInitialState() {
+  const urlParams = getUrlParams();
+
   return {
     // View state
-    isTextDirty: false,
-    isColorModeDirty: false,
+    isTextDirty: 'text' in urlParams,
+    isColorModeDirty: 'colorMode' in urlParams,
     exportAdvancedCollapsed: true,
     mobileHeaderCollapsed: true,
     isFullscreen: false,
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
     glyphPopoverOpen: false,
-    spotlightHintDismissed: preferences.get('dismissedHints.spotlight'),
+    spotlightHintDismissed:
+      preferences.get('dismissedHints.spotlight') ||
+      'animationOriginX' in urlParams ||
+      'animationOriginY' in urlParams,
     toolbarHintDismissed: preferences.get('dismissedHints.toolbar'),
+    shareButtonText: null,
 
-    // Settings state
-    text: settings.text,
-    theme: settings.theme,
-    toggleVariant: settings.toggleVariant,
-    colorMode: settings.colorMode,
-    numLines: settings.numLines,
-    widthValue: settings.widthValue,
-    opszValue: settings.opszValue,
-    minWeight: settings.minWeight,
-    maxWeight: settings.maxWeight,
-    staticWeight: settings.staticWeight,
-    animationSpeed: settings.animationSpeed,
-    mode: settings.mode,
-    animationOriginX: settings.animationOriginX,
-    animationOriginY: settings.animationOriginY,
+    // Settings state (URL params override defaults)
+    text: urlParams.text ?? settings.text,
+    theme: urlParams.theme ?? settings.theme,
+    toggleVariant: urlParams.toggleVariant ?? settings.toggleVariant,
+    colorMode: urlParams.colorMode ?? settings.colorMode,
+    numLines: urlParams.numLines ?? settings.numLines,
+    widthValue: urlParams.widthValue ?? settings.widthValue,
+    opszValue: urlParams.opszValue ?? settings.opszValue,
+    minWeight: urlParams.minWeight ?? settings.minWeight,
+    maxWeight: urlParams.maxWeight ?? settings.maxWeight,
+    staticWeight: urlParams.staticWeight ?? settings.staticWeight,
+    animationSpeed: urlParams.animationSpeed ?? settings.animationSpeed,
+    mode: urlParams.mode ?? settings.mode,
+    animationOriginX: urlParams.animationOriginX ?? settings.animationOriginX,
+    animationOriginY: urlParams.animationOriginY ?? settings.animationOriginY,
 
     // Animation state
-    isPaused: false,
-    currentFrame: 0,
+    isPaused: urlParams.isPaused ?? false,
+    currentFrame: urlParams.currentFrame ?? 0,
     fps: 0,
 
     // Export state
