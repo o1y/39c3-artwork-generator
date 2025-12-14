@@ -4,6 +4,8 @@ import {
   getTextWidth,
   getMiddleBaselineOffset,
   getAscenderHeight,
+  glyphToPath,
+  getGlyphWidth,
 } from '../../export/font-loader.js';
 
 export class SVGRenderer extends Renderer {
@@ -27,6 +29,10 @@ export class SVGRenderer extends Renderer {
     return getTextWidth(text, fontSize, weight, width);
   }
 
+  measureGlyph(glyph, fontSize, weight, width) {
+    return getGlyphWidth(glyph, fontSize, weight, width);
+  }
+
   drawText(text, x, y, fontSize, weight, color, options = {}) {
     let adjustedY = y;
 
@@ -40,6 +46,39 @@ export class SVGRenderer extends Renderer {
 
     const width = options.width;
     const result = textToPath(text, x, adjustedY, fontSize, weight, width);
+
+    let transform = '';
+    if (this.transform) {
+      const transformParts = [];
+      transformParts.push(`translate(${this.transform.translateX}, ${this.transform.translateY})`);
+      transformParts.push(`scale(${this.transform.scaleX}, ${this.transform.scaleY})`);
+      transform = transformParts.join(' ');
+    }
+
+    const path = this.createSVGElement('path');
+    path.setAttribute('d', result.pathData);
+    path.setAttribute('fill', color);
+    path.setAttribute('fill-rule', 'nonzero');
+    if (transform) {
+      path.setAttribute('transform', transform);
+    }
+
+    this.svg.appendChild(path);
+  }
+
+  drawGlyph(glyph, x, y, fontSize, weight, color, options = {}) {
+    let adjustedY = y;
+
+    if (options.baseline === 'middle') {
+      const offset = getMiddleBaselineOffset(fontSize);
+      adjustedY = y + offset;
+    } else if (options.baseline === 'top') {
+      const ascender = getAscenderHeight(fontSize);
+      adjustedY = y + ascender;
+    }
+
+    const width = options.width;
+    const result = glyphToPath(glyph, x, adjustedY, fontSize, weight, width);
 
     let transform = '';
     if (this.transform) {

@@ -1,17 +1,19 @@
 import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
+import { getGlyphs } from '../../export/font-loader.js';
 
-function getLogicalLength(text) {
+function getLogicalLength(glyphs) {
   let length = 0;
-  for (let i = 0; i < text.length; i++) {
-    const charCode = text.charCodeAt(i);
+  for (let i = 0; i < glyphs.length; i++) {
+    const glyph = glyphs[i];
+    const unicode = glyph.unicode;
     // 39C3 logo glyph
-    if (charCode === 0xe002) {
+    if (unicode === 0xe002) {
       length += 5;
     }
     // CCC logo glyphs (bold and thin)
-    else if (charCode === 0xe003 || charCode === 0xe004) {
+    else if (unicode === 0xe003 || unicode === 0xe004) {
       length += 5; // CCC logos are about 5 characters wide
     } else {
       length += 1;
@@ -24,7 +26,7 @@ function measurePatternWidth(
   renderer,
   parts,
   fixedTextUpper,
-  userText,
+  userGlyphs,
   fontSize,
   avgWeight,
   width
@@ -34,8 +36,8 @@ function measurePatternWidth(
   for (let i = 0; i < parts; i++) {
     const fixedWidth = renderer.measureText(fixedTextUpper, fontSize, avgWeight, width);
     let userTextWidth = 0;
-    for (let j = 0; j < userText.length; j++) {
-      userTextWidth += renderer.measureText(userText[j], fontSize, avgWeight, width);
+    for (let j = 0; j < userGlyphs.length; j++) {
+      userTextWidth += renderer.measureGlyph(userGlyphs[j], fontSize, avgWeight, width);
     }
     totalWidth += fixedWidth + userTextWidth;
   }
@@ -72,7 +74,7 @@ function drawCCC(
 
 function drawUserText(
   renderer,
-  userText,
+  userGlyphs,
   x,
   y,
   breatheWeight,
@@ -83,24 +85,24 @@ function drawUserText(
   width
 ) {
   let currentX = x;
-  let charCount = 0;
+  let glyphCount = 0;
 
-  for (let charIndex = 0; charIndex < userText.length; charIndex++) {
-    const char = userText[charIndex];
-    const color = getColor(globalCharIndex + charIndex, lineIndex, settings.time);
-    renderer.drawText(char, currentX, y, finalFontSize, breatheWeight, color, {
+  for (let glyphIndex = 0; glyphIndex < userGlyphs.length; glyphIndex++) {
+    const glyph = userGlyphs[glyphIndex];
+    const color = getColor(globalCharIndex + glyphIndex, lineIndex, settings.time);
+    renderer.drawGlyph(glyph, currentX, y, finalFontSize, breatheWeight, color, {
       baseline: 'top',
       width,
     });
 
-    const charWidth = renderer.measureText(char, finalFontSize, avgWeight, width);
-    currentX += charWidth;
-    charCount++;
+    const glyphWidth = renderer.measureGlyph(glyph, finalFontSize, avgWeight, width);
+    currentX += glyphWidth;
+    glyphCount++;
   }
 
   return {
     width: currentX - x,
-    charCount: charCount,
+    charCount: glyphCount,
   };
 }
 
@@ -110,12 +112,14 @@ export function renderCCCTheme(renderer, canvasSize) {
   const userText = settings.text;
   if (!userText) return;
 
-  const fixedTextUpper = '\uE003'; // Bold CCC logo
-  const fixedTextLower = '\uE004'; // Thin CCC logo
+  const userGlyphs = getGlyphs(userText);
+  const fixedUpperGlyphs = getGlyphs('\uE003');
+  const fixedTextUpper = '\uE003';
+  const fixedTextLower = '\uE004';
   const testSize = 1000;
 
   // Dynamically calculate pattern repetitions based on text length
-  const patternUnitLength = getLogicalLength(fixedTextUpper) + getLogicalLength(userText);
+  const patternUnitLength = getLogicalLength(fixedUpperGlyphs) + getLogicalLength(userGlyphs);
   const targetTotalChars = 36;
   const calculatedParts = Math.floor(targetTotalChars / patternUnitLength);
 
@@ -126,15 +130,15 @@ export function renderCCCTheme(renderer, canvasSize) {
 
   // Measure max line width using average weight
   const avgWeight = (settings.minWeight + settings.maxWeight) / 2;
-  const userTextWidth = settings.widthValue;
+  const userTextWidthSetting = settings.widthValue;
   const maxLineWidth = measurePatternWidth(
     renderer,
     parts,
     fixedTextUpper,
-    userText,
+    userGlyphs,
     testSize,
     avgWeight,
-    userTextWidth
+    userTextWidthSetting
   );
 
   const maxTextHeight = testSize + (settings.numLines - 1) * testSize * settings.lineSpacingFactor;
@@ -157,10 +161,10 @@ export function renderCCCTheme(renderer, canvasSize) {
       renderer,
       parts,
       fixedTextUpper,
-      userText,
+      userGlyphs,
       finalFontSize,
       avgWeight,
-      userTextWidth
+      userTextWidthSetting
     );
 
     // Center the line
@@ -199,14 +203,14 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidth
+          userTextWidthSetting
         );
         x += cccResult.width;
         globalCharIndex += cccResult.charCount;
 
         const userResult = drawUserText(
           renderer,
-          userText,
+          userGlyphs,
           x,
           y,
           breatheWeight,
@@ -214,7 +218,7 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidth
+          userTextWidthSetting
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;
@@ -222,7 +226,7 @@ export function renderCCCTheme(renderer, canvasSize) {
         // Draw user text first, then <<CCC/<<ccc
         const userResult = drawUserText(
           renderer,
-          userText,
+          userGlyphs,
           x,
           y,
           breatheWeight,
@@ -230,7 +234,7 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidth
+          userTextWidthSetting
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;
@@ -246,7 +250,7 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidth
+          userTextWidthSetting
         );
         x += cccResult.width;
         globalCharIndex += cccResult.charCount;

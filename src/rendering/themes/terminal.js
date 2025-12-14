@@ -1,13 +1,15 @@
 import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
-import { getAscenderHeight, getDescenderHeight } from '../../export/font-loader.js';
+import { getAscenderHeight, getDescenderHeight, getGlyphs } from '../../export/font-loader.js';
 
 export function renderTerminalTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
   if (!userText) return;
+
+  const userGlyphs = getGlyphs(userText);
 
   const logo39C3 = '\uE002';
   const t = getNormalizedTime(settings.time);
@@ -141,8 +143,8 @@ export function renderTerminalTheme(renderer, canvasSize) {
     if (template.logo) width += renderer.measureText(logo39C3, testSize, avgWeight);
     if (template.separator) width += renderer.measureText(template.separator, testSize, avgWeight);
 
-    for (let i = 0; i < userText.length; i++) {
-      width += renderer.measureText(userText[i], testSize, avgWeight);
+    for (let i = 0; i < userGlyphs.length; i++) {
+      width += renderer.measureGlyph(userGlyphs[i], testSize, avgWeight);
     }
 
     if (template.afterText) width += renderer.measureText(template.afterText, testSize, avgWeight);
@@ -204,11 +206,11 @@ export function renderTerminalTheme(renderer, canvasSize) {
     if (template.separator)
       lineWidth += renderer.measureText(template.separator, finalFontSize, animWeight);
 
-    for (let i = 0; i < userText.length; i++) {
-      const charPhase = (i / userText.length) * Math.PI * 2;
-      const charWave = (Math.sin(t + charPhase + linePhase) + 1) / 2;
-      const charWeight = settings.minWeight + charWave * (settings.maxWeight - settings.minWeight);
-      lineWidth += renderer.measureText(userText[i], finalFontSize, charWeight);
+    for (let i = 0; i < userGlyphs.length; i++) {
+      const glyphPhase = (i / userGlyphs.length) * Math.PI * 2;
+      const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
+      const glyphWeight = settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
+      lineWidth += renderer.measureGlyph(userGlyphs[i], finalFontSize, glyphWeight);
     }
 
     if (template.afterText)
@@ -246,22 +248,21 @@ export function renderTerminalTheme(renderer, canvasSize) {
       charIndex += template.separator.length;
     }
 
-    const textWithSuffix = template.suffix ? userText + template.suffix : userText;
-    const textWithAfterAndSuffix = template.afterText
-      ? textWithSuffix + template.afterText
-      : textWithSuffix;
+    const suffixGlyphs = template.suffix ? getGlyphs(template.suffix) : [];
+    const afterTextGlyphs = template.afterText ? getGlyphs(template.afterText) : [];
+    const allGlyphs = [...userGlyphs, ...suffixGlyphs, ...afterTextGlyphs];
 
-    for (let i = 0; i < textWithAfterAndSuffix.length; i++) {
-      const char = textWithAfterAndSuffix[i];
-      const charPhase = (i / textWithAfterAndSuffix.length) * Math.PI * 2;
-      const charWave = (Math.sin(t + charPhase + linePhase) + 1) / 2;
-      const charWeight = settings.minWeight + charWave * (settings.maxWeight - settings.minWeight);
+    for (let i = 0; i < allGlyphs.length; i++) {
+      const glyph = allGlyphs[i];
+      const glyphPhase = (i / allGlyphs.length) * Math.PI * 2;
+      const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
+      const glyphWeight = settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
 
       const color = getColor(charIndex + i, lineIndex, settings.time);
-      renderer.drawText(char, x, y, finalFontSize, charWeight, color, { baseline: 'alphabetic' });
+      renderer.drawGlyph(glyph, x, y, finalFontSize, glyphWeight, color, { baseline: 'alphabetic' });
 
-      x += renderer.measureText(char, finalFontSize, charWeight);
+      x += renderer.measureGlyph(glyph, finalFontSize, glyphWeight);
     }
-    charIndex += textWithAfterAndSuffix.length;
+    charIndex += allGlyphs.length;
   }
 }

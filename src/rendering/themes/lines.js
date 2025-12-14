@@ -1,6 +1,7 @@
 import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { calculateWeight } from '../weight.js';
+import { getGlyphs } from '../../export/font-loader.js';
 
 export function renderLinesTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
@@ -8,12 +9,14 @@ export function renderLinesTheme(renderer, canvasSize) {
   const text = settings.text;
   if (!text) return;
 
+  const glyphs = getGlyphs(text);
+
   const testSize = 1000;
 
   // Find max width across all lines
   let maxTextWidth = 0;
   for (let i = 0; i < settings.numLines; i++) {
-    const width = getLineWidth(renderer, text, testSize, i, settings.time);
+    const width = getLineWidth(renderer, glyphs, testSize, i, settings.time);
     maxTextWidth = Math.max(maxTextWidth, width);
   }
 
@@ -29,13 +32,13 @@ export function renderLinesTheme(renderer, canvasSize) {
   const topY = (settings.canvasSize - textBlockHeight) / 2;
   const startY = topY + (settings.numLines - 1) * lineSpacing;
 
-  const midIndex = (text.length - 1) / 2;
+  const midIndex = (glyphs.length - 1) / 2;
 
   for (let lineIndex = 0; lineIndex < settings.numLines; lineIndex++) {
     const y = startY - lineIndex * lineSpacing;
 
     // Center each line
-    const lineWidth = getLineWidth(renderer, text, finalFontSize, lineIndex, settings.time);
+    const lineWidth = getLineWidth(renderer, glyphs, finalFontSize, lineIndex, settings.time);
     let x = (settings.canvasSize - lineWidth) / 2;
 
     const startWeight =
@@ -45,31 +48,30 @@ export function renderLinesTheme(renderer, canvasSize) {
       settings.minWeight +
       ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
 
-    for (let charIndex = 0; charIndex < text.length; charIndex++) {
-      const char = text[charIndex];
+    for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
+      const glyph = glyphs[glyphIndex];
       const weight = calculateWeight(
-        charIndex,
+        glyphIndex,
         lineIndex,
         startWeight,
         endWeight,
         midIndex,
-        text.length,
+        glyphs.length,
         settings.time
       );
 
-      const color = getColor(charIndex, lineIndex, settings.time, text.length);
-      renderer.drawText(char, x, y, finalFontSize, weight, color, { baseline: 'top' });
+      const color = getColor(glyphIndex, lineIndex, settings.time, glyphs.length);
+      renderer.drawGlyph(glyph, x, y, finalFontSize, weight, color, { baseline: 'top' });
 
-      const charWidth = renderer.measureText(char, finalFontSize, weight);
-      x += charWidth;
+      const glyphWidth = renderer.measureGlyph(glyph, finalFontSize, weight);
+      x += glyphWidth;
     }
   }
 }
 
-// Helper function to measure line width
-function getLineWidth(renderer, text, size, lineIndex, timeOffset = 0) {
+function getLineWidth(renderer, glyphs, size, lineIndex, timeOffset = 0) {
   let total = 0;
-  const midIndex = (text.length - 1) / 2;
+  const midIndex = (glyphs.length - 1) / 2;
   const startWeight =
     settings.maxWeight -
     ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
@@ -77,18 +79,18 @@ function getLineWidth(renderer, text, size, lineIndex, timeOffset = 0) {
     settings.minWeight +
     ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
 
-  for (let charIndex = 0; charIndex < text.length; charIndex++) {
+  for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     const weight = calculateWeight(
-      charIndex,
+      glyphIndex,
       lineIndex,
       startWeight,
       endWeight,
       midIndex,
-      text.length,
+      glyphs.length,
       timeOffset
     );
 
-    total += renderer.measureText(text[charIndex], size, weight);
+    total += renderer.measureGlyph(glyphs[glyphIndex], size, weight);
   }
   return total;
 }

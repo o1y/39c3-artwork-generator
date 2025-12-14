@@ -2,7 +2,7 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { BRAND_COLORS } from '../../config/colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
-import { getGlyphBounds } from '../../export/font-loader.js';
+import { getGlyphBounds, getGlyphs } from '../../export/font-loader.js';
 
 const COLOR_MODES = ['violet', 'green', 'mono'];
 
@@ -88,10 +88,10 @@ function getBouncingPosition(time, boundsWidth, boundsHeight) {
   return { x, y };
 }
 
-function measureTextWidth(renderer, text, fontSize, weight) {
+function measureGlyphsWidth(renderer, glyphs, fontSize, weight) {
   let width = 0;
-  for (let i = 0; i < text.length; i++) {
-    width += renderer.measureText(text[i], fontSize, weight);
+  for (let i = 0; i < glyphs.length; i++) {
+    width += renderer.measureGlyph(glyphs[i], fontSize, weight);
   }
   return width;
 }
@@ -106,6 +106,7 @@ export function renderDVDTheme(renderer, canvasSize) {
   }
 
   const logo39C3 = '\uE002';
+  const logoGlyphs = getGlyphs(logo39C3);
   const t = getNormalizedTime(settings.time);
   const time = settings.time;
 
@@ -116,7 +117,7 @@ export function renderDVDTheme(renderer, canvasSize) {
   const weight =
     settings.minWeight + (settings.maxWeight - settings.minWeight) * (0.5 + pulse * 0.3);
 
-  const logoWidth = measureTextWidth(renderer, logo39C3, fontSize, weight);
+  const logoWidth = measureGlyphsWidth(renderer, logoGlyphs, fontSize, weight);
   const bounds = getGlyphBounds(logo39C3, fontSize, weight);
   const logoHeight = bounds.height;
   const bottomOverhang = Math.max(0, bounds.bottom);
@@ -132,21 +133,21 @@ export function renderDVDTheme(renderer, canvasSize) {
   renderer.save();
   renderer.translate(logoX + logoWidth / 2, logoY + logoHeight / 2);
 
-  let charX = -logoWidth / 2;
+  let glyphX = -logoWidth / 2;
   const drawY = bounds.ascender - logoHeight / 2;
 
-  for (let i = 0; i < logo39C3.length; i++) {
-    const char = logo39C3[i];
+  for (let i = 0; i < logoGlyphs.length; i++) {
+    const glyph = logoGlyphs[i];
     const color = isScreenFlashing ? BRAND_COLORS.dark : getColor(i, 0, time);
-    const charPhase = i * 0.4;
-    const charPulse = (Math.sin(t + charPhase) + 1) / 2;
-    const charWeight = settings.minWeight + (settings.maxWeight - settings.minWeight) * charPulse;
+    const glyphPhase = i * 0.4;
+    const glyphPulse = (Math.sin(t + glyphPhase) + 1) / 2;
+    const glyphWeight = settings.minWeight + (settings.maxWeight - settings.minWeight) * glyphPulse;
 
-    renderer.drawText(char, charX, drawY, fontSize, charWeight, color, {
+    renderer.drawGlyph(glyph, glyphX, drawY, fontSize, glyphWeight, color, {
       baseline: 'alphabetic',
     });
 
-    charX += renderer.measureText(char, fontSize, charWeight);
+    glyphX += renderer.measureGlyph(glyph, fontSize, glyphWeight);
   }
 
   renderer.restore();

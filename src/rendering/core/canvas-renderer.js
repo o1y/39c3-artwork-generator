@@ -4,6 +4,8 @@ import {
   getTextWidth,
   getMiddleBaselineOffset,
   getAscenderHeight,
+  glyphToPath,
+  getGlyphWidth,
 } from '../../export/font-loader.js';
 
 export class CanvasRenderer extends Renderer {
@@ -34,6 +36,28 @@ export class CanvasRenderer extends Renderer {
 
     const width = options.width;
     const result = textToPath(text, x, adjustedY, fontSize, weight, width);
+
+    this.ctx.fillStyle = color;
+    this.ctx.fill(new Path2D(result.pathData));
+  }
+
+  measureGlyph(glyph, fontSize, weight, width) {
+    return getGlyphWidth(glyph, fontSize, weight, width);
+  }
+
+  drawGlyph(glyph, x, y, fontSize, weight, color, options = {}) {
+    let adjustedY = y;
+
+    if (options.baseline === 'middle') {
+      const offset = getMiddleBaselineOffset(fontSize);
+      adjustedY = y + offset;
+    } else if (options.baseline === 'top') {
+      const ascender = getAscenderHeight(fontSize);
+      adjustedY = y + ascender;
+    }
+
+    const width = options.width;
+    const result = glyphToPath(glyph, x, adjustedY, fontSize, weight, width);
 
     this.ctx.fillStyle = color;
     this.ctx.fill(new Path2D(result.pathData));

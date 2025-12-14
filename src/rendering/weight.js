@@ -1,36 +1,5 @@
 import { settings } from '../config/settings.js';
 import { getNormalizedTime } from '../animation/timing.js';
-import { getTextWidth } from '../export/font-loader.js';
-
-// Measure text width for a specific line (exact port from DrawBot)
-export function getLineWidth(text, size, lineIndex, timeOffset = 0) {
-  let total = 0;
-  const midIndex = (text.length - 1) / 2;
-  const startWeight =
-    settings.maxWeight -
-    ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
-  const endWeight =
-    settings.minWeight +
-    ((settings.maxWeight - settings.minWeight) / (settings.numLines - 1)) * lineIndex;
-
-  for (let charIndex = 0; charIndex < text.length; charIndex++) {
-    const char = text[charIndex];
-    let weight = calculateWeight(
-      charIndex,
-      lineIndex,
-      startWeight,
-      endWeight,
-      midIndex,
-      text.length,
-      timeOffset
-    );
-
-    // Use opentype.js to measure text width
-    const width = getTextWidth(char, size, weight);
-    total += width;
-  }
-  return total;
-}
 
 // Calculate weight (exact port from DrawBot with animation)
 export function calculateWeight(

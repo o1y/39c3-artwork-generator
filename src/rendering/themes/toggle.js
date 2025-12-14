@@ -1,6 +1,7 @@
 import { settings, defaultTexts, themePresets } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
+import { getGlyphs } from '../../export/font-loader.js';
 
 function easeSwitch(p) {
   return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
@@ -14,29 +15,29 @@ function calculateToggleProgress(isAnimated) {
   return easeSwitch(rawProgress);
 }
 
-function measureTextWithAnimation(renderer, text, size, isAnimated, staticWeight, width) {
-  let textWidth = 0;
+function measureGlyphsWithAnimation(renderer, glyphs, size, isAnimated, staticWeight, width) {
+  let totalWidth = 0;
 
-  for (let charIndex = 0; charIndex < text.length; charIndex++) {
+  for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     let weight;
     if (isAnimated) {
       const t = getNormalizedTime(settings.time);
-      const phase = charIndex * 0.3;
+      const phase = glyphIndex * 0.3;
       const cycle = (Math.sin(t + phase) + 1) / 2;
       weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;
     } else {
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
-    textWidth += renderer.measureText(text[charIndex], size, weight, width);
+    totalWidth += renderer.measureGlyph(glyphs[glyphIndex], size, weight, width);
   }
 
-  return textWidth;
+  return totalWidth;
 }
 
-function renderAnimatedText(
+function renderAnimatedGlyphs(
   renderer,
-  text,
+  glyphs,
   startX,
   centerY,
   textSize,
@@ -46,33 +47,35 @@ function renderAnimatedText(
 ) {
   let currentX = startX;
 
-  for (let charIndex = 0; charIndex < text.length; charIndex++) {
-    const char = text[charIndex];
+  for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
+    const glyph = glyphs[glyphIndex];
     let weight;
 
     if (isAnimated) {
       const t = getNormalizedTime(settings.time);
-      const phase = charIndex * 0.3;
+      const phase = glyphIndex * 0.3;
       const cycle = (Math.sin(t + phase) + 1) / 2;
       weight = settings.minWeight + (settings.maxWeight - settings.minWeight) * cycle;
     } else {
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
-    const color = getColor(charIndex, 0, settings.time);
-    renderer.drawText(char, currentX, centerY, textSize, weight, color, {
+    const color = getColor(glyphIndex, 0, settings.time);
+    renderer.drawGlyph(glyph, currentX, centerY, textSize, weight, color, {
       baseline: 'middle',
       width,
     });
 
-    const charWidth = renderer.measureText(char, textSize, weight, width);
-    currentX += charWidth;
+    const glyphWidth = renderer.measureGlyph(glyph, textSize, weight, width);
+    currentX += glyphWidth;
   }
 }
 
 function renderSingleRowLayout(renderer) {
   const text = settings.text;
   if (!text) return;
+
+  const textGlyphs = getGlyphs(text);
 
   const [position, style] = settings.toggleVariant.split('-');
   const textColor = getColor(0, 0, settings.time);
@@ -83,18 +86,18 @@ function renderSingleRowLayout(renderer) {
 
   const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';
   const toggleWeight = (settings.minWeight + settings.maxWeight) / 2;
-  let textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, width);
+  let glyphsWidth = measureGlyphsWithAnimation(renderer, textGlyphs, textSize, isAnimated, undefined, width);
   let toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
   const spacing = textSize * 0.12;
-  let totalContentWidth = toggleWidth + spacing + textWidth;
+  let totalContentWidth = toggleWidth + spacing + glyphsWidth;
 
   const usableWidth = settings.canvasSize - 2 * settings.margin;
   if (totalContentWidth > usableWidth) {
     const scaleFactorInitial = usableWidth / totalContentWidth;
     textSize *= scaleFactorInitial;
     toggleWidth = renderer.measureText(toggleGlyph, textSize, toggleWeight, 100);
-    textWidth = measureTextWithAnimation(renderer, text, textSize, isAnimated, undefined, width);
-    totalContentWidth = toggleWidth + spacing + textWidth;
+    glyphsWidth = measureGlyphsWithAnimation(renderer, textGlyphs, textSize, isAnimated, undefined, width);
+    totalContentWidth = toggleWidth + spacing + glyphsWidth;
   }
 
   const startX = (settings.canvasSize - totalContentWidth) / 2;
@@ -106,7 +109,7 @@ function renderSingleRowLayout(renderer) {
     textX = startX + toggleWidth + spacing;
   } else {
     textX = startX;
-    toggleX = startX + textWidth + spacing;
+    toggleX = startX + glyphsWidth + spacing;
   }
 
   const progress = calculateToggleProgress(isAnimated);
@@ -115,13 +118,15 @@ function renderSingleRowLayout(renderer) {
     baseline: 'middle',
     width: 100,
   });
-  renderAnimatedText(renderer, text, textX, centerY, textSize, isAnimated, undefined, width);
+  renderAnimatedGlyphs(renderer, textGlyphs, textX, centerY, textSize, isAnimated, undefined, width);
 }
 
 function renderTwoRowLayout(renderer) {
   const logoText = defaultTexts.ccc;
   const userText = settings.text;
   if (!userText) return;
+
+  const userGlyphs = getGlyphs(userText);
 
   const isAnimated = settings.capabilities?.animated !== false;
   const textColor = getColor(0, 0, settings.time);
@@ -158,9 +163,9 @@ function renderTwoRowLayout(renderer) {
   const targetWidth = usableWidth;
 
   let dynamicWidth = DEFAULT_WIDTH;
-  let userTextWidth = measureTextWithAnimation(
+  let userGlyphsWidth = measureGlyphsWithAnimation(
     renderer,
-    userText,
+    userGlyphs,
     userTextSize,
     isAnimated,
     staticWeight,
@@ -168,7 +173,7 @@ function renderTwoRowLayout(renderer) {
   );
 
   for (let i = 0; i < 5; i++) {
-    const currentRatio = targetWidth / userTextWidth;
+    const currentRatio = targetWidth / userGlyphsWidth;
 
     if (Math.abs(currentRatio - 1.0) < 0.02) {
       break;
@@ -178,9 +183,9 @@ function renderTwoRowLayout(renderer) {
     dynamicWidth = dynamicWidth * (1 + adjustment);
     dynamicWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, dynamicWidth));
 
-    userTextWidth = measureTextWithAnimation(
+    userGlyphsWidth = measureGlyphsWithAnimation(
       renderer,
-      userText,
+      userGlyphs,
       userTextSize,
       isAnimated,
       staticWeight,
@@ -188,20 +193,20 @@ function renderTwoRowLayout(renderer) {
     );
   }
 
-  let secondRowWidth = userTextWidth;
+  let secondRowWidth = userGlyphsWidth;
 
   if (secondRowWidth > usableWidth) {
     const scaleFactorRow2 = usableWidth / secondRowWidth;
     userTextSize *= scaleFactorRow2;
-    userTextWidth = measureTextWithAnimation(
+    userGlyphsWidth = measureGlyphsWithAnimation(
       renderer,
-      userText,
+      userGlyphs,
       userTextSize,
       isAnimated,
       staticWeight,
       dynamicWidth
     );
-    secondRowWidth = userTextWidth;
+    secondRowWidth = userGlyphsWidth;
   }
 
   const rowSpacing = userTextSize * 0.15;
@@ -234,14 +239,14 @@ function renderTwoRowLayout(renderer) {
   const row2Y = startY + logoSize + rowSpacing + userTextSize / 2;
   const row2StartX = (settings.canvasSize - secondRowWidth) / 2;
 
-  const offscreenWidth = userTextWidth * 1.2;
+  const offscreenWidth = userGlyphsWidth * 1.2;
   const offscreenHeight = userTextSize * 2;
   const offscreenData = renderer.createOffscreen(offscreenWidth, offscreenHeight);
   const offscreenRenderer = offscreenData.renderer;
 
-  renderAnimatedText(
+  renderAnimatedGlyphs(
     offscreenRenderer,
-    userText,
+    userGlyphs,
     0,
     offscreenHeight / 2,
     userTextSize,

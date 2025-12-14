@@ -5,6 +5,8 @@ import { settings } from '../config/settings.js';
 let font = null;
 let loadPromise = null;
 
+const DEFAULT_FEATURES = { liga: true, rlig: true };
+
 /**
  * Check if font is loaded and throw if not
  * @throws {Error} If font is not loaded
@@ -68,7 +70,7 @@ export function textToPath(text, x, y, fontSize, weight, width = settings.widthV
   ensureFontLoaded();
 
   const variations = createVariations(weight, width);
-  const path = font.getPath(text, x, y, fontSize, { features: {}, variation: variations });
+  const path = font.getPath(text, x, y, fontSize, { features: DEFAULT_FEATURES, variation: variations });
 
   return {
     pathData: path.toPathData({ flipY: false }),
@@ -143,7 +145,7 @@ export function getGlyphBounds(text, fontSize, weight, width = settings.widthVal
   ensureFontLoaded();
 
   const variations = createVariations(weight, width);
-  const path = font.getPath(text, 0, 0, fontSize, { features: {}, variation: variations });
+  const path = font.getPath(text, 0, 0, fontSize, { features: DEFAULT_FEATURES, variation: variations });
   const bbox = path.getBoundingBox();
 
   // bbox.y1 is the top (negative, above baseline), bbox.y2 is the bottom
@@ -175,4 +177,46 @@ export function getAllGlyphs() {
     }
   }
   return glyphs;
+}
+
+/**
+ * Get processed glyphs from text with ligature substitution applied
+ */
+export function getGlyphs(text) {
+  ensureFontLoaded();
+  return font.stringToGlyphs(text, { features: DEFAULT_FEATURES });
+}
+
+/**
+ * Convert a single glyph to SVG path data at a specific weight and size
+ */
+export function glyphToPath(glyph, x, y, fontSize, weight, width = settings.widthValue) {
+  ensureFontLoaded();
+
+  const variations = createVariations(weight, width);
+  const path = glyph.getPath(x, y, fontSize, { variation: variations }, font);
+  const scale = fontSize / font.unitsPerEm;
+  const transformedGlyph = font.variation
+    ? font.variation.getTransform(glyph, variations)
+    : glyph;
+
+  return {
+    pathData: path.toPathData({ flipY: false }),
+    width: (transformedGlyph.advanceWidth || 0) * scale,
+  };
+}
+
+/**
+ * Get the advance width of a single glyph at a specific weight and size
+ */
+export function getGlyphWidth(glyph, fontSize, weight, width = settings.widthValue) {
+  ensureFontLoaded();
+
+  const variations = createVariations(weight, width);
+  const scale = fontSize / font.unitsPerEm;
+  const transformedGlyph = font.variation
+    ? font.variation.getTransform(glyph, variations)
+    : glyph;
+
+  return (transformedGlyph.advanceWidth || 0) * scale;
 }
