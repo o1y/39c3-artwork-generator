@@ -30,6 +30,7 @@ export function createViewActions() {
       this.typographyPopoverOpen = !this.typographyPopoverOpen;
       if (this.typographyPopoverOpen) {
         this.animationPopoverOpen = false;
+        this.downloadPopoverOpen = false;
         this.glyphPopoverOpen = false;
       }
     },
@@ -40,17 +41,30 @@ export function createViewActions() {
       this.animationPopoverOpen = !this.animationPopoverOpen;
       if (this.animationPopoverOpen) {
         this.typographyPopoverOpen = false;
+        this.downloadPopoverOpen = false;
         this.glyphPopoverOpen = false;
       }
     },
     closeAnimationPopover() {
       this.animationPopoverOpen = false;
     },
+    toggleDownloadPopover() {
+      this.downloadPopoverOpen = !this.downloadPopoverOpen;
+      if (this.downloadPopoverOpen) {
+        this.typographyPopoverOpen = false;
+        this.animationPopoverOpen = false;
+        this.glyphPopoverOpen = false;
+      }
+    },
+    closeDownloadPopover() {
+      this.downloadPopoverOpen = false;
+    },
     toggleGlyphPopover() {
       this.glyphPopoverOpen = !this.glyphPopoverOpen;
       if (this.glyphPopoverOpen) {
         this.typographyPopoverOpen = false;
         this.animationPopoverOpen = false;
+        this.downloadPopoverOpen = false;
         this.loadGlyphCategories();
       }
     },

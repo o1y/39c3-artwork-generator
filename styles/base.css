@@ -6,6 +6,15 @@
     box-sizing: border-box;
   }
 
+  /* Form controls inherit font */
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-variation-settings: inherit;
+  }
+
   [x-cloak] {
     display: none !important;
   }
@@ -36,8 +45,7 @@
     --breakpoint-tablet: 768px;
     --breakpoint-desktop: 1200px;
 
-    --font-body: 'Officer Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-heading: 'Kario39C3', var(--font-body);
+    --font-body: 'Kario39C3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
   /* Theme Overrides */
@@ -53,10 +61,14 @@
   /* Base Styles */
   body {
     font-family: var(--font-body);
+    font-variation-settings:
+      'wght' 42,
+      'wdth' 96,
+      'opsz' 8;
     background: var(--bg-dark);
     color: var(--text-light);
     overflow: hidden;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
   }

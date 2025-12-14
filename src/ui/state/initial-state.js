@@ -128,7 +128,9 @@ export function createInitialState() {
     isFullscreen: false,
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
+    downloadPopoverOpen: false,
     glyphPopoverOpen: false,
+    isSliderDragging: false,
     spotlightHintDismissed:
       preferences.get('dismissedHints.spotlight') ||
       'animationOriginX' in urlParams ||

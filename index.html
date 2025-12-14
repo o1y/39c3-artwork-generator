@@ -337,11 +337,38 @@
           </div>
         </div>
         <button
+          class="toolbar-btn download-btn mobile-only"
+          @click="toggleDownloadPopover"
+          :class="{ 'active': downloadPopoverOpen }"
+          title="Download"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 15V3" />
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <path d="m7 10 5 5 5-5" />
+          </svg>
+        </button>
+        <button
           class="toolbar-btn share-btn"
           @click="handleShare"
           :title="shareButtonText || 'Copy shareable link'"
         >
-          <span class="share-btn-text" x-show="shareButtonText" x-text="shareButtonText" x-cloak></span>
+          <span
+            class="share-btn-text"
+            x-show="shareButtonText"
+            x-text="shareButtonText"
+            x-cloak
+          ></span>
           <svg
             x-show="!shareButtonText"
             xmlns="http://www.w3.org/2000/svg"
@@ -387,6 +414,109 @@
     </div>
 
     <div class="footer-bar glass-surface" x-show="showFooter" x-cloak>
+      <!-- Toolbar Buttons (Mobile Only) -->
+      <div class="footer-section footer-toolbar">
+        <button
+          class="toolbar-btn typography-btn"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
+          x-cloak
+          @click="toggleTypographyPopover"
+          :class="{ 'active': typographyPopoverOpen }"
+          title="Typography Options"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 4v16" />
+            <path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" />
+            <path d="M9 20h6" />
+          </svg>
+        </button>
+        <button
+          class="toolbar-btn animation-btn"
+          x-show="showSpeedControl || showModeControl"
+          x-cloak
+          @click="toggleAnimationPopover"
+          :class="{ 'active': animationPopoverOpen }"
+          title="Animation Options"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z" />
+            <path d="m6.2 5.3 3.1 3.9" />
+            <path d="m12.4 3.4 3.1 4" />
+            <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+          </svg>
+        </button>
+        <button
+          class="toolbar-btn download-btn"
+          @click="toggleDownloadPopover"
+          :class="{ 'active': downloadPopoverOpen }"
+          title="Download"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 15V3" />
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <path d="m7 10 5 5 5-5" />
+          </svg>
+        </button>
+        <button
+          class="toolbar-btn share-btn"
+          @click="handleShare"
+          :title="shareButtonText || 'Copy shareable link'"
+        >
+          <span
+            class="share-btn-text"
+            x-show="shareButtonText"
+            x-text="shareButtonText"
+            x-cloak
+          ></span>
+          <svg
+            x-show="!shareButtonText"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          </svg>
+        </button>
+      </div>
+
       <!-- Animation Controls (Left Side) -->
       <div class="footer-section footer-animation" x-show="showAnimationControls" x-cloak>
         <button
@@ -458,6 +588,7 @@
       x-transition:leave-start="sheet-backdrop-leave-start"
       x-transition:leave-end="sheet-backdrop-leave-end"
       @click="closeTypographyPopover"
+      :class="{ 'see-through': isSliderDragging }"
     ></div>
     <div
       class="bottom-sheet"
@@ -469,6 +600,7 @@
       x-transition:leave="sheet-leave"
       x-transition:leave-start="sheet-leave-start"
       x-transition:leave-end="sheet-leave-end"
+      :class="{ 'see-through': isSliderDragging }"
     >
       <div class="bottom-sheet-header">
         <span class="bottom-sheet-title">Typography</span>
@@ -492,35 +624,80 @@
       <div class="control-group" x-show="showWidthControl">
         <label>Font Width</label>
         <div class="control-base-default">
-          <input type="range" min="50" max="160" step="1" x-model.number="widthValue" />
+          <input
+            type="range"
+            min="50"
+            max="160"
+            step="1"
+            x-model.number="widthValue"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="widthDisplay"></span>
         </div>
       </div>
       <div class="control-group" x-show="showOpszControl">
         <label>Ascenders & Descenders</label>
         <div class="control-base-default">
-          <input type="range" min="8" max="140" step="1" x-model.number="opszValue" />
+          <input
+            type="range"
+            min="8"
+            max="140"
+            step="1"
+            x-model.number="opszValue"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="opszDisplay"></span>
         </div>
       </div>
       <div class="control-group" x-show="showMinWeightControl">
         <label>Min Weight</label>
         <div class="control-base-default">
-          <input type="range" min="10" max="100" step="1" x-model.number="minWeight" />
+          <input
+            type="range"
+            min="10"
+            max="100"
+            step="1"
+            x-model.number="minWeight"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="minWeightDisplay"></span>
         </div>
       </div>
       <div class="control-group" x-show="showMaxWeightControl">
         <label>Max Weight</label>
         <div class="control-base-default">
-          <input type="range" min="10" max="100" step="1" x-model.number="maxWeight" />
+          <input
+            type="range"
+            min="10"
+            max="100"
+            step="1"
+            x-model.number="maxWeight"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="maxWeightDisplay"></span>
         </div>
       </div>
       <div class="control-group" x-show="showStaticWeightControl">
         <label>Weight</label>
         <div class="control-base-default">
-          <input type="range" min="10" max="100" step="1" x-model.number="staticWeight" />
+          <input
+            type="range"
+            min="10"
+            max="100"
+            step="1"
+            x-model.number="staticWeight"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="staticWeightDisplay"></span>
         </div>
       </div>
@@ -538,6 +715,7 @@
       x-transition:leave-start="sheet-backdrop-leave-start"
       x-transition:leave-end="sheet-backdrop-leave-end"
       @click="closeAnimationPopover"
+      :class="{ 'see-through': isSliderDragging }"
     ></div>
     <div
       class="bottom-sheet"
@@ -549,6 +727,7 @@
       x-transition:leave="sheet-leave"
       x-transition:leave-start="sheet-leave-start"
       x-transition:leave-end="sheet-leave-end"
+      :class="{ 'see-through': isSliderDragging }"
     >
       <div class="bottom-sheet-header">
         <span class="bottom-sheet-title">Animation</span>
@@ -572,7 +751,16 @@
       <div class="control-group" x-show="showSpeedControl">
         <label>Speed</label>
         <div class="control-base-default">
-          <input type="range" min="0.3" max="3" step="0.1" x-model.number="animationSpeed" />
+          <input
+            type="range"
+            min="0.3"
+            max="3"
+            step="0.1"
+            x-model.number="animationSpeed"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
           <span class="value-display" x-text="speedDisplay"></span>
         </div>
       </div>
@@ -587,6 +775,82 @@
           <option value="spotlight">Spotlight</option>
         </select>
       </div>
+    </div>
+
+    <!-- Download Bottom Sheet (Mobile) -->
+    <div
+      class="bottom-sheet-backdrop"
+      x-show="downloadPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="closeDownloadPopover"
+    ></div>
+    <div
+      class="bottom-sheet"
+      x-show="downloadPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-enter"
+      x-transition:enter-start="sheet-enter-start"
+      x-transition:enter-end="sheet-enter-end"
+      x-transition:leave="sheet-leave"
+      x-transition:leave-start="sheet-leave-start"
+      x-transition:leave-end="sheet-leave-end"
+    >
+      <div class="bottom-sheet-header">
+        <span class="bottom-sheet-title">Download</span>
+        <button class="bottom-sheet-close" @click="closeDownloadPopover" aria-label="Close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="control-group" x-show="showDurationControl">
+        <label>Duration</label>
+        <select x-model="exportLoops" class="control-base">
+          <template x-for="duration in availableDurations" :key="duration.value">
+            <option :value="duration.value" x-text="duration.label"></option>
+          </template>
+        </select>
+      </div>
+      <div class="control-group" x-show="showResolutionControl">
+        <label>Resolution</label>
+        <select x-model="exportResolution" class="control-base">
+          <template x-for="res in availableResolutions" :key="res.value">
+            <option :value="res.value" x-text="res.label"></option>
+          </template>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Format</label>
+        <select x-model="exportFormat" class="control-base">
+          <option value="png">PNG (frame)</option>
+          <option value="svg">SVG (frame)</option>
+          <option value="gif" :disabled="videoExportDisabled">GIF (animated)</option>
+          <option value="video" :disabled="videoExportDisabled">Video (WebM)</option>
+        </select>
+      </div>
+      <button
+        class="btn-primary btn-base export-btn"
+        @click="handleDownload"
+        :disabled="isExporting"
+        x-text="downloadButtonText"
+      ></button>
     </div>
 
     <script type="module" src="/app.js"></script>

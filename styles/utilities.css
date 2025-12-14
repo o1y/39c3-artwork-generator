@@ -23,8 +23,12 @@
     color: var(--text-light);
     padding: 10px 15px;
     border-radius: var(--radius-sm);
-    font-size: 14px;
     transition: all 0.2s;
+    font-size: 16px;
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 70,
+      'opsz' 14;
   }
 
   .control-base:hover {
@@ -42,8 +46,10 @@
   /* Buttons */
   .btn-base {
     border-radius: 0;
-    font-family: 'Kario39C3', var(--font-body);
-    font-weight: 100;
+    font-variation-settings:
+      'wght' 100,
+      'wdth' 80,
+      'opsz' 16;
     cursor: pointer;
     text-transform: uppercase;
     transition: background-color 0.15s;
