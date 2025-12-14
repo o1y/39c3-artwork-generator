@@ -135,7 +135,6 @@
     color: var(--bg-dark);
     padding: 2px 12px 2px 6px;
     width: fit-content;
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
 
@@ -415,7 +414,6 @@
     font-size: 14px;
     text-transform: uppercase;
     color: var(--text-muted);
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
   }
@@ -542,7 +540,6 @@
     font-size: 11px;
     text-transform: uppercase;
     color: var(--text-muted);
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
     padding-bottom: 4px;
@@ -588,7 +585,6 @@
     font-weight: 400;
     font-stretch: 100%;
     line-height: 1;
-    font-kerning: none;
     font-variation-settings:
       'wght' 50,
       'wdth' 100;
@@ -644,7 +640,6 @@
     font-size: 18px;
     text-transform: uppercase;
     color: var(--accent-color);
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
   }
@@ -746,7 +741,6 @@
     font-size: 14px;
     text-transform: uppercase;
     color: var(--text-light);
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
     white-space: nowrap;
@@ -836,7 +830,6 @@
     font-family: 'Kario39C3', var(--font-body);
     font-size: 13px;
     color: var(--text-light);
-    font-kerning: none;
     font-stretch: 72%;
     font-weight: 60;
     white-space: nowrap;
