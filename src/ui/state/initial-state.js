@@ -153,6 +153,7 @@ export function createInitialState() {
     mode: urlParams.mode ?? settings.mode,
     animationOriginX: urlParams.animationOriginX ?? settings.animationOriginX,
     animationOriginY: urlParams.animationOriginY ?? settings.animationOriginY,
+    animationPhaseOffset: urlParams.animationPhaseOffset ?? settings.animationPhaseOffset,
 
     // Animation state
     isPaused: urlParams.isPaused ?? false,
@@ -165,5 +166,12 @@ export function createInitialState() {
     exportFormat: 'png',
     exportResolution: '2',
     exportLoops: '1',
+
+    // Gallery state
+    galleryOpen: false,
+    galleryItems: [],
+    shareMenuOpen: false,
+    hoveredGalleryItem: null,
+    gallerySaveText: null,
   };
 }

@@ -8,6 +8,7 @@ import { createViewActions } from './actions/view-actions.js';
 import { createThemeActions } from './actions/theme-actions.js';
 import { createAnimationActions } from './actions/animation-actions.js';
 import { createExportActions } from './actions/export-actions.js';
+import { createGalleryActions } from './actions/gallery-actions.js';
 import { setupWatchers, startFrameUpdateLoop } from './watchers.js';
 import { initVisibilityHandler, setAlpineStore, pauseAnimation } from '../../animation/loop.js';
 import { ANIMATION_FPS } from './constants.js';
@@ -31,6 +32,7 @@ export function createAppStore() {
     createThemeActions(),
     createAnimationActions(),
     createExportActions(),
+    createGalleryActions(),
     {
       init() {
         const initialPreset = themePresets[this.theme];

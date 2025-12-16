@@ -150,5 +150,9 @@ export function createControlsComputed() {
     get showExportAdvancedToggle() {
       return this.showResolutionControl || this.showDurationControl;
     },
+
+    get showGallerySave() {
+      return this.theme !== 'dvd';
+    },
   };
 }

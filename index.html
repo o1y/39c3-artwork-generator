@@ -129,6 +129,43 @@
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
         </symbol>
+        <symbol
+          id="icon-gallery"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16" />
+          <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2" />
+          <circle cx="13" cy="7" r="1" fill="currentColor" />
+          <rect x="8" y="2" width="14" height="14" />
+        </symbol>
+        <symbol
+          id="icon-link"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </symbol>
+        <symbol
+          id="icon-bookmark"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+        </symbol>
       </defs>
     </svg>
 
@@ -380,18 +417,50 @@
         >
           <svg width="24" height="24"><use href="#icon-download" /></svg>
         </button>
-        <button
-          class="toolbar-btn share-btn"
-          @click="handleShare"
-          :title="shareButtonText || 'Copy shareable link'"
-        >
-          <span
-            class="share-btn-text"
-            x-show="shareButtonText"
-            x-text="shareButtonText"
+        <div class="toolbar-btn-wrapper">
+          <button
+            class="toolbar-btn share-btn"
+            @click="toggleShareMenu"
+            :class="{ 'active': shareMenuOpen }"
+            :title="gallerySaveText || 'Share & Save'"
+          >
+            <span
+              class="share-btn-text"
+              x-show="gallerySaveText"
+              x-text="gallerySaveText"
+              x-cloak
+            ></span>
+            <svg x-show="!gallerySaveText" width="24" height="24"><use href="#icon-share" /></svg>
+          </button>
+          <div
+            class="share-menu glass-surface"
+            x-show="shareMenuOpen"
             x-cloak
-          ></span>
-          <svg x-show="!shareButtonText" width="24" height="24"><use href="#icon-share" /></svg>
+            x-transition:enter="popover-enter"
+            x-transition:enter-start="popover-enter-start"
+            x-transition:enter-end="popover-enter-end"
+            x-transition:leave="popover-leave"
+            x-transition:leave-start="popover-leave-start"
+            x-transition:leave-end="popover-leave-end"
+            @click.outside="closeShareMenu"
+          >
+            <button class="share-menu-item" @click="handleShare">
+              <svg width="20" height="20"><use href="#icon-link" /></svg>
+              <span>Copy Link</span>
+            </button>
+            <button class="share-menu-item" x-show="showGallerySave" @click="saveCurrentToGallery">
+              <svg width="20" height="20"><use href="#icon-bookmark" /></svg>
+              <span>Save to My Gallery</span>
+            </button>
+          </div>
+        </div>
+        <button
+          class="toolbar-btn gallery-btn"
+          @click="toggleGallery"
+          :class="{ 'active': galleryOpen }"
+          title="My Gallery"
+        >
+          <svg width="24" height="24"><use href="#icon-gallery" /></svg>
         </button>
       </div>
       <div
@@ -450,18 +519,50 @@
         >
           <svg width="24" height="24"><use href="#icon-download" /></svg>
         </button>
-        <button
-          class="toolbar-btn share-btn"
-          @click="handleShare"
-          :title="shareButtonText || 'Copy shareable link'"
-        >
-          <span
-            class="share-btn-text"
-            x-show="shareButtonText"
-            x-text="shareButtonText"
+        <div class="toolbar-btn-wrapper footer-share-wrapper">
+          <button
+            class="toolbar-btn share-btn"
+            @click="toggleShareMenu"
+            :class="{ 'active': shareMenuOpen }"
+            :title="gallerySaveText || 'Share & Save'"
+          >
+            <span
+              class="share-btn-text"
+              x-show="gallerySaveText"
+              x-text="gallerySaveText"
+              x-cloak
+            ></span>
+            <svg x-show="!gallerySaveText" width="24" height="24"><use href="#icon-share" /></svg>
+          </button>
+          <div
+            class="share-menu share-menu-bottom glass-surface"
+            x-show="shareMenuOpen"
             x-cloak
-          ></span>
-          <svg x-show="!shareButtonText" width="24" height="24"><use href="#icon-share" /></svg>
+            x-transition:enter="popover-enter"
+            x-transition:enter-start="popover-enter-start"
+            x-transition:enter-end="popover-enter-end"
+            x-transition:leave="popover-leave"
+            x-transition:leave-start="popover-leave-start"
+            x-transition:leave-end="popover-leave-end"
+            @click.outside="closeShareMenu"
+          >
+            <button class="share-menu-item" @click="handleShare">
+              <svg width="20" height="20"><use href="#icon-link" /></svg>
+              <span>Copy Link</span>
+            </button>
+            <button class="share-menu-item" x-show="showGallerySave" @click="saveCurrentToGallery">
+              <svg width="20" height="20"><use href="#icon-bookmark" /></svg>
+              <span>Save to My Gallery</span>
+            </button>
+          </div>
+        </div>
+        <button
+          class="toolbar-btn gallery-btn"
+          @click="toggleGallery"
+          :class="{ 'active': galleryOpen }"
+          title="My Gallery"
+        >
+          <svg width="24" height="24"><use href="#icon-gallery" /></svg>
         </button>
       </div>
 
@@ -750,6 +851,70 @@
         :disabled="isExporting"
         x-text="downloadButtonText"
       ></button>
+    </div>
+
+    <!-- Gallery Panel -->
+    <div
+      class="gallery-backdrop"
+      x-show="galleryOpen"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="closeGallery"
+    ></div>
+    <div
+      class="gallery-panel"
+      x-show="galleryOpen"
+      x-cloak
+      x-transition:enter="gallery-enter"
+      x-transition:enter-start="gallery-enter-start"
+      x-transition:enter-end="gallery-enter-end"
+      x-transition:leave="gallery-leave"
+      x-transition:leave-start="gallery-leave-start"
+      x-transition:leave-end="gallery-leave-end"
+    >
+      <div class="gallery-header">
+        <span class="gallery-title">My Gallery</span>
+        <span class="gallery-count" x-text="galleryItems.length + ' saved'"></span>
+        <button class="gallery-close" @click="closeGallery" aria-label="Close">
+          <svg width="16" height="16"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="gallery-grid" x-show="galleryItems.length > 0">
+        <template x-for="item in galleryItems" :key="item.id">
+          <div
+            class="gallery-item"
+            @click="loadFromGallery(item.id)"
+            @mouseenter="startGalleryPreview(item, $event.currentTarget.querySelector('.gallery-preview-canvas'))"
+            @mouseleave="stopGalleryPreview()"
+          >
+            <img class="gallery-thumbnail" :src="item.thumbnail" alt="Saved artwork" />
+            <canvas
+              class="gallery-preview-canvas"
+              width="200"
+              height="200"
+              x-show="hoveredGalleryItem === item.id"
+            ></canvas>
+            <button
+              class="gallery-delete"
+              @click.stop="removeFromGallery(item.id)"
+              title="Delete"
+              aria-label="Delete artwork"
+            >
+              <svg width="12" height="12"><use href="#icon-close" /></svg>
+            </button>
+          </div>
+        </template>
+      </div>
+      <div class="gallery-empty" x-show="galleryItems.length === 0">
+        <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
+        <p class="gallery-empty-title">No cycles stored</p>
+        <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
+      </div>
     </div>
 
     <script type="module" src="/app.js"></script>

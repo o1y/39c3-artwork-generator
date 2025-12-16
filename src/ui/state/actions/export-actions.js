@@ -2,34 +2,18 @@ import { exportPNG } from '../../../export/png.js';
 import { exportSVG } from '../../../export/svg.js';
 import { exportVideo } from '../../../export/video/index.js';
 import { exportGIF } from '../../../export/gif.js';
-import { KEY_MAP, DEFAULTS, isKeyRelevant } from '../../../config/url-keys.js';
-import { settings } from '../../../config/settings.js';
-
-const SHAREABLE_STATE_KEYS = Object.keys(KEY_MAP);
+import { KEY_MAP, DEFAULTS } from '../../../config/url-keys.js';
+import { captureArtworkConfig } from '../../../gallery/config.js';
 
 export function createExportActions() {
   return {
     async handleShare() {
+      const config = captureArtworkConfig(this);
       const params = new URLSearchParams();
-      const currentTheme = this.theme ?? settings.theme;
 
-      for (const key of SHAREABLE_STATE_KEYS) {
-        if (!isKeyRelevant(key, currentTheme, this)) continue;
-
-        let value = this[key] ?? settings[key];
+      for (const [key, value] of Object.entries(config)) {
         const defaultValue = DEFAULTS[key];
-
         if (value === defaultValue) continue;
-        if (value === undefined || value === null) continue;
-
-        if (
-          key === 'animationOriginX' ||
-          key === 'animationOriginY' ||
-          key === 'animationPhaseOffset'
-        ) {
-          value = Math.round(value * 10000) / 10000;
-          if (value === defaultValue) continue;
-        }
 
         const shortKey = KEY_MAP[key];
         if (typeof value === 'boolean') {
@@ -44,11 +28,13 @@ export function createExportActions() {
         ? `${window.location.origin}${window.location.pathname}?${queryString}`
         : `${window.location.origin}${window.location.pathname}`;
 
+      this.closeShareMenu();
+
       try {
         await navigator.clipboard.writeText(url);
-        this.shareButtonText = 'Copied!';
+        this.gallerySaveText = 'Copied!';
         setTimeout(() => {
-          this.shareButtonText = null;
+          this.gallerySaveText = null;
         }, 2000);
       } catch {
         window.prompt('Copy this link to share:', url);

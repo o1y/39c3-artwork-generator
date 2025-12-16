@@ -44,6 +44,7 @@ export function createThemeActions() {
         this.mode = 'wave';
         this.animationOriginX = 1;
         this.animationOriginY = 1;
+        this.animationPhaseOffset = 0;
       }
 
       if (preset?.controls?.showWidth === false) {

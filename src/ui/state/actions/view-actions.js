@@ -91,7 +91,7 @@ export function createViewActions() {
 
       this.animationOriginX = Math.max(0, Math.min(1, x));
       this.animationOriginY = 1 - Math.max(0, Math.min(1, y));
-      settings.animationPhaseOffset = getNormalizedTime(settings.time) - Math.PI / 2;
+      this.animationPhaseOffset = getNormalizedTime(settings.time) - Math.PI / 2;
     },
   };
 }

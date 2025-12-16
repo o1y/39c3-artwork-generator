@@ -97,6 +97,11 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('animationPhaseOffset', (value) => {
+    settings.animationPhaseOffset = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('exportFormat', (value) => {
     // Reset exportResolution if current selection is no longer available
     const availableResolutions = store.availableResolutions.map((r) => r.value);
