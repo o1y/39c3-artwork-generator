@@ -2,6 +2,8 @@ import {
   AVAILABLE_RESOLUTIONS,
   AVAILABLE_GIF_RESOLUTIONS,
   COLOR_MODE_OPTIONS,
+  ANIMATION_MODE_OPTIONS,
+  EXPORT_FORMAT_OPTIONS,
   MAX_EXPORT_FRAMES,
   TOTAL_FRAMES,
 } from '../constants.js';
@@ -100,6 +102,17 @@ export function createControlsComputed() {
 
     get availableResolutions() {
       return this.exportFormat === 'gif' ? AVAILABLE_GIF_RESOLUTIONS : AVAILABLE_RESOLUTIONS;
+    },
+
+    get availableAnimationModes() {
+      return ANIMATION_MODE_OPTIONS;
+    },
+
+    get availableExportFormats() {
+      return EXPORT_FORMAT_OPTIONS.map((format) => ({
+        ...format,
+        disabled: format.animated && this.videoExportDisabled,
+      }));
     },
 
     get availableDurations() {

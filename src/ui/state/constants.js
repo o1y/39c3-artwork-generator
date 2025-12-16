@@ -18,3 +18,19 @@ export const AVAILABLE_GIF_RESOLUTIONS = [
   { value: '1000', label: '1000px' },
   { value: '2000', label: '2000px' },
 ];
+
+export const ANIMATION_MODE_OPTIONS = [
+  { value: 'wave', label: 'Wave' },
+  { value: 'spotlight', label: 'Spotlight' },
+  { value: 'pulse', label: 'Pulse' },
+  { value: 'rotate', label: 'Rotate' },
+  { value: 'breathe', label: 'Breathe' },
+  { value: 'bounce', label: 'Bounce' },
+];
+
+export const EXPORT_FORMAT_OPTIONS = [
+  { value: 'png', label: 'PNG (frame)', animated: false },
+  { value: 'svg', label: 'SVG (frame)', animated: false },
+  { value: 'gif', label: 'GIF (animated)', animated: true },
+  { value: 'video', label: 'Video (WebM)', animated: true },
+];
