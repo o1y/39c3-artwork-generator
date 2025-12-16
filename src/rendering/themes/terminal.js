@@ -209,7 +209,8 @@ export function renderTerminalTheme(renderer, canvasSize) {
     for (let i = 0; i < userGlyphs.length; i++) {
       const glyphPhase = (i / userGlyphs.length) * Math.PI * 2;
       const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
-      const glyphWeight = settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
+      const glyphWeight =
+        settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
       lineWidth += renderer.measureGlyph(userGlyphs[i], finalFontSize, glyphWeight);
     }
 
@@ -256,10 +257,13 @@ export function renderTerminalTheme(renderer, canvasSize) {
       const glyph = allGlyphs[i];
       const glyphPhase = (i / allGlyphs.length) * Math.PI * 2;
       const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
-      const glyphWeight = settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
+      const glyphWeight =
+        settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
 
       const color = getColor(charIndex + i, lineIndex, settings.time);
-      renderer.drawGlyph(glyph, x, y, finalFontSize, glyphWeight, color, { baseline: 'alphabetic' });
+      renderer.drawGlyph(glyph, x, y, finalFontSize, glyphWeight, color, {
+        baseline: 'alphabetic',
+      });
 
       x += renderer.measureGlyph(glyph, finalFontSize, glyphWeight);
     }

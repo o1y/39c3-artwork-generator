@@ -22,7 +22,11 @@ export function createExportActions() {
         if (value === defaultValue) continue;
         if (value === undefined || value === null) continue;
 
-        if (key === 'animationOriginX' || key === 'animationOriginY' || key === 'animationPhaseOffset') {
+        if (
+          key === 'animationOriginX' ||
+          key === 'animationOriginY' ||
+          key === 'animationPhaseOffset'
+        ) {
           value = Math.round(value * 10000) / 10000;
           if (value === defaultValue) continue;
         }
