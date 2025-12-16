@@ -5,7 +5,7 @@
     border-bottom: 1px solid var(--glass-border);
     z-index: 100;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       padding: 15px 20px;
 
       &.mobile-collapsed .controls-collapsible {
@@ -39,7 +39,7 @@
     gap: 8px;
     align-items: flex-end;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -49,7 +49,7 @@
     flex: 1 1 auto;
     min-width: 200px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       flex: 1 1 0;
       min-width: 0;
     }
@@ -58,7 +58,7 @@
   .controls-collapsible {
     display: contents;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       display: flex;
       flex-direction: column;
       gap: 15px;
@@ -71,7 +71,7 @@
     flex: 0 0 auto;
     min-width: 140px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       min-width: 100%;
     }
   }
@@ -80,7 +80,7 @@
     flex: 0 0 auto;
     min-width: 120px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       min-width: 100%;
     }
   }
@@ -89,7 +89,7 @@
     flex: 0 0 auto;
     min-width: 140px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       min-width: 100%;
     }
   }
@@ -97,7 +97,7 @@
   .mobile-header-toggle {
     display: none;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       display: flex;
       flex-shrink: 0;
     }
@@ -449,7 +449,8 @@
   }
 
   .text-input-wrapper input[type='text'] {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .glyph-btn-wrapper {
@@ -457,7 +458,7 @@
   }
 
   .desktop-only {
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       display: none;
     }
   }
@@ -465,7 +466,7 @@
   .mobile-only {
     display: none;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       display: flex;
     }
   }
@@ -514,7 +515,7 @@
     gap: 12px;
     background: var(--bg-dark);
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       display: none;
     }
   }
