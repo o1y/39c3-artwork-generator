@@ -501,6 +501,7 @@
         >
           View source
         </a>
+        <a href="#" @click.prevent="impressumOpen = true">Impressum</a>
       </div>
     </div>
 
@@ -929,6 +930,52 @@
         <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
         <p class="gallery-empty-title">No cycles stored</p>
         <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
+      </div>
+    </div>
+
+    <div
+      class="gallery-backdrop"
+      x-show="impressumOpen"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="impressumOpen = false"
+    ></div>
+    <div
+      class="gallery-panel impressum-panel"
+      x-show="impressumOpen"
+      x-cloak
+      x-transition:enter="gallery-enter"
+      x-transition:enter-start="gallery-enter-start"
+      x-transition:enter-end="gallery-enter-end"
+      x-transition:leave="gallery-leave"
+      x-transition:leave-start="gallery-leave-start"
+      x-transition:leave-end="gallery-leave-end"
+    >
+      <div class="gallery-header">
+        <span class="gallery-title">Impressum</span>
+        <button class="gallery-close" @click="impressumOpen = false" aria-label="Close">
+          <svg width="16" height="16"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="impressum-content">
+        <p class="impressum-label">Diensteanbieter</p>
+        <p>
+          <span x-text="impressum.name"></span><br />
+          <span x-html="impressum.address.replace(/\n/g, '<br />')"></span>
+        </p>
+        <p class="impressum-label">Kontakt</p>
+        <p>
+          <template x-if="impressum.phone">
+            <span>Telefon: <span x-text="impressum.phone"></span><br /></span>
+          </template>
+          <span>E-Mail: <span x-text="impressum.email"></span></span>
+        </p>
+        <img src="/contact.jpg" alt="Contact" class="impressum-contact" />
       </div>
     </div>
 

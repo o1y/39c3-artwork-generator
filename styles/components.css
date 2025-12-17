@@ -1482,4 +1482,53 @@
       transform: translateY(100%);
     }
   }
+
+  /* Impressum Panel */
+  .impressum-panel {
+    max-width: 400px;
+  }
+
+  .impressum-content {
+    padding: 20px 24px 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    font-variation-settings:
+      'wght' 40,
+      'wdth' 90,
+      'opsz' 14;
+  }
+
+  .impressum-content p {
+    margin: 0 0 16px;
+  }
+
+  .impressum-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .impressum-label {
+    color: var(--text-color);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 90,
+      'opsz' 14;
+    margin-bottom: 4px !important;
+  }
+
+  .impressum-content a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  .impressum-content a:hover {
+    text-decoration: underline;
+  }
+
+  .impressum-contact {
+    margin-top: 16px;
+    max-width: 100%;
+    height: auto;
+    opacity: 0.85;
+  }
 }

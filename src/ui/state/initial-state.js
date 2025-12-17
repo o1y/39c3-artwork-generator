@@ -11,6 +11,7 @@ import { preferences } from '../../config/preferences.js';
 import { COLOR_MODES } from '../../config/colors.js';
 import { KEY_MAP } from '../../config/url-keys.js';
 import { TOTAL_FRAMES } from './constants.js';
+import { impressum } from '../../config/impressum.js';
 
 const NUMERIC_BOUNDS = {
   numLines: [1, 100],
@@ -179,5 +180,9 @@ export function createInitialState() {
     shareMenuOpen: false,
     hoveredGalleryItem: null,
     gallerySaveText: null,
+
+    // Impressum state
+    impressumOpen: false,
+    impressum,
   };
 }
