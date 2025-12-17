@@ -1,18 +1,38 @@
 {
-  "author": "",
-  "browserslist": [
-    "defaults and fully supports es6-module"
-  ],
+  "name": "web",
+  "version": "1.0.0",
+  "description": "Interactive web-based animator for the 39C3 variable font, featuring dynamic weight interpolation and brand-compliant color modes.",
+  "keywords": [],
+  "homepage": "https://github.com/o1y/39c3-logo-animator#readme",
   "bugs": {
     "url": "https://github.com/o1y/39c3-logo-animator/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o1y/39c3-logo-animator.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "format": "sort-package-json && prettier --write \"**/*.{js,json,html,css}\"",
+    "format:check": "sort-package-json --check && prettier --check \"**/*.{js,json,html,css}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview"
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module"
+  ],
   "dependencies": {
     "alpinejs": "^3.15.1",
     "gif.js": "^0.2.0",
     "opentype.js": "https://github.com/o1y/opentype.js#ff6189bef3336b5666f1105d611cb1a437bf1c8a",
     "webm-writer": "^1.0.0"
   },
-  "description": "Interactive web-based animator for the 39C3 variable font, featuring dynamic weight interpolation and brand-compliant color modes.",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "autoprefixer": "^10.4.23",
@@ -20,32 +40,13 @@
     "globals": "^16.5.0",
     "prettier": "^3.6.2",
     "rollup-plugin-license": "^3.6.0",
+    "sort-package-json": "^3.6.0",
     "vite": "^7.1.12",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-static-copy": "^3.1.4"
   },
-  "homepage": "https://github.com/o1y/39c3-logo-animator#readme",
-  "keywords": [],
-  "license": "MIT",
-  "main": "app.js",
-  "name": "web",
   "optionalDependencies": {
     "@esbuild/linux-x64": "^0.25.0",
     "@rollup/rollup-linux-x64-gnu": "^4.41.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/o1y/39c3-logo-animator.git"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "format": "prettier --write \"**/*.{js,json,html,css}\"",
-    "format:check": "prettier --check \"**/*.{js,json,html,css}\"",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
-  },
-  "type": "module",
-  "version": "1.0.0"
+  }
 }
