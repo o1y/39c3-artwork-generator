@@ -27,7 +27,9 @@ function render() {
 }
 
 export function animate() {
-  if (isPaused) return;
+  if (isPaused) {
+    return;
+  }
 
   const now = performance.now();
   const elapsed = now - lastFrameTime;

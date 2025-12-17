@@ -29,7 +29,9 @@ function easeSwitch(p) {
  * @returns {number} - Progress value from 0 to 1
  */
 export function calculateToggleProgress(isAnimated) {
-  if (!isAnimated) return 1;
+  if (!isAnimated) {
+    return 1;
+  }
 
   const t = getNormalizedTime(settings.time);
   const rawProgress = (Math.sin(t) + 1) / 2;

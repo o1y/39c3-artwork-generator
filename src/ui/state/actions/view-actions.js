@@ -1,6 +1,6 @@
 import { settings } from '../../../config/settings.js';
 import { getNormalizedTime } from '../../../animation/timing.js';
-import { preferences } from '../../../config/preferences.js';
+import * as preferences from '../../../config/preferences.js';
 
 export function createViewActions() {
   return {
@@ -107,7 +107,9 @@ export function createViewActions() {
       });
     },
     handleCanvasClick(event) {
-      if (this.mode !== 'spotlight' || !this.showModeControl) return;
+      if (this.mode !== 'spotlight' || !this.showModeControl) {
+        return;
+      }
 
       const rect = event.target.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width;

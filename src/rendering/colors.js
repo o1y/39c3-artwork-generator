@@ -75,13 +75,17 @@ function resolveColor(colorRef) {
 
 export function getBackgroundColor() {
   const mode = COLOR_MODES[settings.colorMode];
-  if (!mode) return colors.dark;
+  if (!mode) {
+    return colors.dark;
+  }
   return resolveColor(mode.background);
 }
 
 export function getColor(charIndex, lineIndex, time, textLength = 16) {
   const mode = COLOR_MODES[settings.colorMode];
-  if (!mode) return colors.natural;
+  if (!mode) {
+    return colors.natural;
+  }
 
   if (mode.foreground) {
     return resolveColor(mode.foreground);

@@ -169,7 +169,9 @@ export function getGlyphBounds(text, fontSize, weight, width = settings.widthVal
  * @returns {Array<{unicode: number, char: string, name: string}>} Array of glyph info
  */
 export function getAllGlyphs() {
-  if (!font) return [];
+  if (!font) {
+    return [];
+  }
 
   const glyphs = [];
   for (let i = 0; i < font.glyphs.length; i++) {

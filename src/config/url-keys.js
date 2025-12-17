@@ -49,8 +49,12 @@ const KEY_RELEVANCE = {
 
 export function isKeyRelevant(key, themeName, state) {
   const check = KEY_RELEVANCE[key];
-  if (!check) return true;
+  if (!check) {
+    return true;
+  }
   const theme = themePresets[themeName];
-  if (!theme) return true;
+  if (!theme) {
+    return true;
+  }
   return check(theme, state);
 }

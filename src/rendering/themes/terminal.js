@@ -8,7 +8,9 @@ export function renderTerminalTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
-  if (!userText) return;
+  if (!userText) {
+    return;
+  }
 
   const userGlyphs = getGlyphs(userText);
 

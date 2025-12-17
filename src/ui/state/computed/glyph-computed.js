@@ -2,45 +2,59 @@ import { getAllGlyphs } from '../../../export/font-loader.js';
 
 const SPECIAL_UNICODES = [0xe002, 0xe000, 0xe001, 0xe003, 0xe004];
 
-const isAccentedLetter = (u) =>
-  (u >= 0xc0 && u <= 0xff && u !== 0xd7 && u !== 0xf7) || (u >= 0x100 && u <= 0x24f);
+const isAccentedLetter = (unicode) =>
+  (unicode >= 0xc0 && unicode <= 0xff && unicode !== 0xd7 && unicode !== 0xf7) ||
+  (unicode >= 0x100 && unicode <= 0x24f);
 
-const isSymbol = (u) =>
-  (u >= 0x2190 && u <= 0x21ff) ||
-  (u >= 0x20a0 && u <= 0x20cf) ||
-  u === 0xa2 ||
-  u === 0xa3 ||
-  u === 0xa4 ||
-  u === 0xa5 ||
-  u === 0x24;
+const isSymbol = (unicode) =>
+  (unicode >= 0x2190 && unicode <= 0x21ff) ||
+  (unicode >= 0x20a0 && unicode <= 0x20cf) ||
+  unicode === 0xa2 ||
+  unicode === 0xa3 ||
+  unicode === 0xa4 ||
+  unicode === 0xa5 ||
+  unicode === 0x24;
 
-const isNumeral = (u) =>
-  (u >= 0x30 && u <= 0x39) ||
-  (u >= 0x2150 && u <= 0x218f) ||
-  (u >= 0xbc && u <= 0xbe) ||
-  u === 0xb9 ||
-  u === 0xb2 ||
-  u === 0xb3 ||
-  (u >= 0x2070 && u <= 0x2079) ||
-  (u >= 0x2080 && u <= 0x2089);
+const isNumeral = (unicode) =>
+  (unicode >= 0x30 && unicode <= 0x39) ||
+  (unicode >= 0x2150 && unicode <= 0x218f) ||
+  (unicode >= 0xbc && unicode <= 0xbe) ||
+  unicode === 0xb9 ||
+  unicode === 0xb2 ||
+  unicode === 0xb3 ||
+  (unicode >= 0x2070 && unicode <= 0x2079) ||
+  (unicode >= 0x2080 && unicode <= 0x2089);
 
-const isBasicLetter = (u) => (u >= 0x41 && u <= 0x5a) || (u >= 0x61 && u <= 0x7a);
+const isBasicLetter = (unicode) =>
+  (unicode >= 0x41 && unicode <= 0x5a) || (unicode >= 0x61 && unicode <= 0x7a);
 
 const GLYPH_CATEGORIES = [
-  { name: 'Special', filter: (g) => SPECIAL_UNICODES.includes(g.unicode) },
-  { name: 'Basic Glyphs', filter: (g) => isBasicLetter(g.unicode) },
-  { name: 'Numerals', filter: (g) => isNumeral(g.unicode) },
+  { name: 'Special', filter: (glyph) => SPECIAL_UNICODES.includes(glyph.unicode) },
+  { name: 'Basic Glyphs', filter: (glyph) => isBasicLetter(glyph.unicode) },
+  { name: 'Numerals', filter: (glyph) => isNumeral(glyph.unicode) },
   {
     name: 'Punctuation & Others',
-    filter: (g) => {
-      const u = g.unicode;
-      if (u === 0x20 || u === 0x0d) return false;
-      if (SPECIAL_UNICODES.includes(u)) return false;
-      if (isBasicLetter(u)) return false;
-      if (isNumeral(u)) return false;
-      if (isAccentedLetter(u)) return false;
-      if (isSymbol(u)) return false;
-      return u < 0xe000;
+    filter: (glyph) => {
+      const unicode = glyph.unicode;
+      if (unicode === 0x20 || unicode === 0x0d) {
+        return false;
+      }
+      if (SPECIAL_UNICODES.includes(unicode)) {
+        return false;
+      }
+      if (isBasicLetter(unicode)) {
+        return false;
+      }
+      if (isNumeral(unicode)) {
+        return false;
+      }
+      if (isAccentedLetter(unicode)) {
+        return false;
+      }
+      if (isSymbol(unicode)) {
+        return false;
+      }
+      return unicode < 0xe000;
     },
   },
   { name: 'Accents', filter: (g) => isAccentedLetter(g.unicode) },
@@ -48,23 +62,39 @@ const GLYPH_CATEGORIES = [
 ];
 
 function getNumeralSortOrder(unicode) {
-  if (unicode >= 0x30 && unicode <= 0x39) return unicode - 0x30;
-  if (unicode === 0x2070) return 10;
-  if (unicode === 0xb9) return 11;
-  if (unicode === 0xb2) return 12;
-  if (unicode === 0xb3) return 13;
-  if (unicode >= 0x2074 && unicode <= 0x2079) return 14 + (unicode - 0x2074);
-  if (unicode >= 0x2080 && unicode <= 0x2089) return 20 + (unicode - 0x2080);
-  if (unicode === 0xbc) return 30;
-  if (unicode === 0xbd) return 31;
-  if (unicode === 0xbe) return 32;
-  if (unicode >= 0x2150 && unicode <= 0x218f) return 33 + (unicode - 0x2150);
-  return 100 + unicode;
+  switch (true) {
+    case unicode >= 0x30 && unicode <= 0x39:
+      return unicode - 0x30;
+    case unicode === 0x2070:
+      return 10;
+    case unicode === 0xb9:
+      return 11;
+    case unicode === 0xb2:
+      return 12;
+    case unicode === 0xb3:
+      return 13;
+    case unicode >= 0x2074 && unicode <= 0x2079:
+      return 14 + (unicode - 0x2074);
+    case unicode >= 0x2080 && unicode <= 0x2089:
+      return 20 + (unicode - 0x2080);
+    case unicode === 0xbc:
+      return 30;
+    case unicode === 0xbd:
+      return 31;
+    case unicode === 0xbe:
+      return 32;
+    case unicode >= 0x2150 && unicode <= 0x218f:
+      return 33 + (unicode - 0x2150);
+    default:
+      return 100 + unicode;
+  }
 }
 
 function buildCategories() {
   const allGlyphs = getAllGlyphs();
-  if (allGlyphs.length === 0) return [];
+  if (allGlyphs.length === 0) {
+    return [];
+  }
 
   const categories = [];
   for (const category of GLYPH_CATEGORIES) {

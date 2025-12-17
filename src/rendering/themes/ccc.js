@@ -119,7 +119,9 @@ export function renderCCCTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const userText = settings.text;
-  if (!userText) return;
+  if (!userText) {
+    return;
+  }
 
   const userGlyphs = getGlyphs(userText);
   const fixedUpperGlyphs = getGlyphs('\uE003');

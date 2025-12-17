@@ -97,11 +97,15 @@ export function createGalleryActions() {
     },
 
     startGalleryPreview(item, canvas) {
-      if (!canvas || !item.config) return;
+      if (!canvas || !item.config) {
+        return;
+      }
 
       // Check if theme supports animation
       const config = item.config;
-      if (this.hoveredGalleryItem === item.id) return;
+      if (this.hoveredGalleryItem === item.id) {
+        return;
+      }
 
       this.hoveredGalleryItem = item.id;
       startPreview(canvas, config);

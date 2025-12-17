@@ -13,7 +13,7 @@ function load() {
     if (stored) {
       return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) };
     }
-  } catch (_e) {
+  } catch {
     // Invalid JSON, return defaults
   }
   return { ...DEFAULT_PREFERENCES };
@@ -22,7 +22,7 @@ function load() {
 function save(prefs) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-  } catch (_e) {
+  } catch {
     // Storage full or unavailable
   }
 }
@@ -36,12 +36,9 @@ function set(path, value) {
   const prefs = load();
   const keys = path.split('.');
   const lastKey = keys.pop();
-  const target = keys.reduce((obj, key) => {
-    if (!obj[key]) obj[key] = {};
-    return obj[key];
-  }, prefs);
+  const target = keys.reduce((obj, key) => obj[key] || {}, prefs);
   target[lastKey] = value;
   save(prefs);
 }
 
-export const preferences = { load, save, get, set };
+export { load, save, get, set };

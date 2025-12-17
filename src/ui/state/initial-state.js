@@ -7,7 +7,7 @@ import {
   MAX_TEXT_LENGTH,
   MAX_MULTILINE_TEXT_LENGTH,
 } from '../../config/settings.js';
-import { preferences } from '../../config/preferences.js';
+import * as preferences from '../../config/preferences.js';
 import { COLOR_MODES } from '../../config/colors.js';
 import { KEY_MAP } from '../../config/url-keys.js';
 import { TOTAL_FRAMES } from './constants.js';

@@ -71,7 +71,9 @@ function renderAnimatedGlyphs(
 
 function renderSingleRowLayout(renderer) {
   const text = settings.text;
-  if (!text) return;
+  if (!text) {
+    return;
+  }
 
   const textGlyphs = getGlyphs(text);
 
@@ -145,7 +147,9 @@ function renderSingleRowLayout(renderer) {
 function renderTwoRowLayout(renderer) {
   const logoText = defaultTexts.ccc;
   const userText = settings.text;
-  if (!userText) return;
+  if (!userText) {
+    return;
+  }
 
   const userGlyphs = getGlyphs(userText);
 

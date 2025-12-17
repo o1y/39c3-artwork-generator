@@ -54,7 +54,9 @@ export function createDisplayComputed() {
     },
 
     get exportStatusLabel() {
-      if (!this.isExporting) return '';
+      if (!this.isExporting) {
+        return '';
+      }
       if (this.exportFormat === 'video') {
         if (this.isChrome) {
           return 'Rendering (grab a Tschunk 🍹)';

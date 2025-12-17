@@ -16,7 +16,9 @@ export function renderLinesTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const text = settings.text;
-  if (!text) return;
+  if (!text) {
+    return;
+  }
 
   const glyphs = getGlyphs(text);
   const numLines = settings.numLines;

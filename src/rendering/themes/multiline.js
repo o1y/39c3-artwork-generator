@@ -19,10 +19,14 @@ export function renderMultilineTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
 
   const text = settings.text;
-  if (!text) return;
+  if (!text) {
+    return;
+  }
 
   const lines = text.split('\n').filter((line) => line.length > 0);
-  if (lines.length === 0) return;
+  if (lines.length === 0) {
+    return;
+  }
 
   const lineGlyphs = lines.map((line) => getGlyphs(line));
   const numLines = lines.length;

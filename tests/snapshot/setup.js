@@ -13,7 +13,9 @@ let testFont = null;
  * Load the font from the filesystem (for Node.js tests)
  */
 export function loadFontSync() {
-  if (testFont) return testFont;
+  if (testFont) {
+    return testFont;
+  }
 
   const fontPath = join(process.cwd(), 'fonts', 'Kario39C3Var-Roman.ttf');
   const fontBuffer = readFileSync(fontPath);

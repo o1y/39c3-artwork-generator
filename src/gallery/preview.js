@@ -48,7 +48,9 @@ function applyConfig(config, canvasSize) {
 }
 
 export function startPreview(canvas, config) {
-  if (config.isPaused) return;
+  if (config.isPaused) {
+    return;
+  }
 
   stopPreview();
   savedSettings = captureSettings();
