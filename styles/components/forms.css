@@ -1,0 +1,128 @@
+@layer components {
+  /* Labels & Form Elements */
+  label {
+    background: var(--accent-color);
+    color: var(--bg-dark);
+    padding: 4px 10px;
+    line-height: 1;
+    width: fit-content;
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 60,
+      'opsz' 8;
+  }
+
+  input[type='range'] {
+    appearance: none;
+    width: 100%;
+    min-width: 80px;
+    height: 4px;
+    background: var(--glass-border);
+    outline: none;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  input[type='range']::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--accent-color-hover);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  input[type='range']::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    background: var(--accent-color-hover);
+  }
+
+  select {
+    cursor: pointer;
+    padding-right: 35px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23faf5f5' fill-opacity='0.6' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    flex: 1;
+  }
+
+  select option {
+    background: var(--bg-dark);
+  }
+
+  input[type='checkbox'] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--glass-border-strong);
+    background: var(--glass-bg);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  input[type='checkbox']:hover {
+    border-color: var(--accent-color);
+  }
+
+  input[type='checkbox']:checked {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+
+  input[type='checkbox']:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--bg-dark);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  label:has(input[type='checkbox']) {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    text-transform: none;
+    background: transparent;
+    color: var(--text-light);
+    padding: 0;
+  }
+
+  .value-display {
+    font-size: 11px;
+    font-variation-settings: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+
+    @media (max-width: 768px) {
+      position: relative;
+    }
+  }
+}

@@ -1,0 +1,127 @@
+@layer components {
+  /* Header */
+  .header {
+    padding: 15px 30px;
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 100;
+
+    @media (max-width: 900px) {
+      padding: 15px 20px;
+
+      &.mobile-collapsed .controls-collapsible {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        margin: 0;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin 0.3s ease;
+      }
+
+      &:not(.mobile-collapsed) .controls-collapsible {
+        max-height: 2000px;
+        opacity: 1;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin 0.3s ease;
+      }
+
+      &:not(.mobile-collapsed) .mobile-header-toggle .toggle-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .header-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+
+    @media (max-width: 900px) {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  }
+
+  .control-text-input {
+    flex: 1 1 auto;
+    min-width: 200px;
+
+    @media (max-width: 900px) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  .controls-collapsible {
+    display: contents;
+
+    @media (max-width: 900px) {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      margin-top: 15px;
+    }
+  }
+
+  .control-theme {
+    flex: 0 0 auto;
+    min-width: 140px;
+
+    @media (max-width: 900px) {
+      min-width: 100%;
+    }
+  }
+
+  .control-theme-option {
+    flex: 0 0 auto;
+    min-width: 120px;
+
+    @media (max-width: 900px) {
+      min-width: 100%;
+    }
+  }
+
+  .control-color-mode {
+    flex: 0 0 auto;
+    min-width: 140px;
+
+    @media (max-width: 900px) {
+      min-width: 100%;
+    }
+  }
+
+  .mobile-header-toggle {
+    display: none;
+
+    @media (max-width: 900px) {
+      display: flex;
+      flex-shrink: 0;
+    }
+  }
+
+  .mobile-header-toggle .toggle-icon {
+    display: inline-block;
+    width: 12px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23faf5f5' fill-opacity='0.6' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: transform 0.3s ease;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+
+  .control-group.hidden {
+    display: none;
+  }
+}

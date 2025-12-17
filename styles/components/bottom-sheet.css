@@ -1,0 +1,91 @@
+@layer components {
+  /* Bottom Sheet (Mobile) */
+  .bottom-sheet-backdrop {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      transition: opacity 0.15s ease;
+    }
+  }
+
+  .bottom-sheet-backdrop.see-through {
+    @media (max-width: 768px) {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .bottom-sheet {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-dark);
+      border-top: 1px solid var(--glass-border);
+      padding: 20px;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom));
+      z-index: 200;
+      max-height: 70vh;
+      overflow-y: auto;
+      transition: opacity 0.15s ease;
+    }
+  }
+
+  .bottom-sheet.see-through {
+    @media (max-width: 768px) {
+      opacity: 0.3;
+      pointer-events: none;
+
+      & input[type='range'] {
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .bottom-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  /* .bottom-sheet-title uses .panel-title utility from utilities.css */
+
+  /* .bottom-sheet-close uses .close-btn utility from utilities.css */
+
+  /* Bottom sheet transitions - backdrop uses .fade-* from utilities.css */
+  .sheet-enter {
+    transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .sheet-enter-start {
+    transform: translateY(100%);
+  }
+
+  .sheet-enter-end {
+    transform: translateY(0);
+  }
+
+  .sheet-leave {
+    transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .sheet-leave-start {
+    transform: translateY(0);
+  }
+
+  .sheet-leave-end {
+    transform: translateY(100%);
+  }
+}

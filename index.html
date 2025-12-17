@@ -642,12 +642,12 @@
       class="bottom-sheet-backdrop"
       x-show="typographyPopoverOpen"
       x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
       @click="closeTypographyPopover"
       :class="{ 'see-through': isSliderDragging }"
     ></div>
@@ -664,8 +664,12 @@
       :class="{ 'see-through': isSliderDragging }"
     >
       <div class="bottom-sheet-header">
-        <span class="bottom-sheet-title">Typography</span>
-        <button class="bottom-sheet-close" @click="closeTypographyPopover" aria-label="Close">
+        <span class="bottom-sheet-title panel-title">Typography</span>
+        <button
+          class="bottom-sheet-close close-btn"
+          @click="closeTypographyPopover"
+          aria-label="Close"
+        >
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>
@@ -755,12 +759,12 @@
       class="bottom-sheet-backdrop"
       x-show="animationPopoverOpen"
       x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
       @click="closeAnimationPopover"
       :class="{ 'see-through': isSliderDragging }"
     ></div>
@@ -777,8 +781,12 @@
       :class="{ 'see-through': isSliderDragging }"
     >
       <div class="bottom-sheet-header">
-        <span class="bottom-sheet-title">Animation</span>
-        <button class="bottom-sheet-close" @click="closeAnimationPopover" aria-label="Close">
+        <span class="bottom-sheet-title panel-title">Animation</span>
+        <button
+          class="bottom-sheet-close close-btn"
+          @click="closeAnimationPopover"
+          aria-label="Close"
+        >
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>
@@ -812,12 +820,12 @@
       class="bottom-sheet-backdrop"
       x-show="downloadPopoverOpen"
       x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
       @click="closeDownloadPopover"
     ></div>
     <div
@@ -832,8 +840,12 @@
       x-transition:leave-end="sheet-leave-end"
     >
       <div class="bottom-sheet-header">
-        <span class="bottom-sheet-title">Download</span>
-        <button class="bottom-sheet-close" @click="closeDownloadPopover" aria-label="Close">
+        <span class="bottom-sheet-title panel-title">Download</span>
+        <button
+          class="bottom-sheet-close close-btn"
+          @click="closeDownloadPopover"
+          aria-label="Close"
+        >
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>
@@ -874,12 +886,12 @@
       class="gallery-backdrop"
       x-show="galleryOpen"
       x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
       @click="closeGallery"
     ></div>
     <div
@@ -894,9 +906,9 @@
       x-transition:leave-end="gallery-leave-end"
     >
       <div class="gallery-header">
-        <span class="gallery-title">My Gallery</span>
+        <span class="gallery-title panel-title">My Gallery</span>
         <span class="gallery-count" x-text="galleryItems.length + ' saved'"></span>
-        <button class="gallery-close" @click="closeGallery" aria-label="Close">
+        <button class="gallery-close close-btn" @click="closeGallery" aria-label="Close">
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>
@@ -937,12 +949,12 @@
       class="gallery-backdrop"
       x-show="impressumOpen"
       x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
       @click="impressumOpen = false"
     ></div>
     <div
@@ -957,8 +969,8 @@
       x-transition:leave-end="gallery-leave-end"
     >
       <div class="gallery-header">
-        <span class="gallery-title">Impressum</span>
-        <button class="gallery-close" @click="impressumOpen = false" aria-label="Close">
+        <span class="gallery-title panel-title">Impressum</span>
+        <button class="gallery-close close-btn" @click="impressumOpen = false" aria-label="Close">
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>

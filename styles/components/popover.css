@@ -1,0 +1,59 @@
+@layer components {
+  /* Popover (Desktop) */
+  .settings-popover {
+    position: absolute;
+    top: 0;
+    right: calc(100% + 15px);
+    min-width: 220px;
+    padding: 16px;
+    border: 1px solid var(--glass-border);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .popover-header {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    font-variation-settings: var(--font-label);
+  }
+
+  /* Popover transitions (Desktop) */
+  .popover-enter {
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .popover-enter-start {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  .popover-enter-end {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .popover-leave {
+    transition:
+      opacity 0.1s ease,
+      transform 0.1s ease;
+  }
+
+  .popover-leave-start {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .popover-leave-end {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}

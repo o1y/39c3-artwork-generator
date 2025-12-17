@@ -1,0 +1,68 @@
+@layer components {
+  /* Share Menu */
+  .share-menu {
+    position: absolute;
+    top: 0;
+    right: calc(100% + 15px);
+    min-width: 180px;
+    padding: 8px;
+    border: 1px solid var(--glass-border);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .share-menu-bottom {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: 0;
+      top: auto;
+      min-width: 180px;
+      padding: 8px;
+      border: 1px solid var(--glass-border);
+      background: var(--bg-dark);
+      backdrop-filter: none;
+      z-index: 210;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+
+  .share-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    text-align: left;
+    font-variation-settings: var(--font-body-sm);
+  }
+
+  .share-menu-item:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--bg-dark);
+  }
+
+  .share-menu-item svg {
+    flex-shrink: 0;
+  }
+
+  .footer-share-wrapper {
+    position: relative;
+  }
+}

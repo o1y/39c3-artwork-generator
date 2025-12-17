@@ -22,7 +22,7 @@
     border: 1px solid var(--glass-border);
     color: var(--text-light);
     padding: 10px 15px;
-    border-radius: var(--radius-sm);
+    border-radius: 0;
     transition: all 0.2s;
     font-size: 16px;
     font-variation-settings:
@@ -82,6 +82,7 @@
   }
 
   .btn-secondary {
+    display: inline-flex;
     background: var(--bg-dark);
     border: 2px solid var(--accent-color);
     color: var(--accent-color);
@@ -103,43 +104,11 @@
     transform: translate(2px, 2px);
   }
 
-  /* Transitions */
-  .smooth {
-    transition: all 0.2s;
-  }
-
-  .smooth-transform {
-    transition: transform 0.3s ease;
-  }
-
-  .transition-colors {
-    transition:
-      background-color 0.2s,
-      border-color 0.2s,
-      color 0.2s;
-  }
-
-  .transition-transform {
-    transition: transform 0.2s;
-  }
-
   /* Shadow Utilities */
-  .shadow-accent-sm {
-    box-shadow: 0 2px 8px var(--accent-shadow-color);
-  }
-
-  .shadow-accent-md {
-    box-shadow: 0 4px 12px var(--accent-shadow-color);
-  }
-
   .shadow-accent-glow {
     box-shadow:
       0 0 40px var(--accent-glow),
       0 0 80px var(--accent-glow);
-  }
-
-  .shadow-focus {
-    box-shadow: 0 0 0 2px var(--accent-border-glow);
   }
 
   /* Glass Surfaces */
@@ -152,5 +121,57 @@
   /* Cursor Utilities */
   .cursor-crosshair {
     cursor: crosshair;
+  }
+
+  /* Close Button */
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .close-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
+
+  /* Panel Title */
+  .panel-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    font-variation-settings: var(--font-title);
+  }
+
+  /* Fade Transitions */
+  .fade-enter {
+    transition: opacity 0.2s ease;
+  }
+
+  .fade-enter-start {
+    opacity: 0;
+  }
+
+  .fade-enter-end {
+    opacity: 1;
+  }
+
+  .fade-leave {
+    transition: opacity 0.15s ease;
+  }
+
+  .fade-leave-start {
+    opacity: 1;
+  }
+
+  .fade-leave-end {
+    opacity: 0;
   }
 }

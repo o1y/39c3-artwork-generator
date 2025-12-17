@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    border-radius: 0;
   }
 
   /* Form controls inherit font */
@@ -37,15 +38,13 @@
     --glass-border: rgba(250, 245, 245, 0.1);
     --glass-border-strong: rgba(250, 245, 245, 0.2);
 
-    --radius-sm: 0;
-    --radius-md: 0;
-    --radius-full: 50%;
-
-    --breakpoint-mobile: 480px;
-    --breakpoint-tablet: 768px;
-    --breakpoint-desktop: 1200px;
-
     --font-body: 'Kario39C3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --font-label: 'wght' 60, 'wdth' 72, 'opsz' 14;
+    --font-label-sm: 'wght' 60, 'wdth' 72, 'opsz' 11;
+    --font-mono: 'wght' 60, 'wdth' 80, 'opsz' 11;
+    --font-body-sm: 'wght' 50, 'wdth' 80, 'opsz' 13;
+    --font-title: 'wght' 60, 'wdth' 72, 'opsz' 18;
   }
 
   /* Theme Overrides */
@@ -71,12 +70,6 @@
     height: 100dvh;
     display: flex;
     flex-direction: column;
-  }
-
-  canvas {
-    font-smooth: never;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   :fullscreen .header,

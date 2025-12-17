@@ -1,0 +1,105 @@
+@layer components {
+  /* Canvas Toolbar */
+  .canvas-toolbar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .toolbar-btn-wrapper {
+    position: relative;
+  }
+
+  .toolbar-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--bg-dark);
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 0 var(--accent-color);
+
+    @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+      box-shadow: 3px 3px 0 var(--accent-color);
+    }
+  }
+
+  .toolbar-btn:hover {
+    background: var(--accent-color);
+    color: var(--bg-dark);
+  }
+
+  .toolbar-btn:active {
+    box-shadow: 2px 2px 0 var(--accent-color);
+    transform: translate(2px, 2px);
+  }
+
+  .toolbar-btn.active {
+    background: var(--accent-color);
+    color: var(--bg-dark);
+  }
+
+  /* Hide fullscreen button on mobile - API not well supported */
+  .toolbar-btn.fullscreen-btn {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .toolbar-btn-wrapper:has(.typography-btn),
+  .toolbar-btn-wrapper:has(.share-btn) {
+    margin-top: 20px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 2px;
+      background: var(--accent-color);
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      margin-top: 0;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .toolbar-btn.share-btn .share-btn-text {
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .toolbar-btn svg {
+    width: 24px;
+    height: 24px;
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

@@ -1,0 +1,136 @@
+@layer components {
+  /* Footer Bar */
+  .footer-bar {
+    padding: 20px 30px;
+    border-top: 1px solid var(--glass-border);
+    z-index: 100;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: flex-end;
+
+    @media (max-width: 768px) {
+      padding: 12px 20px;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+  }
+
+  .footer-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-animation {
+    flex: 1;
+    max-width: 500px;
+    margin-right: auto;
+
+    @media (max-width: 768px) {
+      max-width: 100%;
+      width: 100%;
+      flex-direction: row;
+      gap: 12px;
+
+      & .play-pause-btn {
+        flex-shrink: 0;
+      }
+
+      & .frame-slider-group {
+        flex: 1;
+      }
+    }
+  }
+
+  .footer-toolbar {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+  }
+
+  .footer-toolbar .toolbar-btn {
+    width: 40px;
+    height: 40px;
+    box-shadow: 3px 3px 0 var(--accent-color);
+  }
+
+  .footer-toolbar .toolbar-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-toolbar .share-btn {
+    margin-top: 0;
+    margin-left: 20px;
+  }
+
+  .footer-export {
+    align-items: flex-end;
+    gap: 12px;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .footer-export .control-group {
+    min-width: 140px;
+  }
+
+  /* Buttons */
+  .export-btn {
+    height: 38px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      flex: 1 1 100%;
+      padding: 10px 16px;
+    }
+  }
+
+  .export-btn:focus-visible {
+    outline: none;
+  }
+
+  .play-pause-btn {
+    padding: 8px 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* Frame Controls */
+  .frame-slider-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .playback-controls .frame-slider {
+    width: 100%;
+    height: 4px;
+  }
+
+  .frame-display-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+  }
+
+  .frame-number {
+    font-size: 11px;
+    font-variation-settings: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-color);
+  }
+}
