@@ -26,6 +26,7 @@
   "homepage": "https://github.com/o1y/39c3-logo-animator#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "autoprefixer": "^10.4.23",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
     "prettier": "^3.6.2",
@@ -43,5 +44,8 @@
   "optionalDependencies": {
     "@esbuild/linux-x64": "^0.25.0",
     "@rollup/rollup-linux-x64-gnu": "^4.41.0"
-  }
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module"
+  ]
 }
