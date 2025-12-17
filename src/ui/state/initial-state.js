@@ -5,6 +5,7 @@ import {
   VALID_MODES,
   VALID_TOGGLE_VARIANTS,
   MAX_TEXT_LENGTH,
+  MAX_MULTILINE_TEXT_LENGTH,
 } from '../../config/settings.js';
 import { preferences } from '../../config/preferences.js';
 import { COLOR_MODES } from '../../config/colors.js';
@@ -92,9 +93,14 @@ function getUrlParams() {
     }
   }
 
-  if (result.text && result.text.length > MAX_TEXT_LENGTH)
-    result.text = result.text.slice(0, MAX_TEXT_LENGTH);
   if (result.theme && !themePresets[result.theme]) delete result.theme;
+
+  // Validate text length based on theme's multiline capability
+  const isMultiline = themePresets[result.theme]?.controls?.showMultilineInput === true;
+  const maxTextLen = isMultiline ? MAX_MULTILINE_TEXT_LENGTH : MAX_TEXT_LENGTH;
+  if (result.text && result.text.length > maxTextLen) {
+    result.text = result.text.slice(0, maxTextLen);
+  }
   if (result.mode && !VALID_MODES.includes(result.mode)) delete result.mode;
   if (result.colorMode && !COLOR_MODES[result.colorMode]) delete result.colorMode;
   if (result.toggleVariant && !VALID_TOGGLE_VARIANTS.includes(result.toggleVariant))

@@ -172,15 +172,29 @@
     <div class="header glass-surface" :class="{ 'mobile-collapsed': mobileHeaderCollapsed }">
       <div class="header-row">
         <div class="control-group control-text-input" x-show="showTextInput" x-cloak>
-          <label>Text Input</label>
-          <div class="text-input-wrapper">
+          <label x-text="showMultilineInput ? 'Multiline Text' : 'Text Input'"></label>
+          <div class="text-input-wrapper" :class="{ 'multiline-mode': showMultilineInput }">
             <input
+              x-show="!showMultilineInput"
               type="text"
-              maxlength="30"
+              :maxlength="maxTextLength"
               x-model="text"
               @input="isTextDirty = true"
               class="control-base"
             />
+            <textarea
+              x-show="showMultilineInput"
+              x-cloak
+              :maxlength="maxTextLength"
+              x-model="text"
+              @input="isTextDirty = true; resizeTextarea($el)"
+              @focus="onTextareaFocus($el)"
+              @blur="onTextareaBlur($el)"
+              @mouseenter="onTextareaMouseenter($el)"
+              @mouseleave="onTextareaMouseleave($el)"
+              class="control-base textarea-multiline"
+              placeholder="Enter text (use Enter for new lines)"
+            ></textarea>
             <div class="glyph-btn-wrapper desktop-only">
               <button
                 type="button"
@@ -240,6 +254,7 @@
             <label>Theme</label>
             <select x-model="theme" class="control-base">
               <option value="lines">Nerdy Lines</option>
+              <option value="multiline">Nerdy Multiline</option>
               <option value="toggle">Toggle</option>
               <option value="toggle39c3Animated">39C3 Toggle Animated</option>
               <option value="toggle39c3Static">39C3 Toggle Static</option>

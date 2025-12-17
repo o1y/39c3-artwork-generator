@@ -1,5 +1,6 @@
 import { renderToggleTheme } from '../rendering/themes/toggle.js';
 import { renderLinesTheme } from '../rendering/themes/lines.js';
+import { renderMultilineTheme } from '../rendering/themes/multiline.js';
 import { renderCCCTheme } from '../rendering/themes/ccc.js';
 import { renderTerminalTheme } from '../rendering/themes/terminal.js';
 import { renderDVDTheme } from '../rendering/themes/dvd.js';
@@ -18,6 +19,7 @@ export const VALID_TOGGLE_VARIANTS = [
   'right-outlined',
 ];
 export const MAX_TEXT_LENGTH = 30;
+export const MAX_MULTILINE_TEXT_LENGTH = 200;
 
 const DEFAULT_MIN_WEIGHT = FONT_AXES.weight[0];
 const DEFAULT_MAX_WEIGHT = FONT_AXES.weight[1];
@@ -81,6 +83,22 @@ export const themePresets = {
     controls: {
       ...DEFAULT_CONTROLS,
       showLines: true,
+      showWidth: true,
+      showOpsz: true,
+      showMode: true,
+      showMinWeight: true,
+      showMaxWeight: true,
+    },
+  },
+  multiline: {
+    renderer: renderMultilineTheme,
+    colorMode: 'violet-inv',
+    text: '<<39C3 <<toggle\nPOWER CYCLES',
+    forceUppercase: false,
+    capabilities: DEFAULT_CAPABILITIES,
+    controls: {
+      ...DEFAULT_CONTROLS,
+      showMultilineInput: true,
       showWidth: true,
       showOpsz: true,
       showMode: true,

@@ -72,9 +72,33 @@ export function createViewActions() {
       this.glyphPopoverOpen = false;
     },
     appendToText(char) {
-      if (this.text.length < 30) {
+      if (this.text.length < this.maxTextLength) {
         this.text += char;
         this.isTextDirty = true;
+      }
+    },
+
+    // Textarea auto-resize methods
+    resizeTextarea(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 300) + 'px';
+    },
+    onTextareaFocus(el) {
+      el.classList.add('expanded');
+      this.$nextTick(() => this.resizeTextarea(el));
+    },
+    onTextareaBlur(el) {
+      el.classList.remove('expanded');
+      if (!el.matches(':hover')) {
+        el.style.height = '40px';
+      }
+    },
+    onTextareaMouseenter(el) {
+      this.$nextTick(() => this.resizeTextarea(el));
+    },
+    onTextareaMouseleave(el) {
+      if (document.activeElement !== el) {
+        el.style.height = '40px';
       }
     },
     initFullscreenListener() {

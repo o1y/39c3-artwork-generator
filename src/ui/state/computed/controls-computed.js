@@ -7,6 +7,7 @@ import {
   MAX_EXPORT_FRAMES,
   TOTAL_FRAMES,
 } from '../constants.js';
+import { MAX_TEXT_LENGTH, MAX_MULTILINE_TEXT_LENGTH } from '../../../config/settings.js';
 
 export function createControlsComputed() {
   return {
@@ -68,6 +69,14 @@ export function createControlsComputed() {
 
     get showTextInput() {
       return this.controls.showTextInput !== false;
+    },
+
+    get showMultilineInput() {
+      return this.controls.showMultilineInput === true;
+    },
+
+    get maxTextLength() {
+      return this.showMultilineInput ? MAX_MULTILINE_TEXT_LENGTH : MAX_TEXT_LENGTH;
     },
 
     get showAnimationControls() {

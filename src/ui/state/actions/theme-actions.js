@@ -1,4 +1,10 @@
-import { settings, themePresets, defaultTexts } from '../../../config/settings.js';
+import {
+  settings,
+  themePresets,
+  defaultTexts,
+  MAX_TEXT_LENGTH,
+  MAX_MULTILINE_TEXT_LENGTH,
+} from '../../../config/settings.js';
 import { resumeAnimation } from '../../../animation/loop.js';
 
 export function createThemeActions() {
@@ -49,6 +55,16 @@ export function createThemeActions() {
 
       if (preset?.controls?.showWidth === false) {
         this.widthValue = 100;
+      }
+
+      // Handle text constraints when switching themes
+      const isMultiline = preset?.controls?.showMultilineInput;
+      if (!isMultiline) {
+        this.text = this.text.replace(/\n/g, ' ');
+      }
+      const maxLen = isMultiline ? MAX_MULTILINE_TEXT_LENGTH : MAX_TEXT_LENGTH;
+      if (this.text.length > maxLen) {
+        this.text = this.text.slice(0, maxLen);
       }
     },
   };
