@@ -2,25 +2,19 @@ import { settings, defaultTexts, themePresets } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getGlyphs } from '../../export/font-loader.js';
-
-function easeSwitch(p) {
-  return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-}
-
-function calculateToggleProgress(isAnimated) {
-  if (!isAnimated) return 1;
-
-  const t = getNormalizedTime(settings.time);
-  const rawProgress = (Math.sin(t) + 1) / 2;
-  return easeSwitch(rawProgress);
-}
+import { calculateToggleWeight, isToggleGlyph, TOGGLE_WIDTH } from '../toggle-utils.js';
 
 function measureGlyphsWithAnimation(renderer, glyphs, size, isAnimated, staticWeight, width) {
   let totalWidth = 0;
 
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
+    const glyph = glyphs[glyphIndex];
+    const isToggle = isToggleGlyph(glyph);
+
     let weight;
-    if (isAnimated) {
+    if (isToggle) {
+      weight = calculateToggleWeight(isAnimated);
+    } else if (isAnimated) {
       const t = getNormalizedTime(settings.time);
       const phase = glyphIndex * 0.3;
       const cycle = (Math.sin(t + phase) + 1) / 2;
@@ -29,7 +23,7 @@ function measureGlyphsWithAnimation(renderer, glyphs, size, isAnimated, staticWe
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
-    totalWidth += renderer.measureGlyph(glyphs[glyphIndex], size, weight, width);
+    totalWidth += renderer.measureGlyph(glyph, size, weight, isToggle ? TOGGLE_WIDTH : width);
   }
 
   return totalWidth;
@@ -49,9 +43,12 @@ function renderAnimatedGlyphs(
 
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     const glyph = glyphs[glyphIndex];
-    let weight;
+    const isToggle = isToggleGlyph(glyph);
 
-    if (isAnimated) {
+    let weight;
+    if (isToggle) {
+      weight = calculateToggleWeight(isAnimated);
+    } else if (isAnimated) {
       const t = getNormalizedTime(settings.time);
       const phase = glyphIndex * 0.3;
       const cycle = (Math.sin(t + phase) + 1) / 2;
@@ -60,13 +57,14 @@ function renderAnimatedGlyphs(
       weight = staticWeight !== undefined ? staticWeight : settings.maxWeight;
     }
 
+    const glyphWidthSetting = isToggle ? TOGGLE_WIDTH : width;
     const color = getColor(glyphIndex, 0, settings.time);
     renderer.drawGlyph(glyph, currentX, centerY, textSize, weight, color, {
       baseline: 'middle',
-      width,
+      width: glyphWidthSetting,
     });
 
-    const glyphWidth = renderer.measureGlyph(glyph, textSize, weight, width);
+    const glyphWidth = renderer.measureGlyph(glyph, textSize, weight, glyphWidthSetting);
     currentX += glyphWidth;
   }
 }
@@ -126,8 +124,7 @@ function renderSingleRowLayout(renderer) {
     toggleX = startX + glyphsWidth + spacing;
   }
 
-  const progress = calculateToggleProgress(isAnimated);
-  const animatedWeight = 100 - 90 * progress; // wght 10 = left, 100 = right
+  const animatedWeight = calculateToggleWeight(isAnimated);
   renderer.drawText(toggleGlyph, toggleX, centerY, textSize, animatedWeight, textColor, {
     baseline: 'middle',
     width: 100,
@@ -248,8 +245,7 @@ function renderTwoRowLayout(renderer) {
     toggleX = row1StartX + logoWidth + pillLogoSpacing;
   }
 
-  const progress = calculateToggleProgress(isAnimated);
-  const animatedWeight = 100 - 90 * progress; // wght 10 = left, 100 = right
+  const animatedWeight = calculateToggleWeight(isAnimated);
   renderer.drawText(toggleGlyph, toggleX, row1CenterY, logoSize, animatedWeight, textColor, {
     baseline: 'middle',
     width: 100,

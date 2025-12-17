@@ -2,6 +2,7 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getGlyphs } from '../../export/font-loader.js';
+import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
 
 function getLogicalLength(glyphs) {
   let length = 0;
@@ -82,20 +83,28 @@ function drawUserText(
   finalFontSize,
   lineIndex,
   globalCharIndex,
-  width
+  width,
+  isAnimated
 ) {
   let currentX = x;
   let glyphCount = 0;
 
   for (let glyphIndex = 0; glyphIndex < userGlyphs.length; glyphIndex++) {
     const glyph = userGlyphs[glyphIndex];
+    const isToggle = isToggleGlyph(glyph);
     const color = getColor(globalCharIndex + glyphIndex, lineIndex, settings.time);
-    renderer.drawGlyph(glyph, currentX, y, finalFontSize, breatheWeight, color, {
+
+    // Toggle glyphs get special weight animation (circle moves left to right)
+    // and fixed width to maintain circular shape
+    const glyphWeight = isToggle ? calculateToggleWeight(isAnimated) : breatheWeight;
+    const glyphWidthSetting = isToggle ? TOGGLE_WIDTH : width;
+
+    renderer.drawGlyph(glyph, currentX, y, finalFontSize, glyphWeight, color, {
       baseline: 'top',
-      width,
+      width: glyphWidthSetting,
     });
 
-    const glyphWidth = renderer.measureGlyph(glyph, finalFontSize, avgWeight, width);
+    const glyphWidth = renderer.measureGlyph(glyph, finalFontSize, avgWeight, glyphWidthSetting);
     currentX += glyphWidth;
     glyphCount++;
   }
@@ -152,6 +161,8 @@ export function renderCCCTheme(renderer, canvasSize) {
   const textBlockHeight = finalFontSize + (settings.numLines - 1) * lineSpacing;
   const topY = (settings.canvasSize - textBlockHeight) / 2;
   const startY = topY + (settings.numLines - 1) * lineSpacing;
+
+  const isAnimated = settings.capabilities?.animated !== false;
 
   for (let lineIndex = 0; lineIndex < settings.numLines; lineIndex++) {
     const y = startY - lineIndex * lineSpacing;
@@ -218,7 +229,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidthSetting
+          userTextWidthSetting,
+          isAnimated
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;
@@ -234,7 +246,8 @@ export function renderCCCTheme(renderer, canvasSize) {
           finalFontSize,
           lineIndex,
           globalCharIndex,
-          userTextWidthSetting
+          userTextWidthSetting,
+          isAnimated
         );
         x += userResult.width;
         globalCharIndex += userResult.charCount;

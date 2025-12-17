@@ -2,6 +2,7 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getAscenderHeight, getDescenderHeight, getGlyphs } from '../../export/font-loader.js';
+import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
 
 export function renderTerminalTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
@@ -253,19 +254,35 @@ export function renderTerminalTheme(renderer, canvasSize) {
     const afterTextGlyphs = template.afterText ? getGlyphs(template.afterText) : [];
     const allGlyphs = [...userGlyphs, ...suffixGlyphs, ...afterTextGlyphs];
 
+    const isAnimated = settings.capabilities?.animated !== false;
+
     for (let i = 0; i < allGlyphs.length; i++) {
       const glyph = allGlyphs[i];
-      const glyphPhase = (i / allGlyphs.length) * Math.PI * 2;
-      const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
-      const glyphWeight =
-        settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
+      const isToggle = isToggleGlyph(glyph);
+
+      // Toggle glyphs get special weight animation (circle moves left to right)
+      // and fixed width to maintain circular shape
+      let glyphWeight;
+      if (isToggle) {
+        glyphWeight = calculateToggleWeight(isAnimated);
+      } else {
+        const glyphPhase = (i / allGlyphs.length) * Math.PI * 2;
+        const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;
+        glyphWeight = settings.minWeight + glyphWave * (settings.maxWeight - settings.minWeight);
+      }
 
       const color = getColor(charIndex + i, lineIndex, settings.time);
-      renderer.drawGlyph(glyph, x, y, finalFontSize, glyphWeight, color, {
-        baseline: 'alphabetic',
-      });
+      const glyphOptions = isToggle
+        ? { baseline: 'alphabetic', width: TOGGLE_WIDTH }
+        : { baseline: 'alphabetic' };
+      renderer.drawGlyph(glyph, x, y, finalFontSize, glyphWeight, color, glyphOptions);
 
-      x += renderer.measureGlyph(glyph, finalFontSize, glyphWeight);
+      x += renderer.measureGlyph(
+        glyph,
+        finalFontSize,
+        glyphWeight,
+        isToggle ? TOGGLE_WIDTH : undefined
+      );
     }
     charIndex += allGlyphs.length;
   }

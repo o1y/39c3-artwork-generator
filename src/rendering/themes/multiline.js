@@ -2,6 +2,7 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { calculateWeight } from '../weight.js';
 import { getGlyphs } from '../../export/font-loader.js';
+import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
 
 // Invert lineIndex since we draw top-to-bottom but lines theme draws bottom-to-top
 function getLineWeightRange(lineIndex, numLines) {
@@ -54,22 +55,33 @@ export function renderMultilineTheme(renderer, canvasSize) {
     const midIndex = (glyphs.length - 1) / 2;
     const { invertedLineIndex, startWeight, endWeight } = getLineWeightRange(lineIndex, numLines);
 
+    const isAnimated = settings.capabilities?.animated !== false;
+
     for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
       const glyph = glyphs[glyphIndex];
-      const weight = calculateWeight(
-        glyphIndex,
-        invertedLineIndex,
-        startWeight,
-        endWeight,
-        midIndex,
-        glyphs.length,
-        settings.time
-      );
+      const isToggle = isToggleGlyph(glyph);
+
+      // Toggle glyphs get special weight animation (circle moves left to right)
+      // and fixed width to maintain circular shape
+      const weight = isToggle
+        ? calculateToggleWeight(isAnimated)
+        : calculateWeight(
+            glyphIndex,
+            invertedLineIndex,
+            startWeight,
+            endWeight,
+            midIndex,
+            glyphs.length,
+            settings.time
+          );
 
       const color = getColor(glyphIndex, invertedLineIndex, settings.time, glyphs.length);
-      renderer.drawGlyph(glyph, x, y, finalFontSize, weight, color, { baseline: 'top' });
+      const glyphOptions = isToggle
+        ? { baseline: 'top', width: TOGGLE_WIDTH }
+        : { baseline: 'top' };
+      renderer.drawGlyph(glyph, x, y, finalFontSize, weight, color, glyphOptions);
 
-      x += renderer.measureGlyph(glyph, finalFontSize, weight);
+      x += renderer.measureGlyph(glyph, finalFontSize, weight, isToggle ? TOGGLE_WIDTH : undefined);
     }
   }
 }
@@ -77,19 +89,24 @@ export function renderMultilineTheme(renderer, canvasSize) {
 function getLineWidth(renderer, glyphs, size, lineIndex, numLines) {
   const midIndex = (glyphs.length - 1) / 2;
   const { invertedLineIndex, startWeight, endWeight } = getLineWeightRange(lineIndex, numLines);
+  const isAnimated = settings.capabilities?.animated !== false;
 
   let total = 0;
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
-    const weight = calculateWeight(
-      glyphIndex,
-      invertedLineIndex,
-      startWeight,
-      endWeight,
-      midIndex,
-      glyphs.length,
-      settings.time
-    );
-    total += renderer.measureGlyph(glyphs[glyphIndex], size, weight);
+    const glyph = glyphs[glyphIndex];
+    const isToggle = isToggleGlyph(glyph);
+    const weight = isToggle
+      ? calculateToggleWeight(isAnimated)
+      : calculateWeight(
+          glyphIndex,
+          invertedLineIndex,
+          startWeight,
+          endWeight,
+          midIndex,
+          glyphs.length,
+          settings.time
+        );
+    total += renderer.measureGlyph(glyph, size, weight, isToggle ? TOGGLE_WIDTH : undefined);
   }
   return total;
 }
