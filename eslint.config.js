@@ -10,10 +10,18 @@ export default [
       },
     },
     rules: {
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    files: ['tests/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**'],
   },
 ];

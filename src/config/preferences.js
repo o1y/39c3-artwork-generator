@@ -13,7 +13,7 @@ function load() {
     if (stored) {
       return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) };
     }
-  } catch (e) {
+  } catch (_e) {
     // Invalid JSON, return defaults
   }
   return { ...DEFAULT_PREFERENCES };
@@ -22,7 +22,7 @@ function load() {
 function save(prefs) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-  } catch (e) {
+  } catch (_e) {
     // Storage full or unavailable
   }
 }

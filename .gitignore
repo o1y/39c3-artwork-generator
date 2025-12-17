@@ -40,3 +40,6 @@ env/
 *.tmp
 *.bak
 .cache/
+
+# Test coverage
+coverage/

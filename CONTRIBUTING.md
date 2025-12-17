@@ -37,12 +37,37 @@ npm run lint:fix # Fix lint errors
 npm run format # Format code
 ```
 
+## Testing
+
+This project uses **Vitest** for unit and snapshot testing.
+
+```bash
+npm test # Run all tests
+npm run test:watch # Run tests in watch mode
+npm run test:coverage # Run tests with coverage report
+```
+
+### Snapshot Tests
+
+When you modify rendering code, snapshot tests may need updating:
+
+```bash
+npm test -- --update # Update snapshots after intentional changes
+```
+
+Review snapshot diffs carefully before committing.
+
 ## Pull Requests
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/my-feature`)
 3. Make your changes
-4. Ensure `npm run lint` and `npm run format:check` pass
+4. Ensure all checks pass:
+   ```bash
+   npm test # All tests must pass
+   npm run lint # No lint errors
+   npm run format:check # Code is formatted
+   ```
 5. Commit your changes
 6. Push to your fork and open a pull request
 

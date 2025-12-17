@@ -40,6 +40,14 @@ Starts Vite development server with hot module replacement at `http://localhost:
 npm run build
 ```
 
+### Testing
+
+```bash
+npm test # Run all tests
+npm run test:watch # Run tests in watch mode
+npm run test:coverage # Run tests with coverage report
+```
+
 ## Original DrawBot Script
 
 See `39C3-Script-Interpolation-V01.py` for the original static generator in the [Style Guide](https://events.ccc.de/congress/2025/infos/styleguide.html).
