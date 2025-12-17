@@ -30,7 +30,7 @@ function createVariations(weight, width = settings.widthValue, opsz = settings.o
 
 /**
  * Load the Kario39C3 variable font
- * @returns {Promise<opentype.Font>}
+ * @returns {Promise<import('opentype.js').Font>}
  */
 export async function loadFont() {
   if (font) {

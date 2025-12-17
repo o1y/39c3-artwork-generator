@@ -21,12 +21,13 @@ The development server runs at `http://localhost:5173`.
 
 ## Code Style
 
-This project uses **ESLint** and **Prettier** for code quality and formatting.
+This project uses ESLint and Prettier for code quality and formatting and JSDoc type checking via TypeScript.
 
 Before committing, ensure your code passes:
 
 ```bash
 npm run lint # Check for lint errors
+npm run typecheck # Check JSDoc types
 npm run format:check # Check formatting
 ```
 
@@ -35,6 +36,26 @@ To auto-fix issues:
 ```bash
 npm run lint:fix # Fix lint errors
 npm run format # Format code
+```
+
+### Type Annotations
+
+This project uses JSDoc comments for type safety without converting to TypeScript. When adding or modifying code, include type annotations:
+
+```javascript
+/**
+ * @param {number} weight - Font weight (10-100)
+ * @returns {string} CSS color value
+ */
+function getColorForWeight(weight) {
+  // ...
+}
+```
+
+Shared types are defined in `src/types.js`. Import them with:
+
+```javascript
+/** @typedef {import('./types.js').Settings} Settings */
 ```
 
 ## Testing
@@ -64,8 +85,9 @@ Review snapshot diffs carefully before committing.
 3. Make your changes
 4. Ensure all checks pass:
    ```bash
-   npm test # All tests must pass
-   npm run lint # No lint errors
+   npm test             # All tests must pass
+   npm run lint         # No lint errors
+   npm run typecheck    # No type errors
    npm run format:check # Code is formatted
    ```
 5. Commit your changes

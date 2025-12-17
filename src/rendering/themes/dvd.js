@@ -4,6 +4,11 @@ import { BRAND_COLORS } from '../../config/colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getGlyphBounds, getGlyphs } from '../../export/font-loader.js';
 
+/**
+ * @typedef {Object} AlpineStore
+ * @property {string} colorMode
+ */
+
 const COLOR_MODES = ['violet', 'green', 'mono'];
 
 let currentColorModeIndex = 0;
@@ -13,11 +18,14 @@ let cornerHitTime = -Infinity;
 let lastXEdgeHitTime = -Infinity;
 let lastYEdgeHitTime = -Infinity;
 
+/**
+ * @returns {AlpineStore | null}
+ */
 function getAlpineStore() {
   if (typeof window !== 'undefined' && window.Alpine) {
     const el = document.querySelector('[x-data]');
     if (el && el._x_dataStack) {
-      return el._x_dataStack[0];
+      return /** @type {AlpineStore} */ (el._x_dataStack[0]);
     }
   }
   return null;

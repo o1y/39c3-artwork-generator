@@ -25,7 +25,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc -p jsconfig.json --noEmit 2>&1 | grep '^src/' && exit 1 || exit 0"
   },
   "browserslist": [
     "defaults and fully supports es6-module"
@@ -47,6 +48,7 @@
     "prettier": "^3.6.2",
     "rollup-plugin-license": "^3.6.0",
     "sort-package-json": "^3.6.0",
+    "typescript": "^5.9.3",
     "vite": "^7.1.12",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-static-copy": "^3.1.4",

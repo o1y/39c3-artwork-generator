@@ -48,6 +48,14 @@ npm run test:watch # Run tests in watch mode
 npm run test:coverage # Run tests with coverage report
 ```
 
+### Type Checking
+
+This project uses JSDoc annotations for type safety, checked via TypeScript:
+
+```bash
+npm run typecheck # Check types
+```
+
 ## Original DrawBot Script
 
 See `39C3-Script-Interpolation-V01.py` for the original static generator in the [Style Guide](https://events.ccc.de/congress/2025/infos/styleguide.html).
