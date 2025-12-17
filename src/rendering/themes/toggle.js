@@ -80,7 +80,8 @@ function renderSingleRowLayout(renderer) {
   const isAnimated = settings.capabilities?.animated !== false;
   const width = settings.widthValue;
 
-  let textSize = 200;
+  const baseFactor = settings.canvasSize / 1000;
+  let textSize = 200 * baseFactor;
 
   const toggleGlyph = style === 'filled' ? '\uE001' : '\uE000';
   const toggleWeight = (settings.minWeight + settings.maxWeight) / 2;
