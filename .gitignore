@@ -43,3 +43,5 @@ env/
 
 # Test coverage
 coverage/
+.vercel
+.env*.local
