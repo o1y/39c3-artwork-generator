@@ -139,7 +139,6 @@
   }
 
   input[type='range'] {
-    -webkit-appearance: none;
     appearance: none;
     width: 100%;
     min-width: 80px;
@@ -152,7 +151,6 @@
   }
 
   input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
     appearance: none;
     width: 16px;
     height: 16px;
@@ -185,8 +183,6 @@
     cursor: pointer;
     padding-right: 35px;
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23faf5f5' fill-opacity='0.6' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
@@ -199,7 +195,6 @@
   }
 
   input[type='checkbox'] {
-    -webkit-appearance: none;
     appearance: none;
     width: 18px;
     height: 18px;
