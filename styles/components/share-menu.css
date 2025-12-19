@@ -52,10 +52,15 @@
     font-variation-settings: var(--font-body-sm);
   }
 
-  .share-menu-item:hover {
+  .share-menu-item:hover:not(:disabled) {
     background: var(--accent-color);
     border-color: var(--accent-color);
     color: var(--bg-dark);
+  }
+
+  .share-menu-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .share-menu-item svg {

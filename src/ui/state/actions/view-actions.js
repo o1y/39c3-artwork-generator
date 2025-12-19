@@ -2,8 +2,57 @@ import { settings } from '../../../config/settings.js';
 import { getNormalizedTime } from '../../../animation/timing.js';
 import { preferences } from '../../../config/preferences.js';
 
+/**
+ * Creates popover toggle/close methods with mutual exclusion
+ * @param {string[]} popoverNames - List of popover names (e.g., ['typography', 'animation'])
+ * @param {Object} options - Additional options per popover
+ * @returns {Object} Object containing toggle and close methods for each popover
+ */
+function createPopoverActions(popoverNames, options = {}) {
+  const actions = {};
+
+  for (const name of popoverNames) {
+    const propName = `${name}PopoverOpen`;
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+
+    actions[`toggle${capitalizedName}Popover`] = function () {
+      this[propName] = !this[propName];
+      if (this[propName]) {
+        for (const otherName of popoverNames) {
+          if (otherName !== name) {
+            this[`${otherName}PopoverOpen`] = false;
+          }
+        }
+        if (options[name]?.onOpen) {
+          options[name].onOpen.call(this);
+        }
+      }
+    };
+
+    // Close method
+    actions[`close${capitalizedName}Popover`] = function () {
+      this[propName] = false;
+    };
+  }
+
+  return actions;
+}
+
+const popoverActions = createPopoverActions(
+  ['typography', 'animation', 'download', 'save', 'glyph'],
+  {
+    glyph: {
+      onOpen() {
+        this.loadGlyphCategories();
+      },
+    },
+  }
+);
+
 export function createViewActions() {
   return {
+    ...popoverActions,
+
     dismissHint(hint) {
       if (hint === 'toolbar') {
         this.toolbarHintDismissed = true;
@@ -26,59 +75,12 @@ export function createViewActions() {
         document.exitFullscreen().catch(() => {});
       }
     },
-    toggleTypographyPopover() {
-      this.typographyPopoverOpen = !this.typographyPopoverOpen;
-      if (this.typographyPopoverOpen) {
-        this.animationPopoverOpen = false;
-        this.downloadPopoverOpen = false;
-        this.glyphPopoverOpen = false;
-      }
-    },
-    closeTypographyPopover() {
-      this.typographyPopoverOpen = false;
-    },
-    toggleAnimationPopover() {
-      this.animationPopoverOpen = !this.animationPopoverOpen;
-      if (this.animationPopoverOpen) {
-        this.typographyPopoverOpen = false;
-        this.downloadPopoverOpen = false;
-        this.glyphPopoverOpen = false;
-      }
-    },
-    closeAnimationPopover() {
-      this.animationPopoverOpen = false;
-    },
-    toggleDownloadPopover() {
-      this.downloadPopoverOpen = !this.downloadPopoverOpen;
-      if (this.downloadPopoverOpen) {
-        this.typographyPopoverOpen = false;
-        this.animationPopoverOpen = false;
-        this.glyphPopoverOpen = false;
-      }
-    },
-    closeDownloadPopover() {
-      this.downloadPopoverOpen = false;
-    },
-    toggleGlyphPopover() {
-      this.glyphPopoverOpen = !this.glyphPopoverOpen;
-      if (this.glyphPopoverOpen) {
-        this.typographyPopoverOpen = false;
-        this.animationPopoverOpen = false;
-        this.downloadPopoverOpen = false;
-        this.loadGlyphCategories();
-      }
-    },
-    closeGlyphPopover() {
-      this.glyphPopoverOpen = false;
-    },
     appendToText(char) {
       if (this.text.length < this.maxTextLength) {
         this.text += char;
         this.isTextDirty = true;
       }
     },
-
-    // Textarea auto-resize methods
     resizeTextarea(el) {
       el.style.height = 'auto';
       el.style.height = Math.min(el.scrollHeight, 300) + 'px';
@@ -116,6 +118,16 @@ export function createViewActions() {
       this.animationOriginX = Math.max(0, Math.min(1, x));
       this.animationOriginY = 1 - Math.max(0, Math.min(1, y));
       this.animationPhaseOffset = getNormalizedTime(settings.time) - Math.PI / 2;
+    },
+    showToast(message, target, { duration = 2000, variant = 'default' } = {}) {
+      this.toastMessage = message;
+      this.toastTarget = target;
+      this.toastVariant = variant;
+      setTimeout(() => {
+        this.toastMessage = null;
+        this.toastTarget = null;
+        this.toastVariant = 'default';
+      }, duration);
     },
   };
 }

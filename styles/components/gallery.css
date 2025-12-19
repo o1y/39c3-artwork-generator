@@ -226,4 +226,454 @@
       transform: translateY(100%);
     }
   }
+
+  /* Gallery Tabs */
+  .gallery-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .gallery-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-family: var(--font-family);
+    font-variation-settings:
+      'wght' 50,
+      'wdth' 80,
+      'opsz' 14;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .gallery-tab:hover {
+    border-color: var(--accent-color);
+    color: var(--text-light);
+  }
+
+  .gallery-tab.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--bg-dark);
+  }
+
+  .gallery-tab svg {
+    opacity: 0.7;
+  }
+
+  .gallery-tab.active svg {
+    opacity: 1;
+  }
+
+  /* Community Gallery */
+  .gallery-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 15px;
+    color: var(--text-muted);
+  }
+
+  .gallery-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--glass-border);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .gallery-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 15px;
+    color: var(--text-muted);
+  }
+
+  .community-item {
+    cursor: pointer;
+  }
+
+  .community-card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .community-theme {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
+  .community-text {
+    font-size: 14px;
+    color: var(--text-light);
+    font-variation-settings:
+      'wght' 50,
+      'wdth' 100,
+      'opsz' 14;
+    word-break: break-word;
+    max-height: 60px;
+    overflow: hidden;
+  }
+
+  .community-color {
+    width: 24px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #888, #ccc);
+  }
+
+  .community-color.color-violet-inv,
+  .community-color.color-violet {
+    background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd);
+  }
+
+  .community-color.color-green-inv,
+  .community-color.color-green {
+    background: linear-gradient(90deg, #00ff41, #00cc33, #009926);
+  }
+
+  .community-color.color-mono,
+  .community-color.color-mono-inv {
+    background: linear-gradient(90deg, #888, #fff, #888);
+  }
+
+  /* Consent Dialog */
+  .consent-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 399;
+  }
+
+  .consent-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    z-index: 400;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .consent-title {
+    font-size: 18px;
+    color: var(--accent-color);
+    margin: 0 0 12px 0;
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
+  .consent-text {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+  }
+
+  .consent-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Lightbox */
+  .lightbox-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 399;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-canvas {
+    max-width: 85vw;
+    max-height: 80vh;
+    border: 2px solid var(--glass-border);
+    box-shadow: 0 0 80px var(--accent-shadow-color);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .lightbox-nav:hover:not(:disabled) {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--bg-dark);
+  }
+
+  .lightbox-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .lightbox-prev {
+    left: 20px;
+  }
+
+  .lightbox-next {
+    right: 20px;
+  }
+
+  .lightbox-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lightbox-fork {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--accent-color);
+    border: none;
+    color: var(--bg-dark);
+    font-size: 14px;
+    font-family: var(--font-family);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .lightbox-fork:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px var(--accent-shadow-color);
+  }
+
+  .lightbox-delete {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #c44;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: var(--font-family);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .lightbox-delete:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 20px rgba(204, 68, 68, 0.5);
+  }
+
+  .lightbox-close {
+    width: 40px;
+    height: 40px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+  }
+
+  .lightbox-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light);
+  }
+
+  .lightbox-loading,
+  .lightbox-empty,
+  .lightbox-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .lightbox-loading p,
+  .lightbox-empty p,
+  .lightbox-error p {
+    margin: 0;
+    font-size: 14px;
+    font-variation-settings:
+      'wght' 50,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
+  .lightbox-empty svg {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .lightbox-empty-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  .lightbox-theme {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
+  .lightbox-counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-variation-settings:
+      'wght' 40,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
+  /* Lightbox transitions */
+  .lightbox-enter {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .lightbox-enter-start {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .lightbox-enter-end {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .lightbox-leave {
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .lightbox-leave-start {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .lightbox-leave-end {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .lightbox-canvas {
+      max-width: 95vw;
+      max-height: 60vh;
+    }
+
+    .lightbox-nav {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      top: auto;
+      bottom: 140px;
+      transform: none;
+    }
+
+    .lightbox-prev {
+      left: calc(50% - 60px);
+    }
+
+    .lightbox-next {
+      right: calc(50% - 60px);
+    }
+
+    .lightbox-controls {
+      top: 10px;
+      right: 10px;
+    }
+
+    .lightbox-fork,
+    .lightbox-delete {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .lightbox-info {
+      bottom: 20px;
+    }
+  }
 }

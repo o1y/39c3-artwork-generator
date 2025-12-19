@@ -28,14 +28,9 @@ export function createExportActions() {
         ? `${window.location.origin}${window.location.pathname}?${queryString}`
         : `${window.location.origin}${window.location.pathname}`;
 
-      this.closeShareMenu();
-
       try {
         await navigator.clipboard.writeText(url);
-        this.gallerySaveText = 'Copied!';
-        setTimeout(() => {
-          this.gallerySaveText = null;
-        }, 2000);
+        this.showToast('Copied Link', 'share');
       } catch {
         window.prompt('Copy this link to share:', url);
       }

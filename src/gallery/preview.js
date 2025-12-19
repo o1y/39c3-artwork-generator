@@ -1,13 +1,14 @@
 import { settings, themePresets } from '../config/settings.js';
 import { CanvasRenderer } from '../rendering/core/canvas-renderer.js';
 
-const PREVIEW_FPS = 15;
-const PREVIEW_INTERVAL = 1000 / PREVIEW_FPS;
+export const THUMBNAIL_FPS = 15;
+export const LIGHTBOX_FPS = 30;
 
 let animationId = null;
 let lastFrameTime = 0;
 let previewTime = 0;
 let savedSettings = null;
+let currentFps = THUMBNAIL_FPS;
 
 function captureSettings() {
   return {
@@ -47,11 +48,10 @@ function applyConfig(config, canvasSize) {
   settings.margin = (config.margin || 40) * scaleFactor;
 }
 
-export function startPreview(canvas, config) {
-  if (config.isPaused) return;
-
+export function startPreview(canvas, config, fps = THUMBNAIL_FPS) {
   stopPreview();
   savedSettings = captureSettings();
+  currentFps = fps;
 
   const ctx = canvas.getContext('2d');
   const renderer = new CanvasRenderer(ctx);
@@ -60,11 +60,23 @@ export function startPreview(canvas, config) {
   applyConfig(config, size);
   previewTime = config.time || 0;
 
+  // For paused configs, render once and return
+  if (config.isPaused) {
+    settings.time = previewTime;
+    const preset = themePresets[settings.theme];
+    if (preset) {
+      preset.renderer(renderer, size);
+    }
+    return;
+  }
+
+  const frameInterval = 1000 / currentFps;
+
   function animate(timestamp) {
     if (!lastFrameTime) lastFrameTime = timestamp;
     const elapsed = timestamp - lastFrameTime;
 
-    if (elapsed >= PREVIEW_INTERVAL) {
+    if (elapsed >= frameInterval) {
       previewTime += 0.0333 * (config.animationSpeed || 1);
       settings.time = previewTime;
 
@@ -73,7 +85,7 @@ export function startPreview(canvas, config) {
         preset.renderer(renderer, size);
       }
 
-      lastFrameTime = timestamp - (elapsed % PREVIEW_INTERVAL);
+      lastFrameTime = timestamp - (elapsed % frameInterval);
     }
 
     animationId = requestAnimationFrame(animate);

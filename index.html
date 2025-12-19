@@ -166,6 +166,34 @@
         >
           <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
         </symbol>
+        <symbol
+          id="icon-globe"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </symbol>
+        <symbol
+          id="icon-save"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+          />
+          <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+          <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+        </symbol>
       </defs>
     </svg>
 
@@ -323,6 +351,11 @@
           <svg width="24" height="24"><use href="#icon-fullscreen" /></svg>
         </button>
         <div
+          class="toolbar-divider"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
+          x-cloak
+        ></div>
+        <div
           class="toolbar-btn-wrapper"
           x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
           x-cloak
@@ -334,6 +367,7 @@
             title="Typography Options"
           >
             <svg width="24" height="24"><use href="#icon-typography" /></svg>
+            <span class="toolbar-label">Type</span>
           </button>
           <div
             class="settings-popover glass-surface"
@@ -393,6 +427,7 @@
             title="Animation Options"
           >
             <svg width="24" height="24"><use href="#icon-animation" /></svg>
+            <span class="toolbar-label">Animate</span>
           </button>
           <div
             class="settings-popover glass-surface"
@@ -431,25 +466,54 @@
           title="Download"
         >
           <svg width="24" height="24"><use href="#icon-download" /></svg>
+          <span class="toolbar-label">Export</span>
         </button>
+        <div class="toolbar-divider"></div>
         <div class="toolbar-btn-wrapper">
-          <button
-            class="toolbar-btn share-btn"
-            @click="toggleShareMenu"
-            :class="{ 'active': shareMenuOpen }"
-            :title="gallerySaveText || 'Share & Save'"
-          >
-            <span
-              class="share-btn-text"
-              x-show="gallerySaveText"
-              x-text="gallerySaveText"
-              x-cloak
-            ></span>
-            <svg x-show="!gallerySaveText" width="24" height="24"><use href="#icon-share" /></svg>
+          <button class="toolbar-btn share-btn" @click="handleShare" title="Copy Link">
+            <svg width="24" height="24"><use href="#icon-link" /></svg>
+            <span class="toolbar-label">Share</span>
           </button>
           <div
-            class="share-menu glass-surface"
-            x-show="shareMenuOpen"
+            class="toolbar-toast"
+            :class="{ 'community': toastVariant === 'community' }"
+            x-show="toastTarget === 'share'"
+            x-html="toastMessage"
+            x-cloak
+            x-transition:enter="toast-enter"
+            x-transition:enter-start="toast-enter-start"
+            x-transition:enter-end="toast-enter-end"
+            x-transition:leave="toast-leave"
+            x-transition:leave-start="toast-leave-start"
+            x-transition:leave-end="toast-leave-end"
+          ></div>
+        </div>
+        <div class="toolbar-btn-wrapper" x-show="showGallerySave" x-cloak>
+          <button
+            class="toolbar-btn save-btn"
+            @click="toggleSavePopover"
+            :class="{ 'active': savePopoverOpen }"
+            title="Save Options"
+          >
+            <svg width="24" height="24"><use href="#icon-save" /></svg>
+            <span class="toolbar-label">Save</span>
+          </button>
+          <div
+            class="toolbar-toast"
+            :class="{ 'community': toastVariant === 'community' }"
+            x-show="toastTarget === 'save'"
+            x-html="toastMessage"
+            x-cloak
+            x-transition:enter="toast-enter"
+            x-transition:enter-start="toast-enter-start"
+            x-transition:enter-end="toast-enter-end"
+            x-transition:leave="toast-leave"
+            x-transition:leave-start="toast-leave-start"
+            x-transition:leave-end="toast-leave-end"
+          ></div>
+          <div
+            class="settings-popover save-popover glass-surface"
+            x-show="savePopoverOpen"
             x-cloak
             x-transition:enter="popover-enter"
             x-transition:enter-start="popover-enter-start"
@@ -457,15 +521,23 @@
             x-transition:leave="popover-leave"
             x-transition:leave-start="popover-leave-start"
             x-transition:leave-end="popover-leave-end"
-            @click.outside="closeShareMenu"
+            @click.outside="closeSavePopover"
           >
-            <button class="share-menu-item" @click="handleShare">
-              <svg width="20" height="20"><use href="#icon-link" /></svg>
-              <span>Copy Link</span>
-            </button>
-            <button class="share-menu-item" x-show="showGallerySave" @click="saveCurrentToGallery">
-              <svg width="20" height="20"><use href="#icon-bookmark" /></svg>
+            <button
+              class="share-menu-item"
+              @click="saveCurrentToGallery(); closeSavePopover()"
+              :disabled="toastTarget === 'save'"
+            >
+              <svg width="18" height="18"><use href="#icon-bookmark" /></svg>
               <span>Save to My Gallery</span>
+            </button>
+            <button
+              class="share-menu-item"
+              @click="openCommunityConsent(); closeSavePopover()"
+              :disabled="communitySubmitting"
+            >
+              <svg width="18" height="18"><use href="#icon-globe" /></svg>
+              <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
             </button>
           </div>
         </div>
@@ -476,6 +548,14 @@
           title="My Gallery"
         >
           <svg width="24" height="24"><use href="#icon-gallery" /></svg>
+          <span class="toolbar-label">Gallery</span>
+          <span
+            class="toolbar-badge"
+            :class="{ 'animating': galleryBadgeAnimating }"
+            x-show="galleryItems.length > 0"
+            x-text="galleryItems.length"
+            x-cloak
+          ></span>
         </button>
       </div>
       <div
@@ -492,18 +572,9 @@
         <span class="toolbar-hint-arrow"></span>
         <span class="toolbar-hint-text">More Options!</span>
       </div>
-      <div class="stats" id="stats">
-        FPS: <span x-text="fps">0</span>
-        <a
-          href="https://github.com/o1y/39c3-artwork-generator"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View source
-        </a>
-        <a href="#" @click.prevent="impressumOpen = true">Impressum</a>
-      </div>
     </div>
+
+    <div id="community-btn-mobile" class="footer-community-mobile"></div>
 
     <div class="footer-bar glass-surface" x-show="showFooter" x-cloak>
       <div class="footer-section footer-toolbar">
@@ -516,6 +587,7 @@
           title="Typography Options"
         >
           <svg width="24" height="24"><use href="#icon-typography" /></svg>
+          <span class="toolbar-label">Type</span>
         </button>
         <button
           class="toolbar-btn animation-btn"
@@ -526,6 +598,7 @@
           title="Animation Options"
         >
           <svg width="24" height="24"><use href="#icon-animation" /></svg>
+          <span class="toolbar-label">Animate</span>
         </button>
         <button
           class="toolbar-btn download-btn"
@@ -534,43 +607,51 @@
           title="Download"
         >
           <svg width="24" height="24"><use href="#icon-download" /></svg>
+          <span class="toolbar-label">Export</span>
         </button>
-        <div class="toolbar-btn-wrapper footer-share-wrapper">
-          <button
-            class="toolbar-btn share-btn"
-            @click="toggleShareMenu"
-            :class="{ 'active': shareMenuOpen }"
-            :title="gallerySaveText || 'Share & Save'"
-          >
-            <span
-              class="share-btn-text"
-              x-show="gallerySaveText"
-              x-text="gallerySaveText"
-              x-cloak
-            ></span>
-            <svg x-show="!gallerySaveText" width="24" height="24"><use href="#icon-share" /></svg>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-btn-wrapper">
+          <button class="toolbar-btn share-btn" @click="handleShare" title="Copy Link">
+            <svg width="24" height="24"><use href="#icon-link" /></svg>
+            <span class="toolbar-label">Share</span>
           </button>
           <div
-            class="share-menu share-menu-bottom glass-surface"
-            x-show="shareMenuOpen"
+            class="toolbar-toast"
+            :class="{ 'community': toastVariant === 'community' }"
+            x-show="toastTarget === 'share'"
+            x-html="toastMessage"
             x-cloak
-            x-transition:enter="popover-enter"
-            x-transition:enter-start="popover-enter-start"
-            x-transition:enter-end="popover-enter-end"
-            x-transition:leave="popover-leave"
-            x-transition:leave-start="popover-leave-start"
-            x-transition:leave-end="popover-leave-end"
-            @click.outside="closeShareMenu"
+            x-transition:enter="toast-enter"
+            x-transition:enter-start="toast-enter-start"
+            x-transition:enter-end="toast-enter-end"
+            x-transition:leave="toast-leave"
+            x-transition:leave-start="toast-leave-start"
+            x-transition:leave-end="toast-leave-end"
+          ></div>
+        </div>
+        <div class="toolbar-btn-wrapper" x-show="showGallerySave" x-cloak>
+          <button
+            class="toolbar-btn save-btn"
+            @click="toggleSavePopover"
+            :class="{ 'active': savePopoverOpen }"
+            title="Save Options"
           >
-            <button class="share-menu-item" @click="handleShare">
-              <svg width="20" height="20"><use href="#icon-link" /></svg>
-              <span>Copy Link</span>
-            </button>
-            <button class="share-menu-item" x-show="showGallerySave" @click="saveCurrentToGallery">
-              <svg width="20" height="20"><use href="#icon-bookmark" /></svg>
-              <span>Save to My Gallery</span>
-            </button>
-          </div>
+            <svg width="24" height="24"><use href="#icon-save" /></svg>
+            <span class="toolbar-label">Save</span>
+          </button>
+          <div
+            class="toolbar-toast"
+            :class="{ 'community': toastVariant === 'community' }"
+            x-show="toastTarget === 'save'"
+            x-html="toastMessage"
+            x-cloak
+            x-transition:enter="toast-enter"
+            x-transition:enter-start="toast-enter-start"
+            x-transition:enter-end="toast-enter-end"
+            x-transition:leave="toast-leave"
+            x-transition:leave-start="toast-leave-start"
+            x-transition:leave-end="toast-leave-end"
+          ></div>
         </div>
         <button
           class="toolbar-btn gallery-btn"
@@ -579,6 +660,14 @@
           title="My Gallery"
         >
           <svg width="24" height="24"><use href="#icon-gallery" /></svg>
+          <span class="toolbar-label">Gallery</span>
+          <span
+            class="toolbar-badge"
+            :class="{ 'animating': galleryBadgeAnimating }"
+            x-show="galleryItems.length > 0"
+            x-text="galleryItems.length"
+            x-cloak
+          ></span>
         </button>
       </div>
 
@@ -604,31 +693,53 @@
         </div>
       </div>
 
+      <div id="community-btn-desktop" class="footer-section footer-community"></div>
+
+      <template x-teleport="#community-btn-desktop">
+        <button
+          class="community-btn community-btn-desktop"
+          @click="openCommunityLightbox"
+          :class="{ 'active': lightboxOpen }"
+        >
+          <span class="community-btn-icon">&#xe002;</span>
+          <span>Artwork</span>
+        </button>
+      </template>
+
+      <template x-teleport="#community-btn-mobile">
+        <button
+          class="community-btn community-btn-mobile"
+          @click="openCommunityLightbox"
+          :class="{ 'active': lightboxOpen }"
+        >
+          <span class="community-btn-icon">&#xe002;</span>
+          <span>Artwork</span>
+        </button>
+      </template>
+
       <div class="footer-section footer-export" x-show="showExportControls" x-cloak>
         <div class="control-group" x-show="showDurationControl" x-cloak>
-          <label>Duration</label>
           <select x-model="exportLoops" class="control-base">
             <template x-for="duration in availableDurations" :key="duration.value">
               <option :value="duration.value" x-text="duration.label"></option>
             </template>
           </select>
         </div>
-        <div class="control-group" x-show="showResolutionControl" x-cloak>
-          <label>Resolution</label>
-          <select x-model="exportResolution" class="control-base">
-            <template x-for="res in availableResolutions" :key="res.value">
-              <option :value="res.value" x-text="res.label"></option>
-            </template>
-          </select>
-        </div>
-        <div class="control-group">
-          <label>Format</label>
-          <select x-model="exportFormat" class="control-base">
-            <template x-for="fmt in availableExportFormats" :key="fmt.value">
-              <option :value="fmt.value" x-text="fmt.label" :disabled="fmt.disabled"></option>
-            </template>
-          </select>
-        </div>
+        <select
+          x-show="showResolutionControl"
+          x-cloak
+          x-model="exportResolution"
+          class="control-base"
+        >
+          <template x-for="res in availableResolutions" :key="res.value">
+            <option :value="res.value" x-text="res.label"></option>
+          </template>
+        </select>
+        <select x-model="exportFormat" class="control-base">
+          <template x-for="fmt in availableExportFormats" :key="fmt.value">
+            <option :value="fmt.value" x-text="fmt.label" :disabled="fmt.disabled"></option>
+          </template>
+        </select>
         <button
           class="btn-primary btn-base export-btn"
           @click="handleDownload"
@@ -637,6 +748,18 @@
         ></button>
       </div>
     </div>
+
+    <footer class="meta-footer">
+      <a
+        href="https://github.com/o1y/39c3-artwork-generator"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Source
+      </a>
+      <span class="meta-separator">·</span>
+      <a href="#" @click.prevent="impressumOpen = true">Impressum</a>
+    </footer>
 
     <div
       class="bottom-sheet-backdrop"
@@ -881,6 +1004,56 @@
       ></button>
     </div>
 
+    <!-- Save Bottom Sheet (Mobile) -->
+    <div
+      class="bottom-sheet-backdrop"
+      x-show="savePopoverOpen"
+      x-cloak
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
+      @click="closeSavePopover"
+    ></div>
+    <div
+      class="bottom-sheet"
+      x-show="savePopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-enter"
+      x-transition:enter-start="sheet-enter-start"
+      x-transition:enter-end="sheet-enter-end"
+      x-transition:leave="sheet-leave"
+      x-transition:leave-start="sheet-leave-start"
+      x-transition:leave-end="sheet-leave-end"
+    >
+      <div class="bottom-sheet-header">
+        <span class="bottom-sheet-title panel-title">Save Artwork</span>
+        <button class="bottom-sheet-close close-btn" @click="closeSavePopover" aria-label="Close">
+          <svg width="16" height="16"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="bottom-sheet-menu">
+        <button
+          class="share-menu-item"
+          @click="saveCurrentToGallery(); closeSavePopover()"
+          :disabled="toastTarget === 'save'"
+        >
+          <svg width="18" height="18"><use href="#icon-bookmark" /></svg>
+          <span>Save to My Gallery</span>
+        </button>
+        <button
+          class="share-menu-item"
+          @click="openCommunityConsent(); closeSavePopover()"
+          :disabled="communitySubmitting"
+        >
+          <svg width="18" height="18"><use href="#icon-globe" /></svg>
+          <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
+        </button>
+      </div>
+    </div>
+
     <!-- Gallery Panel -->
     <div
       class="gallery-backdrop"
@@ -907,41 +1080,257 @@
     >
       <div class="gallery-header">
         <span class="gallery-title panel-title">My Gallery</span>
-        <span class="gallery-count" x-text="galleryItems.length + ' saved'"></span>
         <button class="gallery-close close-btn" @click="closeGallery" aria-label="Close">
           <svg width="16" height="16"><use href="#icon-close" /></svg>
         </button>
       </div>
-      <div class="gallery-grid" x-show="galleryItems.length > 0">
-        <template x-for="item in galleryItems" :key="item.id">
-          <div
-            class="gallery-item"
-            @click="loadFromGallery(item.id)"
-            @mouseenter="startGalleryPreview(item, $event.currentTarget.querySelector('.gallery-preview-canvas'))"
-            @mouseleave="stopGalleryPreview()"
-          >
-            <img class="gallery-thumbnail" :src="item.thumbnail" alt="Saved artwork" />
-            <canvas
-              class="gallery-preview-canvas"
-              width="200"
-              height="200"
-              x-show="hoveredGalleryItem === item.id"
-            ></canvas>
-            <button
-              class="gallery-delete"
-              @click.stop="removeFromGallery(item.id)"
-              title="Delete"
-              aria-label="Delete artwork"
+
+      <div>
+        <div class="gallery-grid" x-show="galleryItems.length > 0">
+          <template x-for="item in galleryItems" :key="item.id">
+            <div
+              class="gallery-item"
+              @click="loadFromGallery(item.id)"
+              @mouseenter="startGalleryPreview(item, $event.currentTarget.querySelector('.gallery-preview-canvas'))"
+              @mouseleave="stopGalleryPreview()"
             >
-              <svg width="12" height="12"><use href="#icon-close" /></svg>
-            </button>
-          </div>
-        </template>
+              <img class="gallery-thumbnail" :src="item.thumbnail" alt="Saved artwork" />
+              <canvas
+                class="gallery-preview-canvas"
+                width="200"
+                height="200"
+                x-show="hoveredGalleryItem === item.id"
+              ></canvas>
+              <button
+                class="gallery-delete"
+                @click.stop="removeFromGallery(item.id)"
+                title="Delete"
+                aria-label="Delete artwork"
+              >
+                <svg width="12" height="12"><use href="#icon-close" /></svg>
+              </button>
+            </div>
+          </template>
+        </div>
+        <div class="gallery-empty" x-show="galleryItems.length === 0">
+          <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
+          <p class="gallery-empty-title">No cycles stored</p>
+          <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
+        </div>
       </div>
-      <div class="gallery-empty" x-show="galleryItems.length === 0">
-        <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
-        <p class="gallery-empty-title">No cycles stored</p>
-        <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
+    </div>
+
+    <!-- Community Consent Dialog -->
+    <div
+      class="consent-backdrop"
+      x-show="showCommunityConsent"
+      x-cloak
+      x-transition:enter="sheet-backdrop-enter"
+      x-transition:enter-start="sheet-backdrop-enter-start"
+      x-transition:enter-end="sheet-backdrop-enter-end"
+      x-transition:leave="sheet-backdrop-leave"
+      x-transition:leave-start="sheet-backdrop-leave-start"
+      x-transition:leave-end="sheet-backdrop-leave-end"
+      @click="closeCommunityConsent"
+    ></div>
+    <div
+      class="consent-dialog glass-surface"
+      x-show="showCommunityConsent"
+      x-cloak
+      x-transition:enter="popover-enter"
+      x-transition:enter-start="popover-enter-start"
+      x-transition:enter-end="popover-enter-end"
+      x-transition:leave="popover-leave"
+      x-transition:leave-start="popover-leave-start"
+      x-transition:leave-end="popover-leave-end"
+    >
+      <h3 class="consent-title">Share with &#xE002; Community?</h3>
+      <p class="consent-text">
+        Your artwork will be public. Be excellent to each other. Don’t break the internet.
+      </p>
+      <div class="consent-actions">
+        <button class="btn-secondary btn-base" @click="closeCommunityConsent">
+          Oops, nevermind
+        </button>
+        <button
+          class="btn-primary btn-base"
+          @click="submitToCommunity"
+          :disabled="communitySubmitting"
+          x-text="communitySubmitting ? 'Sharing...' : 'YOLO to gallery'"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Community Lightbox -->
+    <div
+      class="lightbox-backdrop"
+      x-show="lightboxOpen"
+      x-cloak
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
+      @click="closeLightbox"
+    ></div>
+    <div
+      class="lightbox"
+      x-show="lightboxOpen"
+      x-cloak
+      x-transition:enter="lightbox-enter"
+      x-transition:enter-start="lightbox-enter-start"
+      x-transition:enter-end="lightbox-enter-end"
+      x-transition:leave="lightbox-leave"
+      x-transition:leave-start="lightbox-leave-start"
+      x-transition:leave-end="lightbox-leave-end"
+      @keydown.escape.window="lightboxOpen && closeLightbox()"
+      @keydown.arrow-left.window="lightboxOpen && !communityLoading && lightboxPrev()"
+      @keydown.arrow-right.window="lightboxOpen && !communityLoading && lightboxNext()"
+      @touchstart="handleLightboxTouchStart($event)"
+      @touchend="handleLightboxTouchEnd($event)"
+    >
+      <!-- Loading state -->
+      <div class="lightbox-loading" x-show="communityLoading">
+        <div class="gallery-loading-spinner"></div>
+        <p>Summoning Kario spirits...</p>
+      </div>
+
+      <!-- Empty state -->
+      <div
+        class="lightbox-empty"
+        x-show="!communityLoading && communityItems.length === 0 && !communityError"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+          ></path>
+        </svg>
+        <p>No community artwork yet</p>
+        <p class="lightbox-empty-hint">Be the first to share your creation!</p>
+      </div>
+
+      <!-- Error state -->
+      <div class="lightbox-error" x-show="!communityLoading && communityError">
+        <p x-text="communityError"></p>
+        <button class="btn-secondary btn-sm" @click="openCommunityLightbox">Retry</button>
+      </div>
+
+      <!-- Canvas (only show when loaded and has items) -->
+      <canvas
+        class="lightbox-canvas"
+        x-ref="lightboxCanvas"
+        x-show="!communityLoading && communityItems.length > 0"
+      ></canvas>
+
+      <button
+        class="lightbox-nav lightbox-prev"
+        @click.stop="lightboxPrev"
+        x-show="!communityLoading && communityItems.length > 0"
+        :disabled="lightboxIndex === 0"
+        aria-label="Previous artwork"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <button
+        class="lightbox-nav lightbox-next"
+        @click.stop="lightboxNext"
+        x-show="!communityLoading && communityItems.length > 0"
+        :disabled="lightboxIndex === communityItems.length - 1 && !communityHasMore"
+        aria-label="Next artwork"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="lightbox-controls" x-show="!communityLoading && communityItems.length > 0">
+        <button
+          class="lightbox-delete"
+          x-show="isDevMode"
+          @click.stop="deleteLightboxItem"
+          title="Delete (dev only)"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+            ></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+          Delete
+        </button>
+        <button class="lightbox-fork" @click.stop="forkLightboxItem">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="18" r="3"></circle>
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="18" cy="6" r="3"></circle>
+            <path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"></path>
+            <path d="M12 12v3"></path>
+          </svg>
+          Fork
+        </button>
+        <button class="lightbox-close close-btn" @click.stop="closeLightbox" aria-label="Close">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="lightbox-info" x-show="currentLightboxItem">
+        <span
+          class="lightbox-counter"
+          x-text="`${lightboxIndex + 1} / ${communityTotal}${communityLoadingMore ? '...' : ''}`"
+        ></span>
       </div>
     </div>
 

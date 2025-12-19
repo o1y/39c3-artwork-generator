@@ -12,6 +12,7 @@ import { COLOR_MODES } from '../../config/colors.js';
 import { KEY_MAP } from '../../config/url-keys.js';
 import { TOTAL_FRAMES } from './constants.js';
 import { impressum } from '../../config/impressum.js';
+import { loadGallery } from '../../gallery/storage.js';
 
 const NUMERIC_BOUNDS = {
   numLines: [1, 100],
@@ -136,6 +137,7 @@ export function createInitialState() {
     typographyPopoverOpen: false,
     animationPopoverOpen: false,
     downloadPopoverOpen: false,
+    savePopoverOpen: false,
     glyphPopoverOpen: false,
     isSliderDragging: false,
     spotlightHintDismissed:
@@ -143,7 +145,11 @@ export function createInitialState() {
       'animationOriginX' in urlParams ||
       'animationOriginY' in urlParams,
     toolbarHintDismissed: preferences.get('dismissedHints.toolbar'),
-    shareButtonText: null,
+
+    // Toast notification state
+    toastMessage: null,
+    toastTarget: null,
+    toastVariant: 'default',
 
     // Settings state (URL params override defaults)
     text: urlParams.text ?? settings.text,
@@ -165,7 +171,6 @@ export function createInitialState() {
     // Animation state
     isPaused: urlParams.isPaused ?? false,
     currentFrame: urlParams.currentFrame ?? 0,
-    fps: 0,
 
     // Export state
     isExporting: false,
@@ -176,13 +181,27 @@ export function createInitialState() {
 
     // Gallery state
     galleryOpen: false,
-    galleryItems: [],
-    shareMenuOpen: false,
+    galleryItems: loadGallery(),
     hoveredGalleryItem: null,
-    gallerySaveText: null,
+    galleryBadgeAnimating: false,
 
     // Impressum state
     impressumOpen: false,
     impressum,
+
+    // Community gallery state
+    communityItems: [],
+    communityLoading: false,
+    communityLoadingMore: false,
+    communityError: null,
+    communityTotal: 0,
+    communityOffset: 0,
+    communityHasMore: true,
+    communitySubmitting: false,
+    showCommunityConsent: false,
+
+    // Lightbox state
+    lightboxOpen: false,
+    lightboxIndex: 0,
   };
 }

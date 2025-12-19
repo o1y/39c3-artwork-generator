@@ -64,6 +64,12 @@
 
   /* .bottom-sheet-close uses .close-btn utility from utilities.css */
 
+  .bottom-sheet-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
   /* Bottom sheet transitions - backdrop uses .fade-* from utilities.css */
   .sheet-enter {
     transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);

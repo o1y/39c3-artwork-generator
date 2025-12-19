@@ -5,11 +5,8 @@ import { CanvasRenderer } from '../rendering/core/canvas-renderer.js';
 const targetFPS = 30;
 const frameInterval = 1000 / targetFPS;
 let lastFrameTime = performance.now();
-let frameCount = 0;
-let lastFPSUpdate = performance.now();
 let isPaused = false;
 let pausedByVisibility = false;
-let alpineStore = null;
 let cachedRenderer = null;
 let cachedCtx = null;
 
@@ -36,13 +33,6 @@ export function animate() {
     settings.time += 0.0333;
     render();
     lastFrameTime = now - (elapsed % frameInterval);
-
-    frameCount++;
-    if (now - lastFPSUpdate >= 1000) {
-      alpineStore.fps = frameCount;
-      frameCount = 0;
-      lastFPSUpdate = now;
-    }
   }
 
   requestAnimationFrame(animate);
@@ -50,14 +40,11 @@ export function animate() {
 
 export function pauseAnimation() {
   isPaused = true;
-  alpineStore.fps = 0;
 }
 
 export function resumeAnimation() {
   isPaused = false;
   lastFrameTime = performance.now();
-  lastFPSUpdate = performance.now();
-  frameCount = 0;
   requestAnimationFrame(animate);
 }
 
@@ -73,10 +60,6 @@ export function setFramePosition(time) {
 }
 
 export { render };
-
-export function setAlpineStore(store) {
-  alpineStore = store;
-}
 
 export function initVisibilityHandler() {
   if (document.hidden) {

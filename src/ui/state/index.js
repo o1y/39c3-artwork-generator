@@ -10,7 +10,7 @@ import { createAnimationActions } from './actions/animation-actions.js';
 import { createExportActions } from './actions/export-actions.js';
 import { createGalleryActions } from './actions/gallery-actions.js';
 import { setupWatchers, startFrameUpdateLoop } from './watchers.js';
-import { initVisibilityHandler, setAlpineStore, pauseAnimation } from '../../animation/loop.js';
+import { initVisibilityHandler, pauseAnimation } from '../../animation/loop.js';
 import { ANIMATION_FPS } from './constants.js';
 
 function mergeStoreModules(...modules) {
@@ -43,7 +43,6 @@ export function createAppStore() {
         setupWatchers(this);
         startFrameUpdateLoop(this);
         initVisibilityHandler();
-        setAlpineStore(this);
         this.initFullscreenListener();
 
         if (this.isPaused) {
