@@ -102,7 +102,7 @@ export function createControlsComputed() {
     },
 
     get showResolutionControl() {
-      return this.showExportControls && this.exportFormat !== 'svg';
+      return this.showExportControls && this.exportFormat !== 'svg' && this.exportFormat !== 'fax';
     },
 
     get videoExportDisabled() {

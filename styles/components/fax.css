@@ -1,0 +1,320 @@
+/* Fax Export Overlay - 39C3 Retro Terminal Experience */
+
+#fax-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #000;
+  animation: fax-boot 0.3s ease-out;
+}
+
+@keyframes fax-boot {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#fax-overlay.fax-fade-out {
+  animation: fax-shutdown 0.5s ease-in forwards;
+}
+
+@keyframes fax-shutdown {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(0.01);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.01);
+  }
+}
+
+.fax-crt {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0f0a 0%, #0d140d 50%, #080c08 100%);
+}
+
+/* CRT Scanlines */
+.fax-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  z-index: 10;
+}
+
+.fax-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 0, 0.03) 0%,
+    transparent 50%,
+    rgba(0, 255, 0, 0.02) 100%
+  );
+  animation: fax-flicker 0.1s infinite;
+}
+
+@keyframes fax-flicker {
+  0%,
+  100% {
+    opacity: 0.98;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* CRT Vignette */
+.fax-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 11;
+}
+
+/* Content container */
+.fax-content {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #33ff33;
+  font-family: 'Courier New', 'Lucida Console', Monaco, monospace;
+  text-shadow:
+    0 0 5px rgba(51, 255, 51, 0.5),
+    0 0 10px rgba(51, 255, 51, 0.3);
+}
+
+/* ASCII Header */
+.fax-header {
+  text-align: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.fax-ascii {
+  font-size: clamp(6px, 1.2vw, 12px);
+  line-height: 1.2;
+  color: #33ff33;
+  margin: 0;
+  white-space: pre;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.6);
+}
+
+/* Terminal log area */
+.fax-terminal {
+  flex: 1;
+  min-height: 150px;
+  max-height: 40vh;
+  background: rgba(0, 20, 0, 0.6);
+  border: 1px solid #33ff33;
+  border-radius: 4px;
+  padding: 15px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 50, 0, 0.5),
+    0 0 10px rgba(51, 255, 51, 0.2);
+}
+
+.fax-log {
+  font-size: clamp(11px, 1.4vw, 14px);
+}
+
+.fax-line {
+  margin-bottom: 6px;
+  animation: fax-type 0.1s ease-out;
+  word-wrap: break-word;
+}
+
+@keyframes fax-type {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fax-line.fax-special {
+  color: #ffff33;
+  text-shadow: 0 0 5px rgba(255, 255, 51, 0.5);
+}
+
+.fax-time {
+  color: #00aa00;
+  margin-right: 10px;
+}
+
+.fax-cursor {
+  display: inline;
+  animation: fax-blink 0.7s infinite;
+  color: #33ff33;
+}
+
+@keyframes fax-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Paper preview */
+.fax-preview {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.fax-paper {
+  display: none;
+  background: #f5f0e6;
+  padding: 10px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(51, 255, 51, 0.1);
+  transform-origin: top center;
+  animation: fax-paper-feed 0.5s ease-out;
+}
+
+@keyframes fax-paper-feed {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotateX(45deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+#fax-preview-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 40vh;
+  image-rendering: pixelated;
+}
+
+/* Footer status bar */
+.fax-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: rgba(0, 20, 0, 0.8);
+  border: 1px solid #33ff33;
+  border-radius: 4px;
+  font-size: clamp(10px, 1.2vw, 13px);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.fax-status {
+  color: #33ff33;
+  font-weight: bold;
+}
+
+.fax-status::before {
+  content: '●';
+  margin-right: 8px;
+  animation: fax-status-pulse 1s infinite;
+}
+
+@keyframes fax-status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.fax-baud {
+  color: #00aa00;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .fax-content {
+    padding: 10px;
+  }
+
+  .fax-ascii {
+    font-size: 5px;
+  }
+
+  .fax-terminal {
+    padding: 10px;
+    max-height: 30vh;
+  }
+
+  .fax-log {
+    font-size: 10px;
+  }
+
+  .fax-paper {
+    padding: 5px;
+  }
+}
+
+/* Phosphor glow effect */
+.fax-crt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(51, 255, 51, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Screen reflection */
+.fax-crt::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 12;
+}

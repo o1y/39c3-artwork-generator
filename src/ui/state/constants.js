@@ -33,4 +33,5 @@ export const EXPORT_FORMAT_OPTIONS = [
   { value: 'svg', label: 'SVG (frame)', animated: false },
   { value: 'gif', label: 'GIF (animated)', animated: true },
   { value: 'video', label: 'Video (WebM)', animated: true },
+  { value: 'fax', label: 'FAX (thermal)', animated: false },
 ];
