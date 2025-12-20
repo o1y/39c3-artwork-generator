@@ -33,8 +33,8 @@ const KEY_RELEVANCE = {
   animationSpeed: (t) => t.capabilities.animated,
   isPaused: (t) => t.capabilities.animated,
   currentFrame: (t, s) => t.capabilities.animated && s.isPaused,
-  minWeight: (t) => t.capabilities.variableWeight,
-  maxWeight: (t) => t.capabilities.variableWeight,
+  minWeight: (t) => t.controls.showMinWeight ?? false,
+  maxWeight: (t) => t.controls.showMaxWeight ?? false,
   staticWeight: (t) => !t.capabilities.variableWeight,
 
   numLines: (t) => t.controls.showLines,
