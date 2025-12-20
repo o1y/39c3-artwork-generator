@@ -1,5 +1,6 @@
 import { settings, themePresets } from '../config/settings.js';
 import { CanvasRenderer } from '../rendering/core/canvas-renderer.js';
+import { ANIMATION_FPS } from '../ui/state/constants.js';
 
 export const THUMBNAIL_FPS = 15;
 export const LIGHTBOX_FPS = 30;
@@ -58,7 +59,8 @@ export function startPreview(canvas, config, fps = THUMBNAIL_FPS) {
   const size = canvas.width;
 
   applyConfig(config, size);
-  previewTime = config.time || 0;
+
+  previewTime = config.currentFrame !== undefined ? config.currentFrame / ANIMATION_FPS : 0;
 
   // For paused configs, render once and return
   if (config.isPaused) {
