@@ -1,5 +1,5 @@
 /**
- * Fake Fax Export - A nostalgic trip to the 90s for 39C3 hackers
+ * Fax Export - T.30 protocol simulation with thermal paper rendering
  */
 
 import { getCanvas, getContext, setCanvas } from '../rendering/canvas.js';
@@ -20,7 +20,7 @@ class FaxModemSound {
   }
 
   init() {
-    // @ts-ignore - webkitAudioContext for Safari compatibility
+    // @ts-ignore
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.masterGain = this.audioContext.createGain();
     this.masterGain.connect(this.audioContext.destination);
@@ -39,7 +39,6 @@ class FaxModemSound {
     return { osc, gain };
   }
 
-  // Dial tone: 350Hz + 440Hz continuous
   playDialTone(duration = 1) {
     const now = this.audioContext.currentTime;
     const t1 = this.createTone(350, 0.4);
@@ -50,7 +49,6 @@ class FaxModemSound {
     t2.osc.stop(now + duration);
   }
 
-  // DTMF: Dual-tone multi-frequency
   playDTMF(digit, duration = 0.12) {
     const freqs = {
       1: [697, 1209],
@@ -76,71 +74,109 @@ class FaxModemSound {
     t2.osc.stop(now + duration);
   }
 
-  // CED: Called station identification (2100Hz with phase reversals)
+  // CED: 2100Hz with 180° phase reversals every 450ms (echo canceller disable)
   playCEDTone() {
     const now = this.audioContext.currentTime;
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
-
     osc.type = 'sine';
     osc.frequency.value = 2100;
     osc.connect(gain);
     gain.connect(this.masterGain);
-    gain.gain.value = 0.4;
 
-    // Phase reversals every 450ms (V.25 standard)
-    for (let i = 0; i < 5; i++) {
-      const t = now + i * 0.45;
-      osc.frequency.setValueAtTime(2100, t);
-      if (i % 2 === 1) {
-        gain.gain.setValueAtTime(0.35, t);
-        gain.gain.setValueAtTime(0.4, t + 0.02);
-      }
+    for (let i = 0; i < 8; i++) {
+      gain.gain.setValueAtTime(i % 2 === 0 ? 0.4 : -0.4, now + i * 0.45);
     }
 
     osc.start(now);
-    osc.stop(now + 2.5);
+    osc.stop(now + 3.6);
     this.oscillators.push(osc);
   }
 
-  // CNG: Calling fax tone (1100Hz, 0.5s on)
-  playCNG() {
-    const now = this.audioContext.currentTime;
-    const t = this.createTone(1100, 0.5);
-    t.osc.start(now);
-    t.osc.stop(now + 0.5);
+  // CNG: 1100Hz, 0.5s on, 3s cycle
+  playCNG(repetitions = 1, startTime = 0) {
+    const now = this.audioContext.currentTime + startTime;
+    for (let i = 0; i < repetitions; i++) {
+      const t = this.createTone(1100, 0.5);
+      t.osc.start(now + i * 3.0);
+      t.osc.stop(now + i * 3.0 + 0.5);
+    }
+    return repetitions * 3.0;
   }
 
-  // V.21 Preamble: FSK modulation (1650Hz mark, 1850Hz space)
-  playV21Preamble(startTime = 0) {
+  byteToLSBBits(byte) {
+    const bits = [];
+    for (let b = 0; b < 8; b++) bits.push((byte >> b) & 1);
+    return bits;
+  }
+
+  generateHDLCFrame(payloadBytes = []) {
+    const FLAG = this.byteToLSBBits(0x7e);
+    const bits = [];
+
+    for (let i = 0; i < 10; i++) bits.push(...FLAG);
+    bits.push(...this.byteToLSBBits(0xff)); // Address
+    bits.push(...this.byteToLSBBits(0xc0)); // Control
+    for (const byte of payloadBytes) bits.push(...this.byteToLSBBits(byte));
+    for (let i = 0; i < 16; i++) bits.push(Math.random() > 0.5 ? 1 : 0); // FCS
+    bits.push(...FLAG);
+
+    return bits;
+  }
+
+  // V.21 FSK: mark=1650Hz, space=1850Hz, 300 baud
+  playV21FSK(bits, startTime = 0) {
     const now = this.audioContext.currentTime + startTime;
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
-
     osc.type = 'sine';
     osc.connect(gain);
     gain.connect(this.masterGain);
     gain.gain.value = 0.35;
 
-    // HDLC flags and DIS frame simulation
-    const bitDuration = 0.0033; // 300 baud
-    const pattern = [];
-    // Generate ~200 bits of realistic FSK pattern
-    for (let i = 0; i < 200; i++) {
-      pattern.push(Math.random() > 0.5 ? 1 : 0);
-    }
-
-    pattern.forEach((bit, i) => {
-      const freq = bit ? 1650 : 1850;
-      osc.frequency.setValueAtTime(freq, now + i * bitDuration);
+    const bitDuration = 1 / 300;
+    bits.forEach((bit, i) => {
+      osc.frequency.setValueAtTime(bit ? 1650 : 1850, now + i * bitDuration);
     });
 
     osc.start(now);
-    osc.stop(now + pattern.length * bitDuration);
+    osc.stop(now + bits.length * bitDuration);
     this.oscillators.push(osc);
+    return bits.length * bitDuration;
   }
 
-  // TCF: Training Check Frame (1.5s of constant tone)
+  playV21Preamble(startTime = 0) {
+    const FLAG = this.byteToLSBBits(0x7e);
+    const bits = [];
+    for (let i = 0; i < 25; i++) bits.push(...FLAG);
+    return this.playV21FSK(bits, startTime);
+  }
+
+  playDISFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x01, 0x00, 0x46, 0x00]), startTime);
+  }
+
+  playDCSFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x41, 0x00, 0x46, 0x00]), startTime);
+  }
+
+  playCFRFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x21]), startTime);
+  }
+
+  playMCFFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x31]), startTime);
+  }
+
+  playEOPFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x2f]), startTime);
+  }
+
+  playDCNFrame(startTime = 0) {
+    return this.playV21FSK(this.generateHDLCFrame([0x5f]), startTime);
+  }
+
+  // TCF: 1.5s of 1800Hz
   playTCF(startTime = 0) {
     const now = this.audioContext.currentTime + startTime;
     const t = this.createTone(1800, 0.4);
@@ -148,91 +184,74 @@ class FaxModemSound {
     t.osc.stop(now + 1.5);
   }
 
-  // Training sequence: Modem synchronization
-  playTraining(startTime = 0) {
-    const now = this.audioContext.currentTime + startTime;
-    const osc = this.audioContext.createOscillator();
-    const gain = this.audioContext.createGain();
-
-    osc.type = 'sine';
-    osc.connect(gain);
-    gain.connect(this.masterGain);
-    gain.gain.value = 0.35;
-
-    // Alternating tones for equalizer training
-    const tones = [1200, 1800, 2400, 1800, 1200, 1800, 2400, 1800];
-    tones.forEach((freq, i) => {
-      osc.frequency.setValueAtTime(freq, now + i * 0.15);
-    });
-
-    osc.start(now);
-    osc.stop(now + tones.length * 0.15);
-    this.oscillators.push(osc);
-  }
-
-  // Page transmission: Harsh fax screech sound
+  // V.17: 1800Hz carrier, 2400 baud with QAM-style modulation
   playTransmission(startTime = 0, duration = 4) {
     const now = this.audioContext.currentTime + startTime;
+    const symbolDuration = 1 / 2400;
 
-    // Main carrier - rapid frequency switching like real QAM modulation
     const carrier = this.audioContext.createOscillator();
     const carrierGain = this.audioContext.createGain();
-    carrier.type = 'sawtooth'; // Harsher than sine
+    carrier.type = 'sine';
     carrier.connect(carrierGain);
     carrierGain.connect(this.masterGain);
-    carrierGain.gain.value = 0.15;
 
-    // Simulate rapid symbol changes (V.29 uses 2400 baud)
-    const symbolRate = 0.004; // ~250 symbols per second for audible effect
-    for (let t = 0; t < duration; t += symbolRate) {
-      // Jump between frequencies like real phase-shift keying
-      const freqs = [1700, 1800, 1900, 2100, 2200, 2400];
-      const freq = freqs[Math.floor(Math.random() * freqs.length)];
-      carrier.frequency.setValueAtTime(freq, now + t);
+    for (let t = 0; t < duration; t += symbolDuration) {
+      carrier.frequency.setValueAtTime(1800 + (Math.random() - 0.5) * 300, now + t);
+      carrierGain.gain.setValueAtTime(0.2 + Math.random() * 0.1, now + t);
     }
 
-    // High frequency screech component
-    const screech = this.audioContext.createOscillator();
-    const screechGain = this.audioContext.createGain();
-    screech.type = 'square';
-    screech.frequency.value = 2400;
-    screech.connect(screechGain);
-    screechGain.connect(this.masterGain);
-    screechGain.gain.value = 0.06;
+    const harmonic = this.audioContext.createOscillator();
+    const harmonicGain = this.audioContext.createGain();
+    harmonic.type = 'sine';
+    harmonic.frequency.value = 3600;
+    harmonic.connect(harmonicGain);
+    harmonicGain.connect(this.masterGain);
+    harmonicGain.gain.value = 0.04;
 
-    // Modulate screech frequency for texture
-    for (let t = 0; t < duration; t += 0.02) {
-      const freq = 2400 + (Math.random() - 0.5) * 800;
-      screech.frequency.setValueAtTime(freq, now + t);
+    for (let t = 0; t < duration; t += symbolDuration * 2) {
+      harmonic.frequency.setValueAtTime(3600 + (Math.random() - 0.5) * 200, now + t);
     }
 
-    // Low rumble for body
-    const rumble = this.audioContext.createOscillator();
-    const rumbleGain = this.audioContext.createGain();
-    rumble.type = 'triangle';
-    rumble.frequency.value = 600;
-    rumble.connect(rumbleGain);
-    rumbleGain.connect(this.masterGain);
-    rumbleGain.gain.value = 0.08;
+    const baseband = this.audioContext.createOscillator();
+    const basebandGain = this.audioContext.createGain();
+    baseband.type = 'triangle';
+    baseband.frequency.value = 600;
+    baseband.connect(basebandGain);
+    basebandGain.connect(this.masterGain);
+    basebandGain.gain.value = 0.05;
+
+    const noiseBuffer = this.audioContext.createBuffer(
+      1,
+      this.audioContext.sampleRate * duration,
+      this.audioContext.sampleRate
+    );
+    const noiseData = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < noiseData.length; i++) noiseData[i] = (Math.random() * 2 - 1) * 0.02;
+    const noise = this.audioContext.createBufferSource();
+    noise.buffer = noiseBuffer;
+    const noiseGain = this.audioContext.createGain();
+    noise.connect(noiseGain);
+    noiseGain.connect(this.masterGain);
+    noiseGain.gain.value = 0.15;
 
     carrier.start(now);
-    screech.start(now);
-    rumble.start(now);
+    harmonic.start(now);
+    baseband.start(now);
+    noise.start(now);
     carrier.stop(now + duration);
-    screech.stop(now + duration);
-    rumble.stop(now + duration);
+    harmonic.stop(now + duration);
+    baseband.stop(now + duration);
+    noise.stop(now + duration);
 
-    this.oscillators.push(carrier, screech, rumble);
+    this.oscillators.push(carrier, harmonic, baseband);
   }
 
-  // End of page: MCF (Message Confirmation) signal
-  playEOP() {
+  playLocalConfirmationBeeps() {
     const now = this.audioContext.currentTime;
-    // Three short 1500Hz beeps
     for (let i = 0; i < 3; i++) {
-      const t = this.createTone(1500, 0.4);
+      const t = this.createTone(1500, 0.3);
       t.osc.start(now + i * 0.25);
-      t.osc.stop(now + i * 0.25 + 0.15);
+      t.osc.stop(now + i * 0.25 + 0.12);
     }
   }
 
@@ -245,20 +264,36 @@ class FaxModemSound {
       }
     });
     this.oscillators = [];
-    if (this.audioContext) {
-      this.audioContext.close();
-    }
+    if (this.audioContext) this.audioContext.close();
   }
 }
 
+const FAX_WIDTH = 1728; // ITU-T T.4 standard
+const MARGIN_PERCENT = 0.03;
+
 function applyThermalPaperEffect(canvas) {
   const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-  const width = canvas.width;
-  const height = canvas.height;
+  const origWidth = canvas.width;
+  const origHeight = canvas.height;
 
-  // Convert to grayscale with increased contrast
+  // Downsample to fax resolution
+  const faxHeight = Math.round((FAX_WIDTH / origWidth) * origHeight);
+  const faxCanvas = document.createElement('canvas');
+  faxCanvas.width = FAX_WIDTH;
+  faxCanvas.height = faxHeight;
+  const faxCtx = faxCanvas.getContext('2d');
+
+  const marginPx = Math.round(FAX_WIDTH * MARGIN_PERCENT);
+  const contentWidth = FAX_WIDTH - marginPx * 2;
+
+  faxCtx.fillStyle = '#f5f0e6';
+  faxCtx.fillRect(0, 0, FAX_WIDTH, faxHeight);
+  faxCtx.drawImage(canvas, marginPx, 0, contentWidth, faxHeight);
+
+  // Grayscale + contrast
+  const imageData = faxCtx.getImageData(0, 0, FAX_WIDTH, faxHeight);
+  const data = imageData.data;
+
   for (let i = 0; i < data.length; i += 4) {
     let gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
     gray = Math.max(0, Math.min(255, (gray - 128) * 1.4 + 128));
@@ -266,37 +301,48 @@ function applyThermalPaperEffect(canvas) {
   }
 
   // Floyd-Steinberg dithering
-  const pixels = new Float32Array(width * height);
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      pixels[y * width + x] = data[(y * width + x) * 4];
+  const pixels = new Float32Array(FAX_WIDTH * faxHeight);
+  for (let y = 0; y < faxHeight; y++) {
+    for (let x = 0; x < FAX_WIDTH; x++) {
+      pixels[y * FAX_WIDTH + x] = data[(y * FAX_WIDTH + x) * 4];
     }
   }
 
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const idx = y * width + x;
+  for (let y = 0; y < faxHeight; y++) {
+    for (let x = 0; x < FAX_WIDTH; x++) {
+      const idx = y * FAX_WIDTH + x;
       const oldPixel = pixels[idx];
       const newPixel = oldPixel > 128 ? 255 : 0;
       pixels[idx] = newPixel;
       const error = oldPixel - newPixel;
 
-      if (x + 1 < width) pixels[idx + 1] += (error * 7) / 16;
-      if (y + 1 < height) {
-        if (x > 0) pixels[idx + width - 1] += (error * 3) / 16;
-        pixels[idx + width] += (error * 5) / 16;
-        if (x + 1 < width) pixels[idx + width + 1] += (error * 1) / 16;
+      if (x + 1 < FAX_WIDTH) pixels[idx + 1] += (error * 7) / 16;
+      if (y + 1 < faxHeight) {
+        if (x > 0) pixels[idx + FAX_WIDTH - 1] += (error * 3) / 16;
+        pixels[idx + FAX_WIDTH] += (error * 5) / 16;
+        if (x + 1 < FAX_WIDTH) pixels[idx + FAX_WIDTH + 1] += (error * 1) / 16;
       }
     }
   }
 
-  // Apply thermal paper colors
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const idx = y * width + x;
-      const i = idx * 4;
+  // Row jitter
+  const rowJitter = new Int8Array(faxHeight);
+  for (let y = 0; y < faxHeight; y++) {
+    if (Math.random() < 0.015) {
+      rowJitter[y] = Math.floor(Math.random() * 5) - 2;
+    } else if (y > 0) {
+      rowJitter[y] = rowJitter[y - 1];
+    }
+  }
 
-      if (pixels[idx] > 128) {
+  // Apply thermal colors with jitter
+  for (let y = 0; y < faxHeight; y++) {
+    const jitter = rowJitter[y];
+    for (let x = 0; x < FAX_WIDTH; x++) {
+      const srcX = Math.max(0, Math.min(FAX_WIDTH - 1, x - jitter));
+      const i = (y * FAX_WIDTH + x) * 4;
+
+      if (pixels[y * FAX_WIDTH + srcX] > 128) {
         data[i] = 245 + Math.random() * 5;
         data[i + 1] = 240 + Math.random() * 5;
         data[i + 2] = 230 + Math.random() * 5;
@@ -309,20 +355,31 @@ function applyThermalPaperEffect(canvas) {
     }
   }
 
-  // Add vertical streaks
-  for (let x = 0; x < width; x++) {
+  // Vertical streaks
+  for (let x = 0; x < FAX_WIDTH; x++) {
     if (Math.random() < 0.003) {
-      const streakIntensity = 0.85 + Math.random() * 0.1;
-      for (let y = 0; y < height; y++) {
-        const i = (y * width + x) * 4;
-        data[i] = Math.floor(data[i] * streakIntensity);
-        data[i + 1] = Math.floor(data[i + 1] * streakIntensity);
-        data[i + 2] = Math.floor(data[i + 2] * streakIntensity);
+      const intensity = 0.85 + Math.random() * 0.1;
+      for (let y = 0; y < faxHeight; y++) {
+        const i = (y * FAX_WIDTH + x) * 4;
+        data[i] = Math.floor(data[i] * intensity);
+        data[i + 1] = Math.floor(data[i + 1] * intensity);
+        data[i + 2] = Math.floor(data[i + 2] * intensity);
       }
     }
   }
 
-  // Add paper grain
+  // Roller mark on left edge
+  for (let y = 0; y < faxHeight; y++) {
+    for (let x = 0; x < marginPx; x++) {
+      const i = (y * FAX_WIDTH + x) * 4;
+      const darken = 0.92 + (x / marginPx) * 0.08;
+      data[i] = Math.floor(data[i] * darken);
+      data[i + 1] = Math.floor(data[i + 1] * darken);
+      data[i + 2] = Math.floor(data[i + 2] * darken);
+    }
+  }
+
+  // Paper grain
   for (let i = 0; i < data.length; i += 4) {
     const noise = (Math.random() - 0.5) * 8;
     data[i] = Math.max(0, Math.min(255, data[i] + noise));
@@ -330,31 +387,54 @@ function applyThermalPaperEffect(canvas) {
     data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
   }
 
-  ctx.putImageData(imageData, 0, 0);
+  faxCtx.putImageData(imageData, 0, 0);
+
+  // Global skew (crooked paper feed)
+  const skewAngle = (Math.random() * 0.5 + 0.3) * (Math.random() > 0.5 ? 1 : -1);
+  const skewRad = (skewAngle * Math.PI) / 180;
+
+  const skewCanvas = document.createElement('canvas');
+  skewCanvas.width = FAX_WIDTH;
+  skewCanvas.height = faxHeight;
+  const skewCtx = skewCanvas.getContext('2d');
+
+  skewCtx.fillStyle = '#f5f0e6';
+  skewCtx.fillRect(0, 0, FAX_WIDTH, faxHeight);
+  skewCtx.translate(FAX_WIDTH / 2, faxHeight / 2);
+  skewCtx.rotate(skewRad);
+  skewCtx.translate(-FAX_WIDTH / 2, -faxHeight / 2);
+  skewCtx.drawImage(faxCanvas, 0, 0);
+
+  // Nearest-neighbor upsample
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#f5f0e6';
+  ctx.fillRect(0, 0, origWidth, origHeight);
+  ctx.drawImage(skewCanvas, 0, 0, origWidth, origHeight);
+  ctx.imageSmoothingEnabled = true;
 }
 
-// Fax Overlay UI
+const FAX_NUMBER = '04057308308181';
+const FAX_NUMBER_DISPLAY = '+49 40 5730 830 8181';
 
 const FAX_MESSAGES = [
-  // PSTN Layer
   { text: 'INITIALIZING FAX MODEM...', delay: 0 },
   { text: 'OFF HOOK', delay: 500, dialTone: true },
-  { text: 'DIALING +494057308308181...', delay: 1500, dial: true },
+  { text: `DIALING ${FAX_NUMBER_DISPLAY}...`, delay: 1500, dial: true },
   { text: 'RINGING...', delay: 3500 },
-  { text: 'CALL CONNECTED', delay: 4500 },
-  // Fax Layer
-  { text: 'CNG: SENDING CALLING TONE', delay: 5000, cng: true },
-  { text: 'CED: REMOTE FAX ANSWERED (2100Hz)', delay: 5800, ced: true },
-  { text: 'V.21 PREAMBLE: HDLC FLAGS', delay: 8500, preamble: true },
-  { text: 'DIS: RECEIVING CAPABILITIES', delay: 9300 },
-  { text: 'DCS: V.17 14400bps, ECM, 200dpi', delay: 9800 },
-  { text: 'TCF: TRAINING CHECK', delay: 10300, tcf: true },
-  { text: 'CFR: READY TO RECEIVE', delay: 12000, training: true },
-  { text: 'ENCRYPTION: ROT13 (DOUBLE)', delay: 13000, special: true },
-  { text: 'TRANSMITTING PAGE 1/1...', delay: 13500, transmit: true },
-  { text: 'EOP: END OF PAGE', delay: 18500 },
-  { text: 'MCF: MESSAGE CONFIRMED', delay: 19000, eop: true },
-  { text: 'DCN: DISCONNECT', delay: 19800 },
+  { text: 'CNG: SENDING CALLING TONE (1100Hz)', delay: 4000, cng: true },
+  { text: 'CNG: ...', delay: 7000 },
+  { text: 'CALL CONNECTED', delay: 9500 },
+  { text: 'CED: REMOTE FAX ANSWERED (2100Hz)', delay: 10000, ced: true },
+  { text: 'V.21 PREAMBLE: HDLC FLAGS (0x7E)', delay: 14000, preamble: true },
+  { text: 'DIS: RECEIVING CAPABILITIES', delay: 14800, dis: true },
+  { text: 'DCS: V.17 14400bps, ECM, 200dpi', delay: 15600, dcs: true },
+  { text: 'TCF: TRAINING CHECK (1.5s)', delay: 16400, tcf: true },
+  { text: 'CFR: CONFIRMATION TO RECEIVE', delay: 18100, cfr: true },
+  { text: 'ENCRYPTION: ROT13 (DOUBLE)', delay: 18700, special: true },
+  { text: 'TRANSMITTING PAGE 1/1...', delay: 19200, transmit: true },
+  { text: 'EOP: END OF PROCEDURE', delay: 24200, eop: true },
+  { text: 'MCF: MESSAGE CONFIRMATION', delay: 25000, mcf: true },
+  { text: 'DCN: DISCONNECT', delay: 25800, dcn: true },
 ];
 
 function createFaxOverlay() {
@@ -398,7 +478,6 @@ function createFaxOverlay() {
       <div class="fax-vignette"></div>
     </div>
   `;
-
   document.body.appendChild(overlay);
   return overlay;
 }
@@ -416,9 +495,7 @@ function updateFaxLog(overlay, message, isSpecial = false) {
 
 function updateFaxStatus(overlay, status, baud = null) {
   overlay.querySelector('.fax-status').textContent = status;
-  if (baud) {
-    overlay.querySelector('.fax-baud').textContent = `${baud} BPS`;
-  }
+  if (baud) overlay.querySelector('.fax-baud').textContent = `${baud} BPS`;
 }
 
 function animatePaperFeed(overlay, thermalCanvas) {
@@ -434,7 +511,6 @@ function animatePaperFeed(overlay, thermalCanvas) {
     const ctx = previewCanvas.getContext('2d');
     const duration = 4000;
     const startTime = performance.now();
-
     paper.style.display = 'block';
 
     function animate(currentTime) {
@@ -472,11 +548,8 @@ function animatePaperFeed(overlay, thermalCanvas) {
   });
 }
 
-// Main Export Function
-
 export async function exportFax(resolution = 2, callbacks = {}) {
   const { onStart, onProgress, onComplete } = callbacks;
-
   if (onStart) onStart();
 
   const overlay = createFaxOverlay();
@@ -485,7 +558,7 @@ export async function exportFax(resolution = 2, callbacks = {}) {
   try {
     modem.init();
   } catch {
-    // Audio may not be available
+    // Audio unavailable
   }
 
   const originalCanvas = getCanvas();
@@ -527,50 +600,59 @@ export async function exportFax(resolution = 2, callbacks = {}) {
         modem.playDialTone(0.8);
       } else if (msg.dial) {
         updateFaxStatus(overlay, 'DIALING');
-        const number = '18002426722';
-        for (let i = 0; i < number.length; i++) {
+        for (let i = 0; i < FAX_NUMBER.length; i++) {
           setTimeout(() => {
             try {
-              modem.playDTMF(number[i]);
+              modem.playDTMF(FAX_NUMBER[i]);
             } catch {
-              /* audio */
+              /* ignore */
             }
           }, i * 180);
         }
       } else if (msg.cng) {
         updateFaxStatus(overlay, 'CNG');
-        modem.playCNG();
+        modem.playCNG(2);
       } else if (msg.ced) {
         updateFaxStatus(overlay, 'CED');
         modem.playCEDTone();
       } else if (msg.preamble) {
         updateFaxStatus(overlay, 'V.21 HDLC');
         modem.playV21Preamble();
+      } else if (msg.dis) {
+        updateFaxStatus(overlay, 'DIS', 300);
+        modem.playDISFrame();
+      } else if (msg.dcs) {
+        updateFaxStatus(overlay, 'DCS', 300);
+        modem.playDCSFrame();
       } else if (msg.tcf) {
         updateFaxStatus(overlay, 'TCF', baudRate);
         modem.playTCF();
-      } else if (msg.training) {
-        updateFaxStatus(overlay, 'TRAINING', baudRate);
-        modem.playTraining();
+      } else if (msg.cfr) {
+        updateFaxStatus(overlay, 'CFR', 300);
+        modem.playCFRFrame();
       } else if (msg.transmit) {
         updateFaxStatus(overlay, 'TX PAGE 1', baudRate);
         modem.playTransmission(0, 4.5);
         await animatePaperFeed(overlay, thermalCanvas);
         if (onProgress) onProgress(90);
       } else if (msg.eop) {
-        updateFaxStatus(overlay, 'MCF', baudRate);
-        modem.playEOP();
-      } else if (msg.text.includes('DCN')) {
-        updateFaxStatus(overlay, 'STANDBY');
+        updateFaxStatus(overlay, 'EOP', 300);
+        modem.playEOPFrame();
+      } else if (msg.mcf) {
+        updateFaxStatus(overlay, 'MCF', 300);
+        modem.playMCFFrame();
+        setTimeout(() => modem.playLocalConfirmationBeeps(), 300);
+      } else if (msg.dcn) {
+        updateFaxStatus(overlay, 'DCN', 300);
+        modem.playDCNFrame();
+        setTimeout(() => updateFaxStatus(overlay, 'STANDBY'), 500);
       }
     } catch {
       // Audio unavailable
     }
 
     messageIndex++;
-    if (onProgress) {
-      onProgress(Math.floor((messageIndex / FAX_MESSAGES.length) * 80));
-    }
+    if (onProgress) onProgress(Math.floor((messageIndex / FAX_MESSAGES.length) * 80));
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -602,10 +684,7 @@ export async function exportFax(resolution = 2, callbacks = {}) {
   downloadCanvas(finalCanvas, 'png', generateFilename('fax.png'), () => {
     modem.stop();
     overlay.classList.add('fax-fade-out');
-    setTimeout(() => {
-      overlay.remove();
-    }, 500);
-
+    setTimeout(() => overlay.remove(), 500);
     if (onComplete) onComplete();
   });
 }
