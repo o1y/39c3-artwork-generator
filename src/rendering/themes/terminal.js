@@ -2,7 +2,13 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getAscenderHeight, getDescenderHeight, getGlyphs } from '../../export/font-loader.js';
-import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
+import {
+  isToggleGlyph,
+  calculateToggleWeight,
+  TOGGLE_WIDTH,
+  isCCCGlyph,
+  calculateCCCWeight,
+} from '../toggle-utils.js';
 
 export function renderTerminalTheme(renderer, canvasSize) {
   renderer.drawBackground(canvasSize, canvasSize, getBackgroundColor());
@@ -259,12 +265,14 @@ export function renderTerminalTheme(renderer, canvasSize) {
     for (let i = 0; i < allGlyphs.length; i++) {
       const glyph = allGlyphs[i];
       const isToggle = isToggleGlyph(glyph);
+      const isCCC = isCCCGlyph(glyph);
 
-      // Toggle glyphs get special weight animation (circle moves left to right)
-      // and fixed width to maintain circular shape
+      // Toggle and CCC glyphs get special weight animation independent of weight settings
       let glyphWeight;
       if (isToggle) {
         glyphWeight = calculateToggleWeight(isAnimated);
+      } else if (isCCC) {
+        glyphWeight = calculateCCCWeight(isAnimated);
       } else {
         const glyphPhase = (i / allGlyphs.length) * Math.PI * 2;
         const glyphWave = (Math.sin(t + glyphPhase + linePhase) + 1) / 2;

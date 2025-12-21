@@ -2,7 +2,13 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { calculateWeight } from '../weight.js';
 import { getGlyphs } from '../../export/font-loader.js';
-import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
+import {
+  isToggleGlyph,
+  calculateToggleWeight,
+  TOGGLE_WIDTH,
+  isCCCGlyph,
+  calculateCCCWeight,
+} from '../toggle-utils.js';
 
 // Invert lineIndex since we draw top-to-bottom but lines theme draws bottom-to-top
 function getLineWeightRange(lineIndex, numLines) {
@@ -60,20 +66,25 @@ export function renderMultilineTheme(renderer, canvasSize) {
     for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
       const glyph = glyphs[glyphIndex];
       const isToggle = isToggleGlyph(glyph);
+      const isCCC = isCCCGlyph(glyph);
 
-      // Toggle glyphs get special weight animation (circle moves left to right)
-      // and fixed width to maintain circular shape
-      const weight = isToggle
-        ? calculateToggleWeight(isAnimated)
-        : calculateWeight(
-            glyphIndex,
-            invertedLineIndex,
-            startWeight,
-            endWeight,
-            midIndex,
-            glyphs.length,
-            settings.time
-          );
+      // Toggle and CCC glyphs get special weight animation independent of weight settings
+      let weight;
+      if (isToggle) {
+        weight = calculateToggleWeight(isAnimated);
+      } else if (isCCC) {
+        weight = calculateCCCWeight(isAnimated);
+      } else {
+        weight = calculateWeight(
+          glyphIndex,
+          invertedLineIndex,
+          startWeight,
+          endWeight,
+          midIndex,
+          glyphs.length,
+          settings.time
+        );
+      }
 
       const color = getColor(glyphIndex, invertedLineIndex, settings.time, glyphs.length);
       const glyphOptions = isToggle
@@ -95,17 +106,24 @@ function getLineWidth(renderer, glyphs, size, lineIndex, numLines) {
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     const glyph = glyphs[glyphIndex];
     const isToggle = isToggleGlyph(glyph);
-    const weight = isToggle
-      ? calculateToggleWeight(isAnimated)
-      : calculateWeight(
-          glyphIndex,
-          invertedLineIndex,
-          startWeight,
-          endWeight,
-          midIndex,
-          glyphs.length,
-          settings.time
-        );
+    const isCCC = isCCCGlyph(glyph);
+
+    let weight;
+    if (isToggle) {
+      weight = calculateToggleWeight(isAnimated);
+    } else if (isCCC) {
+      weight = calculateCCCWeight(isAnimated);
+    } else {
+      weight = calculateWeight(
+        glyphIndex,
+        invertedLineIndex,
+        startWeight,
+        endWeight,
+        midIndex,
+        glyphs.length,
+        settings.time
+      );
+    }
     total += renderer.measureGlyph(glyph, size, weight, isToggle ? TOGGLE_WIDTH : undefined);
   }
   return total;

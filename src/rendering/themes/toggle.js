@@ -2,7 +2,13 @@ import { settings, defaultTexts, themePresets } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getGlyphs } from '../../export/font-loader.js';
-import { calculateToggleWeight, isToggleGlyph, TOGGLE_WIDTH } from '../toggle-utils.js';
+import {
+  calculateToggleWeight,
+  isToggleGlyph,
+  TOGGLE_WIDTH,
+  isCCCGlyph,
+  calculateCCCWeight,
+} from '../toggle-utils.js';
 
 function measureGlyphsWithAnimation(renderer, glyphs, size, isAnimated, staticWeight, width) {
   let totalWidth = 0;
@@ -10,10 +16,13 @@ function measureGlyphsWithAnimation(renderer, glyphs, size, isAnimated, staticWe
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     const glyph = glyphs[glyphIndex];
     const isToggle = isToggleGlyph(glyph);
+    const isCCC = isCCCGlyph(glyph);
 
     let weight;
     if (isToggle) {
       weight = calculateToggleWeight(isAnimated);
+    } else if (isCCC) {
+      weight = calculateCCCWeight(isAnimated);
     } else if (isAnimated) {
       const t = getNormalizedTime(settings.time);
       const phase = glyphIndex * 0.3;
@@ -44,10 +53,13 @@ function renderAnimatedGlyphs(
   for (let glyphIndex = 0; glyphIndex < glyphs.length; glyphIndex++) {
     const glyph = glyphs[glyphIndex];
     const isToggle = isToggleGlyph(glyph);
+    const isCCC = isCCCGlyph(glyph);
 
     let weight;
     if (isToggle) {
       weight = calculateToggleWeight(isAnimated);
+    } else if (isCCC) {
+      weight = calculateCCCWeight(isAnimated);
     } else if (isAnimated) {
       const t = getNormalizedTime(settings.time);
       const phase = glyphIndex * 0.3;

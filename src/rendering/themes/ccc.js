@@ -2,7 +2,13 @@ import { settings } from '../../config/settings.js';
 import { getBackgroundColor, getColor } from '../colors.js';
 import { getNormalizedTime } from '../../animation/timing.js';
 import { getGlyphs } from '../../export/font-loader.js';
-import { isToggleGlyph, calculateToggleWeight, TOGGLE_WIDTH } from '../toggle-utils.js';
+import {
+  isToggleGlyph,
+  calculateToggleWeight,
+  TOGGLE_WIDTH,
+  isCCCGlyph,
+  calculateCCCWeight,
+} from '../toggle-utils.js';
 
 function getLogicalLength(glyphs) {
   let length = 0;
@@ -92,11 +98,18 @@ function drawUserText(
   for (let glyphIndex = 0; glyphIndex < userGlyphs.length; glyphIndex++) {
     const glyph = userGlyphs[glyphIndex];
     const isToggle = isToggleGlyph(glyph);
+    const isCCC = isCCCGlyph(glyph);
     const color = getColor(globalCharIndex + glyphIndex, lineIndex, settings.time);
 
-    // Toggle glyphs get special weight animation (circle moves left to right)
-    // and fixed width to maintain circular shape
-    const glyphWeight = isToggle ? calculateToggleWeight(isAnimated) : breatheWeight;
+    // Toggle and CCC glyphs get special weight animation independent of weight settings
+    let glyphWeight;
+    if (isToggle) {
+      glyphWeight = calculateToggleWeight(isAnimated);
+    } else if (isCCC) {
+      glyphWeight = calculateCCCWeight(isAnimated);
+    } else {
+      glyphWeight = breatheWeight;
+    }
     const glyphWidthSetting = isToggle ? TOGGLE_WIDTH : width;
 
     renderer.drawGlyph(glyph, currentX, y, finalFontSize, glyphWeight, color, {
