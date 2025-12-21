@@ -1327,6 +1327,7 @@
       </div>
 
       <div class="lightbox-info" x-show="currentLightboxItem">
+        <span class="lightbox-day" x-show="currentLightboxDay" x-text="currentLightboxDay"></span>
         <span
           class="lightbox-counter"
           x-text="`${lightboxIndex + 1} / ${communityTotal}${communityLoadingMore ? '...' : ''}`"

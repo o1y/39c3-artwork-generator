@@ -14,6 +14,7 @@ import {
   deleteGalleryItem,
   isDevMode,
 } from '../../../api/community.js';
+import { getCongressDay } from '../../../config/congress.js';
 
 let savedAnimationState = { gallery: false, lightbox: false };
 let touchStart = { x: 0, y: 0 };
@@ -331,6 +332,12 @@ export function createGalleryActions() {
 
     get currentLightboxItem() {
       return this.communityItems[this.lightboxIndex] || null;
+    },
+
+    get currentLightboxDay() {
+      const item = this.communityItems[this.lightboxIndex];
+      if (!item || !item.createdAt) return null;
+      return getCongressDay(item.createdAt);
     },
 
     get isDevMode() {

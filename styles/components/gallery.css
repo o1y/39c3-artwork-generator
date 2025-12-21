@@ -595,6 +595,16 @@
       'opsz' 14;
   }
 
+  .lightbox-day {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    font-variation-settings:
+      'wght' 60,
+      'wdth' 80,
+      'opsz' 14;
+  }
+
   .lightbox-counter {
     font-size: 13px;
     color: var(--text-muted);
