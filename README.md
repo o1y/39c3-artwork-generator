@@ -1,5 +1,7 @@
 # 39C3 Power Cycles – Artwork Generator
 
+![](.github/39C3_88x31.gif)
+
 Interactive web-based artwork generator for the 39C3 variable font, featuring dynamic weight interpolation and brand-compliant color modes.
 
 ![39C3 Artwork Generator Demo](.github/screen.gif)
