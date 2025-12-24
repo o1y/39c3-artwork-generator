@@ -14,13 +14,17 @@ function extractId(request) {
   return parts[parts.length - 1];
 }
 
-// DELETE /api/gallery/[id] - Dev mode only
+// DELETE /api/gallery/[id]
+//   curl -X DELETE -H "x-admin-secret: ..." /api/gallery/[id]
 export async function DELETE(request) {
   try {
     const id = extractId(request);
 
-    if (process.env.VERCEL_ENV === 'production') {
-      return Response.json({ error: 'Delete not available in production' }, { status: 403 });
+    if (
+      !process.env.ADMIN_SECRET ||
+      request.headers.get('x-admin-secret') !== process.env.ADMIN_SECRET
+    ) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const client = await getRedis();

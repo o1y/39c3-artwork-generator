@@ -45,3 +45,5 @@ env/
 coverage/
 .vercel
 .env*.local
+
+backups/
