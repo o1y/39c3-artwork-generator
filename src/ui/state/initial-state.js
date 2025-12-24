@@ -139,6 +139,7 @@ export function createInitialState() {
     downloadPopoverOpen: false,
     savePopoverOpen: false,
     glyphPopoverOpen: false,
+    colorPopoverOpen: false,
     isSliderDragging: false,
     spotlightHintDismissed:
       preferences.get('dismissedHints.spotlight') ||

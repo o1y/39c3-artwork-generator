@@ -39,7 +39,7 @@ function createPopoverActions(popoverNames, options = {}) {
 }
 
 const popoverActions = createPopoverActions(
-  ['typography', 'animation', 'download', 'save', 'glyph'],
+  ['typography', 'animation', 'download', 'save', 'glyph', 'color'],
   {
     glyph: {
       onOpen() {

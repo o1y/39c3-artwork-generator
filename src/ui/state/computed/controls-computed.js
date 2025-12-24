@@ -8,6 +8,7 @@ import {
   TOTAL_FRAMES,
 } from '../constants.js';
 import { MAX_TEXT_LENGTH, MAX_MULTILINE_TEXT_LENGTH } from '../../../config/settings.js';
+import { COLOR_MODES, BRAND_COLORS } from '../../../config/colors.js';
 
 export function createControlsComputed() {
   return {
@@ -65,6 +66,18 @@ export function createControlsComputed() {
       }
 
       return COLOR_MODE_OPTIONS.filter((option) => !option.value.includes('-smooth'));
+    },
+
+    get currentColorMode() {
+      return COLOR_MODES[this.colorMode] || COLOR_MODES.mono;
+    },
+
+    get currentColorPreview() {
+      return this.currentColorMode.preview || { fg: BRAND_COLORS.natural, bg: BRAND_COLORS.dark };
+    },
+
+    get currentColorLabel() {
+      return this.currentColorMode.label || 'Color';
     },
 
     get showTextInput() {

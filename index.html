@@ -309,11 +309,59 @@
           </div>
           <div class="control-group control-color-mode" x-show="showColorModeControl" x-cloak>
             <label>Color Mode</label>
-            <select x-model="colorMode" class="control-base">
-              <template x-for="mode in availableColorModes" :key="mode.value">
-                <option :value="mode.value" x-text="mode.label"></option>
-              </template>
-            </select>
+            <button
+              class="color-picker-btn control-base"
+              @click="toggleColorPopover()"
+              :class="{ 'active': colorPopoverOpen }"
+            >
+              <span
+                class="color-preview"
+                :style="{ background: currentColorPreview.bg, color: Array.isArray(currentColorPreview.fg) ? currentColorPreview.fg[1] : currentColorPreview.fg }"
+                >Aa</span
+              >
+              <span class="color-label" x-text="currentColorLabel"></span>
+            </button>
+            <div
+              class="color-picker-popover glass-surface"
+              x-show="colorPopoverOpen"
+              x-cloak
+              x-transition:enter="popover-enter"
+              x-transition:enter-start="popover-enter-start"
+              x-transition:enter-end="popover-enter-end"
+              x-transition:leave="popover-leave"
+              x-transition:leave-start="popover-leave-start"
+              x-transition:leave-end="popover-leave-end"
+              @click.outside="closeColorPopover"
+            >
+              <div class="popover-header">Color Mode</div>
+              <div class="color-picker-grid">
+                <template x-for="mode in availableColorModes" :key="mode.value">
+                  <button
+                    class="color-option"
+                    :class="{ 'active': colorMode === mode.value }"
+                    @click="colorMode = mode.value; closeColorPopover()"
+                  >
+                    <span
+                      class="color-preview"
+                      :class="{ 'multi-color': Array.isArray(mode.preview.fg) }"
+                      :style="{ background: mode.preview.bg }"
+                    >
+                      <template x-if="!Array.isArray(mode.preview.fg)">
+                        <span :style="{ color: mode.preview.fg }">Aa</span>
+                      </template>
+                      <template x-if="Array.isArray(mode.preview.fg)">
+                        <span class="multi-text">
+                          <template x-for="(color, i) in mode.preview.fg" :key="i">
+                            <span :style="{ color: color }">A</span>
+                          </template>
+                        </span>
+                      </template>
+                    </span>
+                    <span class="color-label" x-text="mode.label"></span>
+                  </button>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1051,6 +1099,65 @@
           <svg width="18" height="18"><use href="#icon-globe" /></svg>
           <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
         </button>
+      </div>
+    </div>
+
+    <!-- Color Picker Bottom Sheet (Mobile) -->
+    <div
+      class="bottom-sheet-backdrop"
+      x-show="colorPopoverOpen"
+      x-cloak
+      x-transition:enter="fade-enter"
+      x-transition:enter-start="fade-enter-start"
+      x-transition:enter-end="fade-enter-end"
+      x-transition:leave="fade-leave"
+      x-transition:leave-start="fade-leave-start"
+      x-transition:leave-end="fade-leave-end"
+      @click="closeColorPopover"
+    ></div>
+    <div
+      class="bottom-sheet color-picker-sheet"
+      x-show="colorPopoverOpen"
+      x-cloak
+      x-transition:enter="sheet-enter"
+      x-transition:enter-start="sheet-enter-start"
+      x-transition:enter-end="sheet-enter-end"
+      x-transition:leave="sheet-leave"
+      x-transition:leave-start="sheet-leave-start"
+      x-transition:leave-end="sheet-leave-end"
+    >
+      <div class="bottom-sheet-header">
+        <span class="bottom-sheet-title panel-title">Color Mode</span>
+        <button class="bottom-sheet-close close-btn" @click="closeColorPopover" aria-label="Close">
+          <svg width="16" height="16"><use href="#icon-close" /></svg>
+        </button>
+      </div>
+      <div class="color-picker-grid">
+        <template x-for="mode in availableColorModes" :key="mode.value">
+          <button
+            class="color-option"
+            :class="{ 'active': colorMode === mode.value }"
+            @click="colorMode = mode.value; closeColorPopover()"
+          >
+            <span
+              class="color-preview"
+              :class="{ 'multi-color': Array.isArray(mode.preview.fg) }"
+              :style="{ background: mode.preview.bg }"
+            >
+              <template x-if="!Array.isArray(mode.preview.fg)">
+                <span :style="{ color: mode.preview.fg }">Aa</span>
+              </template>
+              <template x-if="Array.isArray(mode.preview.fg)">
+                <span class="multi-text">
+                  <template x-for="(color, i) in mode.preview.fg" :key="i">
+                    <span :style="{ color: color }">A</span>
+                  </template>
+                </span>
+              </template>
+            </span>
+            <span class="color-label" x-text="mode.label"></span>
+          </button>
+        </template>
       </div>
     </div>
 

@@ -35,6 +35,7 @@
 
     --glass-bg: rgba(250, 245, 245, 0.05);
     --glass-bg-subtle: rgba(250, 245, 245, 0.02);
+    --glass-bg-solid: rgba(20, 20, 20, 0.95);
     --glass-border: rgba(250, 245, 245, 0.1);
     --glass-border-strong: rgba(250, 245, 245, 0.2);
 
