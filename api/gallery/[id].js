@@ -3,7 +3,6 @@ import {
   getRedis,
   GALLERY_INDEX_KEY,
   GALLERY_ITEM_PREFIX,
-  GALLERY_HASH_PREFIX,
   errorResponse,
   runtimeConfig,
 } from '../utils/redis.js';
@@ -34,14 +33,9 @@ export async function DELETE(request) {
       return Response.json({ error: 'Item not found' }, { status: 404 });
     }
 
-    const item = JSON.parse(rawItem);
-
     const multi = client.multi();
     multi.zRem(GALLERY_INDEX_KEY, id);
     multi.del(`${GALLERY_ITEM_PREFIX}${id}`);
-    if (item.hash) {
-      multi.del(`${GALLERY_HASH_PREFIX}${item.hash}`);
-    }
     await multi.exec();
 
     return Response.json({ success: true, deleted: id });
