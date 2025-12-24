@@ -30,6 +30,8 @@ function captureSettings() {
     animationOriginX: settings.animationOriginX,
     animationOriginY: settings.animationOriginY,
     animationPhaseOffset: settings.animationPhaseOffset,
+    togglePosition: settings.togglePosition,
+    toggleVariant: settings.toggleVariant,
   };
 }
 
