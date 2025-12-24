@@ -39,9 +39,10 @@ export async function exportGIF(
     setCanvas(tempCanvas, recordingCtx);
 
     const targetFPS = 15;
+    const quality = resolution === 500 ? 1 : 10;
     const gif = new GIF({
       workers: 2,
-      quality: 10,
+      quality,
       width: tempCanvas.width,
       height: tempCanvas.height,
       workerScript: '/gif.worker.js',
