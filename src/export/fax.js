@@ -2,6 +2,7 @@
  * Fax Export - T.30 protocol simulation with thermal paper rendering
  */
 
+import { jsPDF } from 'jspdf';
 import { getCanvas, getContext, setCanvas } from '../rendering/canvas.js';
 import { render } from '../animation/loop.js';
 import { createTempCanvas, cleanupTempCanvas } from './utils/canvas-manager.js';
@@ -10,7 +11,8 @@ import {
   restoreSettingsState,
   applyScaledSettings,
 } from './utils/settings-state.js';
-import { generateFilename, downloadCanvas } from './utils/download.js';
+import { generateFilename } from './utils/download.js';
+import { getCongressDay } from '../config/congress.js';
 
 class FaxModemSound {
   constructor() {
@@ -269,7 +271,7 @@ class FaxModemSound {
 }
 
 const FAX_WIDTH = 1728; // ITU-T T.4 standard
-const MARGIN_PERCENT = 0.03;
+const MARGIN_PERCENT = 0.05; // Page margin for content
 
 function applyThermalPaperEffect(canvas) {
   const ctx = canvas.getContext('2d');
@@ -286,7 +288,7 @@ function applyThermalPaperEffect(canvas) {
   const marginPx = Math.round(FAX_WIDTH * MARGIN_PERCENT);
   const contentWidth = FAX_WIDTH - marginPx * 2;
 
-  faxCtx.fillStyle = '#f5f0e6';
+  faxCtx.fillStyle = '#ffffff';
   faxCtx.fillRect(0, 0, FAX_WIDTH, faxHeight);
   faxCtx.drawImage(canvas, marginPx, 0, contentWidth, faxHeight);
 
@@ -343,9 +345,9 @@ function applyThermalPaperEffect(canvas) {
       const i = (y * FAX_WIDTH + x) * 4;
 
       if (pixels[y * FAX_WIDTH + srcX] > 128) {
-        data[i] = 245 + Math.random() * 5;
-        data[i + 1] = 240 + Math.random() * 5;
-        data[i + 2] = 230 + Math.random() * 5;
+        data[i] = 250 + Math.random() * 5;
+        data[i + 1] = 250 + Math.random() * 5;
+        data[i + 2] = 250 + Math.random() * 5;
       } else {
         const fade = 20 + Math.random() * 15;
         data[i] = fade;
@@ -368,14 +370,15 @@ function applyThermalPaperEffect(canvas) {
     }
   }
 
-  // Roller mark on left edge
+  // Perforation line on left edge (tear-off mark)
+  const perfX = Math.floor(marginPx * 0.4);
+  const dashLength = 8;
+  const gapLength = 6;
   for (let y = 0; y < faxHeight; y++) {
-    for (let x = 0; x < marginPx; x++) {
-      const i = (y * FAX_WIDTH + x) * 4;
-      const darken = 0.92 + (x / marginPx) * 0.08;
-      data[i] = Math.floor(data[i] * darken);
-      data[i + 1] = Math.floor(data[i + 1] * darken);
-      data[i + 2] = Math.floor(data[i + 2] * darken);
+    const inDash = y % (dashLength + gapLength) < dashLength;
+    if (inDash) {
+      const i = (y * FAX_WIDTH + perfX) * 4;
+      data[i] = data[i + 1] = data[i + 2] = 180; // Light gray dash
     }
   }
 
@@ -393,21 +396,27 @@ function applyThermalPaperEffect(canvas) {
   const skewAngle = (Math.random() * 0.5 + 0.3) * (Math.random() > 0.5 ? 1 : -1);
   const skewRad = (skewAngle * Math.PI) / 180;
 
+  // Calculate expanded canvas size to prevent clipping during rotation
+  const cosA = Math.cos(Math.abs(skewRad));
+  const sinA = Math.sin(Math.abs(skewRad));
+  const expandedWidth = Math.ceil(FAX_WIDTH * cosA + faxHeight * sinA);
+  const expandedHeight = Math.ceil(faxHeight * cosA + FAX_WIDTH * sinA);
+
   const skewCanvas = document.createElement('canvas');
-  skewCanvas.width = FAX_WIDTH;
-  skewCanvas.height = faxHeight;
+  skewCanvas.width = expandedWidth;
+  skewCanvas.height = expandedHeight;
   const skewCtx = skewCanvas.getContext('2d');
 
-  skewCtx.fillStyle = '#f5f0e6';
-  skewCtx.fillRect(0, 0, FAX_WIDTH, faxHeight);
-  skewCtx.translate(FAX_WIDTH / 2, faxHeight / 2);
+  skewCtx.fillStyle = '#ffffff';
+  skewCtx.fillRect(0, 0, expandedWidth, expandedHeight);
+  skewCtx.translate(expandedWidth / 2, expandedHeight / 2);
   skewCtx.rotate(skewRad);
   skewCtx.translate(-FAX_WIDTH / 2, -faxHeight / 2);
   skewCtx.drawImage(faxCanvas, 0, 0);
 
   // Nearest-neighbor upsample
   ctx.imageSmoothingEnabled = false;
-  ctx.fillStyle = '#f5f0e6';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, origWidth, origHeight);
   ctx.drawImage(skewCanvas, 0, 0, origWidth, origHeight);
   ctx.imageSmoothingEnabled = true;
@@ -518,7 +527,7 @@ function animatePaperFeed(overlay, thermalCanvas) {
       const eased = 1 - Math.pow(1 - progress, 3);
       const visibleHeight = Math.floor(thermalCanvas.height * eased);
 
-      ctx.fillStyle = '#f5f0e6';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 
       if (visibleHeight > 0) {
@@ -574,11 +583,65 @@ export async function exportFax(resolution = 2, callbacks = {}) {
   setCanvas(tempCanvas, tempCtx);
   render();
 
-  const thermalCanvas = document.createElement('canvas');
-  thermalCanvas.width = tempCanvas.width;
-  thermalCanvas.height = tempCanvas.height;
-  thermalCanvas.getContext('2d').drawImage(tempCanvas, 0, 0);
-  applyThermalPaperEffect(thermalCanvas);
+  const a4AspectRatio = 297 / 210;
+  const a4CanvasWidth = tempCanvas.width;
+  const a4CanvasHeight = Math.round(a4CanvasWidth * a4AspectRatio);
+
+  const a4Canvas = document.createElement('canvas');
+  a4Canvas.width = a4CanvasWidth;
+  a4Canvas.height = a4CanvasHeight;
+  const a4Ctx = a4Canvas.getContext('2d');
+
+  a4Ctx.fillStyle = '#ffffff';
+  a4Ctx.fillRect(0, 0, a4CanvasWidth, a4CanvasHeight);
+
+  const marginX = Math.round(a4CanvasWidth * MARGIN_PERCENT);
+  const marginY = Math.round(a4CanvasHeight * MARGIN_PERCENT);
+  const headerHeight = Math.round(a4CanvasHeight * 0.04);
+  const contentWidth = a4CanvasWidth - marginX * 2;
+
+  a4Ctx.fillStyle = '#1a1a1a';
+  a4Ctx.font = `${Math.floor(a4CanvasWidth / 45)}px monospace`;
+  const now = new Date();
+  const date = now.toISOString().slice(0, 19) + 'Z';
+  const congressDay = getCongressDay(now);
+  a4Ctx.fillText(
+    `39C3 SECURE FAX    ${congressDay}    ${date}    PAGE 1/1`,
+    marginX,
+    marginY + headerHeight * 0.4
+  );
+  a4Ctx.fillText(
+    `FROM: 39C3.o1y.de LOCAL TERMINAL    TO: 39C3`,
+    marginX,
+    marginY + headerHeight * 0.8
+  );
+
+  a4Ctx.strokeStyle = '#1a1a1a';
+  a4Ctx.lineWidth = 2;
+  a4Ctx.setLineDash([5, 3]);
+  a4Ctx.beginPath();
+  a4Ctx.moveTo(marginX, marginY + headerHeight);
+  a4Ctx.lineTo(a4CanvasWidth - marginX, marginY + headerHeight);
+  a4Ctx.stroke();
+  a4Ctx.setLineDash([]);
+
+  const artworkY = marginY + headerHeight + 10;
+  const availableHeight = a4CanvasHeight - artworkY - marginY;
+  const artworkAspect = tempCanvas.height / tempCanvas.width;
+  let artworkWidth = contentWidth;
+  let artworkHeight = artworkWidth * artworkAspect;
+
+  if (artworkHeight > availableHeight) {
+    artworkHeight = availableHeight;
+    artworkWidth = artworkHeight / artworkAspect;
+  }
+
+  const artworkX = marginX + (contentWidth - artworkWidth) / 2;
+  a4Ctx.drawImage(tempCanvas, artworkX, artworkY, artworkWidth, artworkHeight);
+
+  applyThermalPaperEffect(a4Canvas);
+
+  const thermalCanvas = a4Canvas;
 
   setCanvas(originalCanvas, originalCtx);
   restoreSettingsState(settingsState);
@@ -657,34 +720,17 @@ export async function exportFax(resolution = 2, callbacks = {}) {
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const finalCanvas = document.createElement('canvas');
-  const headerHeight = 60;
-  finalCanvas.width = thermalCanvas.width;
-  finalCanvas.height = thermalCanvas.height + headerHeight;
-  const finalCtx = finalCanvas.getContext('2d');
-
-  finalCtx.fillStyle = '#f5f0e6';
-  finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-  finalCtx.fillStyle = '#1a1a1a';
-  finalCtx.font = `${Math.floor(thermalCanvas.width / 40)}px monospace`;
-  const date = new Date().toISOString().replace('T', ' ').slice(0, 19);
-  finalCtx.fillText(`39C3 SECURE FAX    ${date}    PAGE 1/1`, 20, 25);
-  finalCtx.fillText(`FROM: 39C3.o1y.de LOCAL TERMINAL    TO: 39C3`, 20, 50);
-
-  finalCtx.strokeStyle = '#1a1a1a';
-  finalCtx.lineWidth = 2;
-  finalCtx.setLineDash([5, 3]);
-  finalCtx.beginPath();
-  finalCtx.moveTo(10, headerHeight - 5);
-  finalCtx.lineTo(finalCanvas.width - 10, headerHeight - 5);
-  finalCtx.stroke();
-
-  finalCtx.drawImage(thermalCanvas, 0, headerHeight);
-
-  downloadCanvas(finalCanvas, 'png', generateFilename('fax.png'), () => {
-    modem.stop();
-    overlay.classList.add('fax-fade-out');
-    setTimeout(() => overlay.remove(), 500);
-    if (onComplete) onComplete();
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
   });
+
+  pdf.addImage(thermalCanvas, 'PNG', 0, 0, 210, 297);
+  pdf.save(generateFilename('fax.pdf'));
+
+  modem.stop();
+  overlay.classList.add('fax-fade-out');
+  setTimeout(() => overlay.remove(), 500);
+  if (onComplete) onComplete();
 }
