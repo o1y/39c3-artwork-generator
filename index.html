@@ -1215,38 +1215,36 @@
         </button>
       </div>
 
-      <div>
-        <div class="gallery-grid" x-show="galleryItems.length > 0">
-          <template x-for="item in galleryItems" :key="item.id">
-            <div
-              class="gallery-item"
-              @click="loadFromGallery(item.id)"
-              @mouseenter="startGalleryPreview(item, $event.currentTarget.querySelector('.gallery-preview-canvas'))"
-              @mouseleave="stopGalleryPreview()"
+      <div class="gallery-grid" x-show="galleryItems.length > 0">
+        <template x-for="item in galleryItems" :key="item.id">
+          <div
+            class="gallery-item"
+            @click="loadFromGallery(item.id)"
+            @mouseenter="startGalleryPreview(item, $event.currentTarget.querySelector('.gallery-preview-canvas'))"
+            @mouseleave="stopGalleryPreview()"
+          >
+            <img class="gallery-thumbnail" :src="item.thumbnail" alt="Saved artwork" />
+            <canvas
+              class="gallery-preview-canvas"
+              width="200"
+              height="200"
+              x-show="hoveredGalleryItem === item.id"
+            ></canvas>
+            <button
+              class="gallery-delete"
+              @click.stop="removeFromGallery(item.id)"
+              title="Delete"
+              aria-label="Delete artwork"
             >
-              <img class="gallery-thumbnail" :src="item.thumbnail" alt="Saved artwork" />
-              <canvas
-                class="gallery-preview-canvas"
-                width="200"
-                height="200"
-                x-show="hoveredGalleryItem === item.id"
-              ></canvas>
-              <button
-                class="gallery-delete"
-                @click.stop="removeFromGallery(item.id)"
-                title="Delete"
-                aria-label="Delete artwork"
-              >
-                <svg width="12" height="12"><use href="#icon-close" /></svg>
-              </button>
-            </div>
-          </template>
-        </div>
-        <div class="gallery-empty" x-show="galleryItems.length === 0">
-          <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
-          <p class="gallery-empty-title">No cycles stored</p>
-          <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
-        </div>
+              <svg width="12" height="12"><use href="#icon-close" /></svg>
+            </button>
+          </div>
+        </template>
+      </div>
+      <div class="gallery-empty" x-show="galleryItems.length === 0">
+        <svg class="gallery-empty-icon" width="48" height="48"><use href="#icon-gallery" /></svg>
+        <p class="gallery-empty-title">No cycles stored</p>
+        <p class="gallery-empty-hint">Persist your first power cycle via the Share menu</p>
       </div>
     </div>
 
