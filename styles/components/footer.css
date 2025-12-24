@@ -82,6 +82,7 @@
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
+    margin-left: auto;
 
     @media (max-width: 1200px) {
       gap: 8px;
