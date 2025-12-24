@@ -4,6 +4,7 @@ export const KEY_MAP = {
   text: 't',
   theme: 'th',
   toggleVariant: 'tv',
+  togglePosition: 'tp',
   colorMode: 'cm',
   numLines: 'nl',
   widthValue: 'w',
@@ -41,6 +42,7 @@ const KEY_RELEVANCE = {
   widthValue: (t) => t.controls.showWidth,
   opszValue: (t) => t.controls.showOpsz,
   toggleVariant: (t) => t.controls.showToggleVariant,
+  togglePosition: (t) => t.controls.showTogglePosition,
 
   animationOriginX: (t, s) => t.capabilities.animated && s.mode === 'spotlight',
   animationOriginY: (t, s) => t.capabilities.animated && s.mode === 'spotlight',

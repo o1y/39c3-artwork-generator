@@ -31,6 +31,11 @@ export function setupWatchers(store) {
     if (store.isPaused) render();
   });
 
+  store.$watch('togglePosition', (value) => {
+    settings.togglePosition = value;
+    if (store.isPaused) render();
+  });
+
   store.$watch('colorMode', (value) => {
     settings.colorMode = value;
     const preset = themePresets[store.theme];

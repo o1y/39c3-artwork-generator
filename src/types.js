@@ -91,6 +91,7 @@
  * @property {boolean} [showColorMode] - Show color mode selector
  * @property {boolean} [showAnimationSpeed] - Show animation speed control
  * @property {boolean} [showStaticWeight] - Show static weight control
+ * @property {boolean} [showTogglePosition] - Show toggle position control
  */
 
 /**
@@ -132,6 +133,7 @@
  * @property {AnimationMode} mode - Animation mode
  * @property {string} theme - Active theme name
  * @property {ToggleVariant} toggleVariant - Toggle glyph style
+ * @property {number} togglePosition - Static toggle position (0 = left/off, 1 = right/on)
  * @property {string} colorMode - Active color mode
  * @property {number} animationOriginX - Spotlight animation origin X (0-1)
  * @property {number} animationOriginY - Spotlight animation origin Y (0-1)

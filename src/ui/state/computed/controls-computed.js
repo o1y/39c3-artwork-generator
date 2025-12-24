@@ -54,6 +54,10 @@ export function createControlsComputed() {
       return this.controls.showToggleVariant;
     },
 
+    get showTogglePositionControl() {
+      return this.controls.showTogglePosition;
+    },
+
     get showColorModeControl() {
       return this.controls.showColorMode !== false;
     },

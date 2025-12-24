@@ -400,12 +400,12 @@
         </button>
         <div
           class="toolbar-divider"
-          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl || showTogglePositionControl"
           x-cloak
         ></div>
         <div
           class="toolbar-btn-wrapper"
-          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl || showTogglePositionControl"
           x-cloak
         >
           <button
@@ -463,6 +463,13 @@
               <div class="control-base-default">
                 <input type="range" min="10" max="100" step="1" x-model.number="staticWeight" />
                 <span class="value-display" x-text="staticWeightDisplay"></span>
+              </div>
+            </div>
+            <div class="control-group" x-show="showTogglePositionControl">
+              <label>Toggle Position</label>
+              <div class="control-base-default">
+                <input type="range" min="0" max="1" step="0.01" x-model.number="togglePosition" />
+                <span class="value-display" x-text="togglePositionDisplay"></span>
               </div>
             </div>
           </div>
@@ -628,7 +635,7 @@
       <div class="footer-section footer-toolbar">
         <button
           class="toolbar-btn typography-btn"
-          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl"
+          x-show="showWidthControl || showOpszControl || showMinWeightControl || showMaxWeightControl || showStaticWeightControl || showTogglePositionControl"
           x-cloak
           @click="toggleTypographyPopover"
           :class="{ 'active': typographyPopoverOpen }"
@@ -922,6 +929,22 @@
             @touchcancel="isSliderDragging = false"
           />
           <span class="value-display" x-text="staticWeightDisplay"></span>
+        </div>
+      </div>
+      <div class="control-group" x-show="showTogglePositionControl">
+        <label>Toggle Position</label>
+        <div class="control-base-default">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            x-model.number="togglePosition"
+            @touchstart="isSliderDragging = true"
+            @touchend="isSliderDragging = false"
+            @touchcancel="isSliderDragging = false"
+          />
+          <span class="value-display" x-text="togglePositionDisplay"></span>
         </div>
       </div>
     </div>

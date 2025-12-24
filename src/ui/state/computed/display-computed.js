@@ -36,6 +36,10 @@ export function createDisplayComputed() {
       return this.staticWeight.toString();
     },
 
+    get togglePositionDisplay() {
+      return Math.round(this.togglePosition * 100) + '%';
+    },
+
     get currentFrameNumber() {
       return this.currentFrame;
     },
