@@ -1,9 +1,8 @@
-import { createHash, randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
 import {
   getRedis,
   GALLERY_INDEX_KEY,
   GALLERY_ITEM_PREFIX,
-  GALLERY_HASH_PREFIX,
   RATE_LIMIT_PREFIX,
   errorResponse,
   runtimeConfig,
@@ -15,29 +14,6 @@ const MAX_TEXT_LENGTH = 200;
 
 function generateId() {
   return randomUUID().replace(/-/g, '').slice(0, 12);
-}
-
-/**
- * Generate a hash of the config for duplicate detection
- * @param {Object} config - Artwork configuration
- * @returns {string} 16-character hex hash
- */
-function hashConfig(config) {
-  const normalized = JSON.stringify({
-    theme: config.theme,
-    text: config.text,
-    colorMode: config.colorMode,
-    mode: config.mode,
-    numLines: config.numLines,
-    minWeight: config.minWeight,
-    maxWeight: config.maxWeight,
-    widthValue: config.widthValue,
-    opszValue: config.opszValue,
-    animationSpeed: config.animationSpeed,
-    animationOriginX: config.animationOriginX,
-    animationOriginY: config.animationOriginY,
-  });
-  return createHash('sha256').update(normalized).digest('hex').slice(0, 16);
 }
 
 /**
@@ -62,16 +38,6 @@ async function checkRateLimit(ip) {
   }
 
   return { allowed: true, remaining: RATE_LIMIT_MAX - count, waitTime: 0 };
-}
-
-/**
- * Check if a config already exists (duplicate detection)
- * @param {string} hash - Config hash
- * @returns {Promise<string|null>} Existing item ID or null
- */
-async function findExistingByHash(hash) {
-  const client = await getRedis();
-  return await client.get(`${GALLERY_HASH_PREFIX}${hash}`);
 }
 
 function sanitizeText(text) {
@@ -143,7 +109,7 @@ async function getGalleryItems(offset, limit) {
 
 /**
  * Add a new item to the gallery
- * @param {Object} item - Gallery item with id, config, createdAt, hash, etc.
+ * @param {Object} item - Gallery item with id, config, createdAt
  */
 async function addGalleryItem(item) {
   const client = await getRedis();
@@ -154,11 +120,6 @@ async function addGalleryItem(item) {
 
   // Store item data as JSON
   multi.set(`${GALLERY_ITEM_PREFIX}${item.id}`, JSON.stringify(item));
-
-  // Store hash mapping for duplicate detection
-  if (item.hash) {
-    multi.set(`${GALLERY_HASH_PREFIX}${item.hash}`, item.id);
-  }
 
   await multi.exec();
 }
@@ -204,24 +165,13 @@ export async function POST(request) {
       );
     }
 
-    const configHash = hashConfig(config);
-    const existingId = await findExistingByHash(configHash);
-
-    if (existingId) {
-      return Response.json({ success: true, id: existingId });
-    }
-
     const item = {
       id: generateId(),
-      hash: configHash,
       config: {
         ...config,
         text: sanitizeText(config.text),
       },
       createdAt: Date.now(),
-      theme: config.theme,
-      colorMode: config.colorMode || 'mono',
-      textPreview: sanitizeText(config.text).slice(0, 20),
     };
 
     await addGalleryItem(item);
