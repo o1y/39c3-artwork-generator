@@ -669,7 +669,7 @@ export async function exportFax(resolution = 2, callbacks = {}) {
   finalCtx.font = `${Math.floor(thermalCanvas.width / 40)}px monospace`;
   const date = new Date().toISOString().replace('T', ' ').slice(0, 19);
   finalCtx.fillText(`39C3 SECURE FAX    ${date}    PAGE 1/1`, 20, 25);
-  finalCtx.fillText(`FROM: 8181 LOCAL TERMINAL    TO: 39C3-CHAOS-CC`, 20, 50);
+  finalCtx.fillText(`FROM: 39C3.o1y.de LOCAL TERMINAL    TO: 39C3`, 20, 50);
 
   finalCtx.strokeStyle = '#1a1a1a';
   finalCtx.lineWidth = 2;
