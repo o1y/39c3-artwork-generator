@@ -69,7 +69,7 @@ const DEFAULT_CONTROLS = {
   showOpsz: false,
   showMode: false,
   showToggleVariant: false,
-  showSmoothColorModes: true,
+  showGradientColorModes: true,
 };
 
 /**
@@ -204,7 +204,7 @@ export const themePresets = {
       showToggleVariant: true,
       showOpsz: true,
       showStaticWeight: true,
-      showSmoothColorModes: false,
+      showGradientColorModes: false,
     },
   },
   ccc: {

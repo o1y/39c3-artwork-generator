@@ -59,13 +59,14 @@ export function createControlsComputed() {
     },
 
     get availableColorModes() {
-      const showSmoothColorModes = this.controls.showSmoothColorModes !== false;
+      const showGradientColorModes = this.controls.showGradientColorModes !== false;
 
-      if (showSmoothColorModes) {
+      if (showGradientColorModes) {
         return COLOR_MODE_OPTIONS;
       }
 
-      return COLOR_MODE_OPTIONS.filter((option) => !option.value.includes('-smooth'));
+      const gradientModes = ['green', 'green-smooth', 'violet', 'violet-smooth'];
+      return COLOR_MODE_OPTIONS.filter((option) => !gradientModes.includes(option.value));
     },
 
     get currentColorMode() {

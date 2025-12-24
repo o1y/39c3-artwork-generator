@@ -81,7 +81,7 @@
  * @property {boolean} [showOpsz] - Show optical size control
  * @property {boolean} [showMode] - Show animation mode control
  * @property {boolean} [showToggleVariant] - Show toggle variant control
- * @property {boolean} [showSmoothColorModes] - Show smooth color options
+ * @property {boolean} [showGradientColorModes] - Show gradient color modes (shades/smooth)
  * @property {boolean} [showMinWeight] - Show min weight control
  * @property {boolean} [showMaxWeight] - Show max weight control
  * @property {boolean} [showMultilineInput] - Show multiline text input
