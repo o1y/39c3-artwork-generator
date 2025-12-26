@@ -81,7 +81,7 @@ export function startPreview(canvas, config, fps = THUMBNAIL_FPS) {
     const elapsed = timestamp - lastFrameTime;
 
     if (elapsed >= frameInterval) {
-      previewTime += 0.0333 * (config.animationSpeed || 1);
+      previewTime += 0.0333;
       settings.time = previewTime;
 
       const preset = themePresets[settings.theme];
