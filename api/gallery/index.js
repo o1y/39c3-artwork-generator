@@ -42,7 +42,7 @@ async function checkRateLimit(ip) {
 
 function sanitizeText(text) {
   if (!text || typeof text !== 'string') return '';
-  return text.slice(0, MAX_TEXT_LENGTH).trim();
+  return text.slice(0, MAX_TEXT_LENGTH);
 }
 
 function validateConfig(config) {
