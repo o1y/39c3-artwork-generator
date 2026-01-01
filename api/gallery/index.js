@@ -1,3 +1,4 @@
+/* global process */
 import { randomUUID } from 'crypto';
 import {
   getRedis,
@@ -147,6 +148,10 @@ export async function GET(request) {
 // POST /api/gallery - Submit new artwork
 export async function POST(request) {
   try {
+    if (process.env.VITE_ENABLE_PUBLIC_GALLERY !== 'true') {
+      return Response.json({ error: 'Public gallery submissions are disabled' }, { status: 403 });
+    }
+
     const body = await request.json();
     const { config } = body;
 

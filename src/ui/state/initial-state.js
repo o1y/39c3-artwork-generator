@@ -12,6 +12,7 @@ import { COLOR_MODES } from '../../config/colors.js';
 import { KEY_MAP } from '../../config/url-keys.js';
 import { TOTAL_FRAMES } from './constants.js';
 import { impressum } from '../../config/impressum.js';
+import { galleryConfig } from '../../config/gallery.js';
 import { loadGallery } from '../../gallery/storage.js';
 
 const NUMERIC_BOUNDS = {
@@ -204,6 +205,7 @@ export function createInitialState() {
     communityHasMore: true,
     communitySubmitting: false,
     showCommunityConsent: false,
+    isPublicGalleryEnabled: galleryConfig.isPublicGalleryEnabled,
 
     // Lightbox state
     lightboxOpen: false,

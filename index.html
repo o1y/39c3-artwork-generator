@@ -590,6 +590,7 @@
               class="share-menu-item"
               @click="openCommunityConsent(); closeSavePopover()"
               :disabled="communitySubmitting"
+              x-show="isPublicGalleryEnabled"
             >
               <svg width="18" height="18"><use href="#icon-globe" /></svg>
               <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
@@ -1118,6 +1119,7 @@
           class="share-menu-item"
           @click="openCommunityConsent(); closeSavePopover()"
           :disabled="communitySubmitting"
+          x-show="isPublicGalleryEnabled"
         >
           <svg width="18" height="18"><use href="#icon-globe" /></svg>
           <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
