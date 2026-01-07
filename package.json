@@ -34,7 +34,7 @@
   "dependencies": {
     "alpinejs": "^3.15.1",
     "gif.js": "^0.2.0",
-    "jspdf": "^3.0.4",
+    "jspdf": "^4.0.0",
     "opentype.js": "https://github.com/o1y/opentype.js#ff6189bef3336b5666f1105d611cb1a437bf1c8a",
     "redis": "^5.10.0",
     "webm-writer": "^1.0.0"
