@@ -31,6 +31,12 @@
   "browserslist": [
     "defaults and fully supports es6-module"
   ],
+  "overrides": {
+    "ajv": "6.14.0",
+    "dompurify": "^3.3.2",
+    "minimatch": "^3.1.4",
+    "rollup": "^4.59.0"
+  },
   "dependencies": {
     "alpinejs": "^3.15.1",
     "gif.js": "^0.2.0",
@@ -55,12 +61,6 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-static-copy": "^3.1.4",
     "vitest": "^4.0.16"
-  },
-  "overrides": {
-    "ajv": "6.14.0",
-    "dompurify": "^3.3.2",
-    "minimatch": "^3.1.4",
-    "rollup": "^4.59.0"
   },
   "optionalDependencies": {
     "@esbuild/linux-x64": "^0.25.0",
