@@ -58,7 +58,9 @@
   },
   "overrides": {
     "ajv": "6.14.0",
-    "minimatch": "^3.1.4"
+    "dompurify": "^3.3.2",
+    "minimatch": "^3.1.4",
+    "rollup": "^4.59.0"
   },
   "optionalDependencies": {
     "@esbuild/linux-x64": "^0.25.0",
