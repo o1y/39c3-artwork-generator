@@ -292,6 +292,5 @@ export function renderTerminalTheme(renderer, canvasSize) {
         isToggle ? TOGGLE_WIDTH : undefined
       );
     }
-    charIndex += allGlyphs.length;
   }
 }

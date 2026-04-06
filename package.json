@@ -38,32 +38,33 @@
     "rollup": "^4.59.0"
   },
   "dependencies": {
-    "alpinejs": "^3.15.1",
+    "alpinejs": "^3.15.11",
     "gif.js": "^0.2.0",
-    "jspdf": "^4.2.0",
+    "jspdf": "^4.2.1",
     "opentype.js": "https://github.com/o1y/opentype.js#ff6189bef3336b5666f1105d611cb1a437bf1c8a",
-    "redis": "^5.10.0",
+    "redis": "^5.11.0",
     "webm-writer": "^1.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@napi-rs/canvas": "^0.1.84",
-    "@vitest/coverage-v8": "^4.0.16",
-    "autoprefixer": "^10.4.23",
-    "eslint": "^9.39.1",
-    "globals": "^16.5.0",
-    "jsdom": "^27.3.0",
-    "prettier": "^3.6.2",
-    "rollup-plugin-license": "^3.6.0",
-    "sort-package-json": "^3.6.0",
-    "typescript": "^5.9.3",
-    "vite": "^7.1.12",
+    "@eslint/js": "^10.0.1",
+    "@napi-rs/canvas": "^0.1.97",
+    "@vitest/coverage-v8": "^4.1.2",
+    "autoprefixer": "^10.4.27",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "jsdom": "^29.0.1",
+    "prettier": "^3.8.1",
+    "rollup-plugin-license": "^3.7.0",
+    "sort-package-json": "^3.6.1",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.5",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-static-copy": "^3.1.4",
-    "vitest": "^4.0.16"
+    "vite-plugin-static-copy": "^4.0.1",
+    "vitest": "^4.1.2"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "^0.25.0",
-    "@rollup/rollup-linux-x64-gnu": "^4.41.0"
+    "@esbuild/linux-x64": "^0.28.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.60.1"
   }
 }
