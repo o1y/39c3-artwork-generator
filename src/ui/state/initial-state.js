@@ -12,8 +12,8 @@ import { COLOR_MODES } from '../../config/colors.js';
 import { KEY_MAP } from '../../config/url-keys.js';
 import { TOTAL_FRAMES } from './constants.js';
 import { impressum } from '../../config/impressum.js';
-import { galleryConfig } from '../../config/gallery.js';
 import { loadGallery } from '../../gallery/storage.js';
+import communityGalleryItems from '../../data/community-gallery.json';
 
 const NUMERIC_BOUNDS = {
   numLines: [1, 100],
@@ -195,17 +195,9 @@ export function createInitialState() {
     impressumOpen: false,
     impressum,
 
-    // Community gallery state
-    communityItems: [],
-    communityLoading: false,
-    communityLoadingMore: false,
-    communityError: null,
-    communityTotal: 0,
-    communityOffset: 0,
-    communityHasMore: true,
-    communitySubmitting: false,
-    showCommunityConsent: false,
-    isPublicGalleryEnabled: galleryConfig.isPublicGalleryEnabled,
+    // Community gallery state (read-only, bundled at build time)
+    communityItems: communityGalleryItems,
+    communityTotal: communityGalleryItems.length,
 
     // Lightbox state
     lightboxOpen: false,

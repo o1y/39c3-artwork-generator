@@ -8,12 +8,6 @@ import { generateThumbnail } from '../../../gallery/thumbnail.js';
 import { captureArtworkConfig, restoreArtworkConfig } from '../../../gallery/config.js';
 import { startPreview, stopPreview, LIGHTBOX_FPS } from '../../../gallery/preview.js';
 import { render, pauseAnimation, resumeAnimation, getIsPaused } from '../../../animation/loop.js';
-import {
-  fetchGalleryItems,
-  submitToGallery,
-  deleteGalleryItem,
-  isDevMode,
-} from '../../../api/community.js';
 import { getCongressDay } from '../../../config/congress.js';
 
 let savedAnimationState = { gallery: false, lightbox: false };
@@ -31,18 +25,6 @@ function restoreAnimationState(key) {
   if (savedAnimationState[key]) {
     resumeAnimation();
   }
-}
-
-function updateCommunityPagination(store, response, append = false) {
-  if (append) {
-    store.communityItems = [...store.communityItems, ...response.items];
-    store.communityOffset += response.items.length;
-  } else {
-    store.communityItems = response.items;
-    store.communityOffset = response.items.length;
-  }
-  store.communityTotal = response.total;
-  store.communityHasMore = store.communityOffset < response.total;
 }
 
 function loadArtworkFromItem(store, item, options = {}) {
@@ -138,93 +120,15 @@ export function createGalleryActions() {
       loadArtworkFromItem(this, item, { resumeAnimation: true });
     },
 
-    openCommunityConsent() {
-      this.showCommunityConsent = true;
-    },
-
-    closeCommunityConsent() {
-      this.showCommunityConsent = false;
-    },
-
-    async submitToCommunity() {
-      if (this.communitySubmitting) return;
-
-      this.communitySubmitting = true;
-      this.showCommunityConsent = false;
-
-      try {
-        const config = captureArtworkConfig(this);
-        await submitToGallery(config);
-        this.showToast('Shared!', 'save', { variant: 'community' });
-        this.communityItems = [];
-        this.communityOffset = 0;
-        this.communityHasMore = true;
-      } catch (error) {
-        this.showToast(
-          error.message.includes('wait') ? 'Easy, Picasso!<br />Rate limit hit.' : 'Error!',
-          'save',
-          {
-            variant: 'community',
-          }
-        );
-        console.error('Failed to submit to community:', error);
-      } finally {
-        this.communitySubmitting = false;
-      }
-    },
-
-    async openCommunityLightbox() {
+    openCommunityLightbox() {
       pauseAndSaveState('lightbox');
       this.lightboxOpen = true;
       this.lightboxIndex = 0;
-
-      if (this.communityItems.length === 0 && !this.communityLoading) {
-        this.communityLoading = true;
-        this.communityError = null;
-        this.communityOffset = 0;
-        this.communityHasMore = true;
-
-        try {
-          const response = await fetchGalleryItems({ limit: 50, offset: 0 });
-          updateCommunityPagination(this, response, false);
-        } catch (error) {
-          this.communityError = error.message;
-          console.error('Failed to load community gallery:', error);
-          this.communityLoading = false;
-          return;
-        }
-
-        this.communityLoading = false;
-      }
 
       if (this.communityItems.length > 0) {
         this.$nextTick(() => {
           this.startLightboxAnimation();
         });
-      }
-    },
-
-    async loadMoreCommunityItems() {
-      if (this.communityLoadingMore || !this.communityHasMore) return;
-
-      this.communityLoadingMore = true;
-
-      try {
-        const response = await fetchGalleryItems({
-          limit: 50,
-          offset: this.communityOffset,
-        });
-        updateCommunityPagination(this, response, true);
-      } catch (error) {
-        console.error('Failed to load more community items:', error);
-      } finally {
-        this.communityLoadingMore = false;
-      }
-    },
-
-    checkLoadMore() {
-      if (this.lightboxIndex >= this.communityItems.length - 5 && this.communityHasMore) {
-        this.loadMoreCommunityItems();
       }
     },
 
@@ -244,33 +148,13 @@ export function createGalleryActions() {
       restoreAnimationState('lightbox');
     },
 
-    async lightboxNext() {
+    lightboxNext() {
       if (this.communityItems.length === 0) return;
-
-      const nextIndex = this.lightboxIndex + 1;
-      const isAtEnd = nextIndex >= this.communityItems.length;
-
-      if (isAtEnd) {
-        if (!this.communityHasMore) {
-          return;
-        }
-
-        if (!this.communityLoadingMore) {
-          await this.loadMoreCommunityItems();
-        }
-
-        if (nextIndex < this.communityItems.length) {
-          stopPreview();
-          this.lightboxIndex = nextIndex;
-          this.$nextTick(() => this.startLightboxAnimation());
-        }
-        return;
-      }
+      if (this.lightboxIndex >= this.communityItems.length - 1) return;
 
       stopPreview();
-      this.lightboxIndex = nextIndex;
+      this.lightboxIndex++;
       this.$nextTick(() => this.startLightboxAnimation());
-      this.checkLoadMore();
     },
 
     lightboxPrev() {
@@ -303,33 +187,6 @@ export function createGalleryActions() {
       }
     },
 
-    async deleteLightboxItem() {
-      const item = this.communityItems[this.lightboxIndex];
-      if (!item) return;
-
-      try {
-        await deleteGalleryItem(item.id);
-
-        this.communityItems = this.communityItems.filter((i) => i.id !== item.id);
-        this.communityTotal--;
-
-        if (this.lightboxIndex >= this.communityItems.length) {
-          this.lightboxIndex = Math.max(0, this.communityItems.length - 1);
-        }
-
-        if (this.communityItems.length === 0) {
-          this.closeLightbox();
-        } else {
-          this.$nextTick(() => {
-            this.startLightboxAnimation();
-          });
-        }
-      } catch (error) {
-        console.error('Failed to delete item:', error);
-        alert(error.message);
-      }
-    },
-
     get currentLightboxItem() {
       return this.communityItems[this.lightboxIndex] || null;
     },
@@ -340,10 +197,6 @@ export function createGalleryActions() {
       return getCongressDay(item.createdAt);
     },
 
-    get isDevMode() {
-      return isDevMode();
-    },
-
     handleLightboxTouchStart(event) {
       const touch = event.touches[0];
       touchStart.x = touch.clientX;
@@ -351,7 +204,7 @@ export function createGalleryActions() {
     },
 
     handleLightboxTouchEnd(event) {
-      if (this.communityLoading || this.communityItems.length === 0) return;
+      if (this.communityItems.length === 0) return;
 
       const touch = event.changedTouches[0];
       const deltaX = touch.clientX - touchStart.x;

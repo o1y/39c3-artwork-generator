@@ -586,15 +586,6 @@
               <svg width="18" height="18"><use href="#icon-bookmark" /></svg>
               <span>Save to My Gallery</span>
             </button>
-            <button
-              class="share-menu-item"
-              @click="openCommunityConsent(); closeSavePopover()"
-              :disabled="communitySubmitting"
-              x-show="isPublicGalleryEnabled"
-            >
-              <svg width="18" height="18"><use href="#icon-globe" /></svg>
-              <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
-            </button>
           </div>
         </div>
         <button
@@ -1115,15 +1106,6 @@
           <svg width="18" height="18"><use href="#icon-bookmark" /></svg>
           <span>Save to My Gallery</span>
         </button>
-        <button
-          class="share-menu-item"
-          @click="openCommunityConsent(); closeSavePopover()"
-          :disabled="communitySubmitting"
-          x-show="isPublicGalleryEnabled"
-        >
-          <svg width="18" height="18"><use href="#icon-globe" /></svg>
-          <span x-text="communitySubmitting ? 'Publishing...' : 'Publish to Community'"></span>
-        </button>
       </div>
     </div>
 
@@ -1250,47 +1232,6 @@
       </div>
     </div>
 
-    <!-- Community Consent Dialog -->
-    <div
-      class="consent-backdrop"
-      x-show="showCommunityConsent"
-      x-cloak
-      x-transition:enter="sheet-backdrop-enter"
-      x-transition:enter-start="sheet-backdrop-enter-start"
-      x-transition:enter-end="sheet-backdrop-enter-end"
-      x-transition:leave="sheet-backdrop-leave"
-      x-transition:leave-start="sheet-backdrop-leave-start"
-      x-transition:leave-end="sheet-backdrop-leave-end"
-      @click="closeCommunityConsent"
-    ></div>
-    <div
-      class="consent-dialog glass-surface"
-      x-show="showCommunityConsent"
-      x-cloak
-      x-transition:enter="popover-enter"
-      x-transition:enter-start="popover-enter-start"
-      x-transition:enter-end="popover-enter-end"
-      x-transition:leave="popover-leave"
-      x-transition:leave-start="popover-leave-start"
-      x-transition:leave-end="popover-leave-end"
-    >
-      <h3 class="consent-title">Share with &#xE002; Community?</h3>
-      <p class="consent-text">
-        Your artwork will be public. Be excellent to each other. Don’t break the internet.
-      </p>
-      <div class="consent-actions">
-        <button class="btn-secondary btn-base" @click="closeCommunityConsent">
-          Oops, nevermind
-        </button>
-        <button
-          class="btn-primary btn-base"
-          @click="submitToCommunity"
-          :disabled="communitySubmitting"
-          x-text="communitySubmitting ? 'Sharing...' : 'YOLO to gallery'"
-        ></button>
-      </div>
-    </div>
-
     <!-- Community Lightbox -->
     <div
       class="lightbox-backdrop"
@@ -1315,57 +1256,16 @@
       x-transition:leave-start="lightbox-leave-start"
       x-transition:leave-end="lightbox-leave-end"
       @keydown.escape.window="lightboxOpen && closeLightbox()"
-      @keydown.arrow-left.window="lightboxOpen && !communityLoading && lightboxPrev()"
-      @keydown.arrow-right.window="lightboxOpen && !communityLoading && lightboxNext()"
+      @keydown.arrow-left.window="lightboxOpen && lightboxPrev()"
+      @keydown.arrow-right.window="lightboxOpen && lightboxNext()"
       @touchstart="handleLightboxTouchStart($event)"
       @touchend="handleLightboxTouchEnd($event)"
     >
-      <!-- Loading state -->
-      <div class="lightbox-loading" x-show="communityLoading">
-        <div class="gallery-loading-spinner"></div>
-        <p>Summoning Kario spirits...</p>
-      </div>
-
-      <!-- Empty state -->
-      <div
-        class="lightbox-empty"
-        x-show="!communityLoading && communityItems.length === 0 && !communityError"
-      >
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path
-            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-          ></path>
-        </svg>
-        <p>No community artwork yet</p>
-        <p class="lightbox-empty-hint">Be the first to share your creation!</p>
-      </div>
-
-      <!-- Error state -->
-      <div class="lightbox-error" x-show="!communityLoading && communityError">
-        <p x-text="communityError"></p>
-        <button class="btn-secondary btn-sm" @click="openCommunityLightbox">Retry</button>
-      </div>
-
-      <!-- Canvas (only show when loaded and has items) -->
-      <canvas
-        class="lightbox-canvas"
-        x-ref="lightboxCanvas"
-        x-show="!communityLoading && communityItems.length > 0"
-      ></canvas>
+      <canvas class="lightbox-canvas" x-ref="lightboxCanvas"></canvas>
 
       <button
         class="lightbox-nav lightbox-prev"
         @click.stop="lightboxPrev"
-        x-show="!communityLoading && communityItems.length > 0"
         :disabled="lightboxIndex === 0"
         aria-label="Previous artwork"
       >
@@ -1384,8 +1284,7 @@
       <button
         class="lightbox-nav lightbox-next"
         @click.stop="lightboxNext"
-        x-show="!communityLoading && communityItems.length > 0"
-        :disabled="lightboxIndex === communityItems.length - 1 && !communityHasMore"
+        :disabled="lightboxIndex === communityItems.length - 1"
         aria-label="Next artwork"
       >
         <svg
@@ -1400,30 +1299,7 @@
         </svg>
       </button>
 
-      <div class="lightbox-controls" x-show="!communityLoading && communityItems.length > 0">
-        <button
-          class="lightbox-delete"
-          x-show="isDevMode"
-          @click.stop="deleteLightboxItem"
-          title="Delete (dev only)"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path
-              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-            ></path>
-            <line x1="10" y1="11" x2="10" y2="17"></line>
-            <line x1="14" y1="11" x2="14" y2="17"></line>
-          </svg>
-          Delete
-        </button>
+      <div class="lightbox-controls">
         <button class="lightbox-fork" @click.stop="forkLightboxItem">
           <svg
             width="16"
@@ -1458,10 +1334,7 @@
 
       <div class="lightbox-info" x-show="currentLightboxItem">
         <span class="lightbox-day" x-show="currentLightboxDay" x-text="currentLightboxDay"></span>
-        <span
-          class="lightbox-counter"
-          x-text="`${lightboxIndex + 1} / ${communityTotal}${communityLoadingMore ? '...' : ''}`"
-        ></span>
+        <span class="lightbox-counter" x-text="`${lightboxIndex + 1} / ${communityTotal}`"></span>
       </div>
     </div>
 

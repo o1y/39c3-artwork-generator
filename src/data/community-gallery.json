@@ -1,0 +1,1458 @@
+[
+  {
+    "id": "dcd4f3bbeb8b",
+    "config": {
+      "text": " \n  \n  \n    \n     \n       \n        \n         \nCaptain Kirk is climbing the mountain!",
+      "theme": "multiline",
+      "colorMode": "green-solid",
+      "widthValue": 50,
+      "opszValue": 39,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767278096240
+  },
+  {
+    "id": "177724988db1",
+    "config": {
+      "text": "39C3 POWER CYCLISTS\nOpenBikeSensor.Org",
+      "theme": "multiline",
+      "colorMode": "violet-inv",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767208558176
+  },
+  {
+    "id": "80247c401623",
+    "config": {
+      "text": "FCKAFDFCKAFDFCKAFD",
+      "theme": "lines",
+      "colorMode": "violet",
+      "numLines": 11,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1.9,
+      "mode": "bounce",
+      "isPaused": false
+    },
+    "createdAt": 1767202808614
+  },
+  {
+    "id": "ca2973286088",
+    "config": {
+      "text": "39C3 MACHT FAHRRÄDER",
+      "theme": "lines",
+      "colorMode": "violet-smooth",
+      "numLines": 7,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767199865168
+  },
+  {
+    "id": "7f3627397e49",
+    "config": {
+      "text": "Bye bye <<39C3",
+      "theme": "lines",
+      "colorMode": "violet-smooth",
+      "numLines": 11,
+      "widthValue": 109,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767112596300
+  },
+  {
+    "id": "3cc3103df000",
+    "config": {
+      "text": "Bye bye <<39C3",
+      "theme": "lines",
+      "colorMode": "mono-inv",
+      "numLines": 11,
+      "widthValue": 109,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767112454963
+  },
+  {
+    "id": "8b445fa808c9",
+    "config": {
+      "text": "* * *\n<<39C3 <<toggle\nPOWER CYCLES\nDay 4\n* * *",
+      "theme": "multiline",
+      "colorMode": "violet",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767089209995
+  },
+  {
+    "id": "77d7e1f98175",
+    "config": {
+      "text": "<<39C3 RollTrePPe\nLinks gehen <<ccc Links gehen",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767015884740
+  },
+  {
+    "id": "e9e8b663bb2f",
+    "config": {
+      "text": "<<39C3 Trolltreppe\nLinks gehen <<ccc Rechts stehen",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1767015842590
+  },
+  {
+    "id": "f0c97113ca88",
+    "config": {
+      "text": "<<CCC GLATTEIS",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766965107012
+  },
+  {
+    "id": "78a972e7a828",
+    "config": {
+      "text": "THE MAYBE TALENT SHOW",
+      "theme": "lines",
+      "colorMode": "violet",
+      "numLines": 9,
+      "widthValue": 68,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766960655375
+  },
+  {
+    "id": "dd03bfbb00d8",
+    "config": {
+      "text": "„Ich würd gern\njetzt Schuhe\nausziehen.“\n\n \n\nNot so excellent\nto each other.\n¯\\_(<<toggle <<toggle)_/¯",
+      "theme": "multiline",
+      "colorMode": "green-solid",
+      "widthValue": 111,
+      "opszValue": 14,
+      "minWeight": 30,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766960348437
+  },
+  {
+    "id": "eb184fde2589",
+    "config": {
+      "text": "SELFTEST",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "mono",
+      "widthValue": 160,
+      "opszValue": 14,
+      "minWeight": 30,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766960043030
+  },
+  {
+    "id": "4f1348124161",
+    "config": {
+      "text": "This font is pr0n.",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "violet-smooth",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766950557257
+  },
+  {
+    "id": "13550190575b",
+    "config": {
+      "text": "Chaospat:innen <<toggle",
+      "theme": "lines",
+      "colorMode": "green-smooth",
+      "numLines": 9,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 113,
+      "isPaused": true
+    },
+    "createdAt": 1766841451972
+  },
+  {
+    "id": "0b31e8d1100f",
+    "config": {
+      "text": "OPENING",
+      "theme": "toggle39c3Animated",
+      "toggleVariant": "left-filled",
+      "colorMode": "mono-inv",
+      "opszValue": 14,
+      "minWeight": 51,
+      "maxWeight": 100,
+      "staticWeight": 80,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766828323623
+  },
+  {
+    "id": "f4c965896185",
+    "config": {
+      "text": "slide",
+      "theme": "ccc",
+      "colorMode": "green-inv",
+      "numLines": 19,
+      "widthValue": 152,
+      "opszValue": 102,
+      "minWeight": 76,
+      "maxWeight": 100,
+      "staticWeight": 80,
+      "animationSpeed": 2.2,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766823264718
+  },
+  {
+    "id": "cd077701bf93",
+    "config": {
+      "text": " ¯\\_(<<CCC)_/¯",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 120,
+      "opszValue": 140,
+      "minWeight": 50,
+      "maxWeight": 50,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766792228819
+  },
+  {
+    "id": "c90bda5f9504",
+    "config": {
+      "text": "<<39C3 Wecker\n\n \n\nTag 1: 07:15 <<toggle2\n Tag 2: 13:37 <<toggle2\nTag 3: 15:15 <<toggle2\n  Tag 4:  ¯\\_(<<toggle)_/¯",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 113,
+      "opszValue": 140,
+      "minWeight": 10,
+      "maxWeight": 80,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 106,
+      "isPaused": true
+    },
+    "createdAt": 1766791993023
+  },
+  {
+    "id": "a1f2fa906d8e",
+    "config": {
+      "text": "PSA: Es ist glatt draußen!",
+      "theme": "lines",
+      "colorMode": "green-solid",
+      "numLines": 11,
+      "widthValue": 73,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 27,
+      "isPaused": true
+    },
+    "createdAt": 1766790648188
+  },
+  {
+    "id": "50ba8ab8413e",
+    "config": {
+      "text": "HACKERSPACE ŻYRARDUW",
+      "theme": "lines",
+      "colorMode": "violet-solid",
+      "numLines": 11,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 0,
+      "isPaused": true
+    },
+    "createdAt": 1766778114067
+  },
+  {
+    "id": "dafc60dc496c",
+    "config": {
+      "text": " *\n  <<39C3\n  //      \\\\\n  //        \\\\\n  ||  <<toggle  ||\n  ||            ||\n  ||            ||\n  ||            ||\n  \\\\          //\n  <<CCC\n  \\>>>>/\n  * * *\n  *  *  *\n  *   *   *",
+      "theme": "multiline",
+      "colorMode": "green",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.5088,
+      "animationOriginY": 0.9368,
+      "animationPhaseOffset": -0.8168,
+      "isPaused": false
+    },
+    "createdAt": 1766755586363
+  },
+  {
+    "id": "85e6f9483dc3",
+    "config": {
+      "text": "CYBER <<ccc CYBER",
+      "theme": "multiline",
+      "colorMode": "green-solid",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 67,
+      "maxWeight": 75,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766750690929
+  },
+  {
+    "id": "9b7308f91704",
+    "config": {
+      "text": "Gibt es noch Tickets?",
+      "theme": "toggle39c3Static",
+      "toggleVariant": "left-filled",
+      "togglePosition": 0,
+      "colorMode": "mono-inv",
+      "opszValue": 14,
+      "staticWeight": 80
+    },
+    "createdAt": 1766739702186
+  },
+  {
+    "id": "25764af2545e",
+    "config": {
+      "text": "KEIN BACKUP\nKEIN MITLEID",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 69,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766681724639
+  },
+  {
+    "id": "93e394d7aba9",
+    "config": {
+      "text": "ANSWER:\nThere is no Hacker Jeopardy at <<39C3.\n\n \n\n(What is a breaking change)",
+      "theme": "multiline",
+      "colorMode": "green-inv",
+      "widthValue": 50,
+      "opszValue": 113,
+      "minWeight": 29,
+      "maxWeight": 29,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766681261117
+  },
+  {
+    "id": "b11d5060f702",
+    "config": {
+      "text": "<<cccDAY -1<<cccDAY -1<<ccc",
+      "theme": "lines",
+      "colorMode": "green-solid",
+      "numLines": 18,
+      "widthValue": 160,
+      "opszValue": 14,
+      "minWeight": 40,
+      "maxWeight": 64,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766679766043
+  },
+  {
+    "id": "2268796f01a7",
+    "config": {
+      "text": "C3Nav",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "mono",
+      "widthValue": 155,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766655979268
+  },
+  {
+    "id": "4d9e5cba3d3c",
+    "config": {
+      "text": "EXPORT → FAX\nCOMMIT <<39C3 REALITY.",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 136,
+      "opszValue": 15,
+      "minWeight": 69,
+      "maxWeight": 55,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 98,
+      "isPaused": true
+    },
+    "createdAt": 1766622675855
+  },
+  {
+    "id": "6862d2b3a36a",
+    "config": {
+      "text": "UnplugTechBrotopia",
+      "theme": "multiline",
+      "colorMode": "violet-smooth",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766622234687
+  },
+  {
+    "id": "b5efba4811ab",
+    "config": {
+      "text": "FAX THiS OR IT DIDN’T HAPPEN",
+      "theme": "lines",
+      "colorMode": "green-solid",
+      "numLines": 16,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766621971162
+  },
+  {
+    "id": "05365954c715",
+    "config": {
+      "text": "KurbelnStattSchwurbeln",
+      "theme": "toggle39c3Animated",
+      "toggleVariant": "left-filled",
+      "colorMode": "violet-smooth",
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "staticWeight": 80,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766621626450
+  },
+  {
+    "id": "4a5b9b653460",
+    "config": {
+      "text": "this is when we can have nice things\nthis is when we can have nice things\nthis is when we can have nice things\nthis is when we can have nice things\nthis is when we can have nice things",
+      "theme": "multiline",
+      "colorMode": "violet-inv",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766621401676
+  },
+  {
+    "id": "e2db6e014e0f",
+    "config": {
+      "text": "*  *  *  *  *  *\n  <<39C3\n  <<CCC\n  <<CCC*<<CCC\n  <<CCC<<CCC<<CCC\n  <<CCC*<<CCC*<<CCC\n  <<CCC<<CCC<<CCC<<CCC\n  <<CCC*<<CCC*<<CCC*<<CCC\n  <<CCC<<CCC<<CCC<<CCC<<CCC\n  <<toggle\n  *  *  *  *  *  *",
+      "theme": "multiline",
+      "colorMode": "green",
+      "widthValue": 69,
+      "opszValue": 14,
+      "minWeight": 30,
+      "maxWeight": 30,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766594259205
+  },
+  {
+    "id": "f696b86e13c5",
+    "config": {
+      "text": "$ ./configure --enable-mate --with-rum\nchecking for mate... <<toggle2\nchecking for rum... <<toggle2\nmake && sudo make caffeinate",
+      "theme": "multiline",
+      "colorMode": "green-solid",
+      "widthValue": 69,
+      "opszValue": 14,
+      "minWeight": 30,
+      "maxWeight": 30,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 104,
+      "isPaused": true
+    },
+    "createdAt": 1766592593582
+  },
+  {
+    "id": "b5407cbaf66a",
+    "config": {
+      "text": " wifi\nis perfectly safe\n \nPlease DO connect\nALL your devices \n \nEverything will\nbe fine",
+      "theme": "multiline",
+      "colorMode": "violet-smooth",
+      "widthValue": 100,
+      "opszValue": 92,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766574027371
+  },
+  {
+    "id": "b7145692909a",
+    "config": {
+      "text": "|||||\n||||||||||||||\n||||||||||||||||||||||\n¯\\_ (  )_/¯ \n\n_______________\n------------------",
+      "theme": "multiline",
+      "colorMode": "green-smooth",
+      "widthValue": 100,
+      "opszValue": 92,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766571080916
+  },
+  {
+    "id": "6ce9f9eb6fea",
+    "config": {
+      "text": "¯\\_ (  )_/¯\n  ",
+      "theme": "multiline",
+      "colorMode": "green-smooth",
+      "widthValue": 100,
+      "opszValue": 92,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766570685027
+  },
+  {
+    "id": "be34c131eddc",
+    "config": {
+      "text": "<<CCC <<CCC <<CCC\n<<CCC  Day -2 <<CCC\n<<CCC <<CCC <<CCC",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766539436749
+  },
+  {
+    "id": "426910341b60",
+    "config": {
+      "text": "\n Room \n",
+      "theme": "multiline",
+      "colorMode": "violet",
+      "widthValue": 100,
+      "opszValue": 140,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1.3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766525201975
+  },
+  {
+    "id": "c2318d35528a",
+    "config": {
+      "text": "\n\n<<CCC",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766515185035
+  },
+  {
+    "id": "f305c000b6f0",
+    "config": {
+      "text": "\nWatching you.",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 74,
+      "opszValue": 140,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1.3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766514375773
+  },
+  {
+    "id": "f76149e5aa3a",
+    "config": {
+      "text": "ShalomSalam",
+      "theme": "toggle",
+      "toggleVariant": "left-outlined",
+      "colorMode": "violet-inv",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 120,
+      "isPaused": true
+    },
+    "createdAt": 1766501881730
+  },
+  {
+    "id": "9261d8b9df17",
+    "config": {
+      "text": "\n \ncyclops\n \n  \n\n \n \nalien\n \n \n  \n \nracists\n \n \n  \nIF ALL CREATURES ARE WELCOME,\nALL CREATURES DO COME.\n \n  \n \nPRIVILEGES, LIKE\nPOWER, CYCLES.\n \n \n \nWATCHING YOU. ",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 63,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1.3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766497987017
+  },
+  {
+    "id": "78d4748b21ed",
+    "config": {
+      "text": "Alles so schön bunt hier",
+      "theme": "toggle39c3Static",
+      "toggleVariant": "right-outlined",
+      "colorMode": "violet-smooth",
+      "opszValue": 70,
+      "staticWeight": 73
+    },
+    "createdAt": 1766487812997
+  },
+  {
+    "id": "883c34743b7b",
+    "config": {
+      "text": "I HATE PROGRAMMING\nI HATE PROGRAMMING\nI HATE PROGRAMMING\nI HATE PROGRAMMING\n\nI HATE PROGRAMMING\nYES! IT WORKS!\nI LOVE PROGRAMMING\nI LOVE PROGRAMMING\nI LOVE PROGRAMMING",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 80,
+      "opszValue": 14,
+      "minWeight": 48,
+      "maxWeight": 71,
+      "animationSpeed": 3,
+      "mode": "wave",
+      "currentFrame": 36,
+      "isPaused": true
+    },
+    "createdAt": 1766448964926
+  },
+  {
+    "id": "cb7e39a37de8",
+    "config": {
+      "text": "CYDER CYDER CYDER",
+      "theme": "lines",
+      "colorMode": "green",
+      "numLines": 11,
+      "widthValue": 65,
+      "opszValue": 14,
+      "minWeight": 79,
+      "maxWeight": 78,
+      "animationSpeed": 3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766448485624
+  },
+  {
+    "id": "4e5589b2d094",
+    "config": {
+      "text": "Bad Gateway\nInternetkurort",
+      "theme": "multiline",
+      "colorMode": "violet-smooth",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 79,
+      "maxWeight": 78,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766448343682
+  },
+  {
+    "id": "e68b5d09827d",
+    "config": {
+      "text": "<<toggle <<toggle\n>",
+      "theme": "multiline",
+      "colorMode": "violet-inv",
+      "widthValue": 108,
+      "opszValue": 105,
+      "minWeight": 100,
+      "maxWeight": 100,
+      "animationSpeed": 1.4,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766446509474
+  },
+  {
+    "id": "5fa27766caf4",
+    "config": {
+      "text": "<<ccc Bild",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 50,
+      "opszValue": 96,
+      "minWeight": 100,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 76,
+      "isPaused": true
+    },
+    "createdAt": 1766446138156
+  },
+  {
+    "id": "9e1d37033f83",
+    "config": {
+      "text": "Wenn er straight durcharbeitet\nist das Ding in kürzester Zeit auf.",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 50,
+      "opszValue": 140,
+      "minWeight": 71,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.9031,
+      "animationOriginY": 0.1492,
+      "animationPhaseOffset": 2.618,
+      "currentFrame": 50,
+      "isPaused": true
+    },
+    "createdAt": 1766445876771
+  },
+  {
+    "id": "986e4a986816",
+    "config": {
+      "text": "<<39C3\nworks as designed™",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 50,
+      "opszValue": 140,
+      "minWeight": 100,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "currentFrame": 59,
+      "isPaused": true
+    },
+    "createdAt": 1766445474686
+  },
+  {
+    "id": "f40dab8a4414",
+    "config": {
+      "text": "<script>alert('<<39C3')</script>",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 119,
+      "opszValue": 65,
+      "minWeight": 28,
+      "maxWeight": 10,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "currentFrame": 8,
+      "isPaused": true
+    },
+    "createdAt": 1766445300553
+  },
+  {
+    "id": "6bb7a8b8987c",
+    "config": {
+      "text": "../../../../etc/passwd",
+      "theme": "multiline",
+      "colorMode": "violet-smooth",
+      "widthValue": 160,
+      "opszValue": 65,
+      "minWeight": 28,
+      "maxWeight": 10,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "currentFrame": 8,
+      "isPaused": true
+    },
+    "createdAt": 1766445249409
+  },
+  {
+    "id": "1992e828a870",
+    "config": {
+      "text": "SQLSTATE[42000]: Syntax error near '<<39C3'",
+      "theme": "multiline",
+      "colorMode": "green-smooth",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "currentFrame": 8,
+      "isPaused": true
+    },
+    "createdAt": 1766445111655
+  },
+  {
+    "id": "75f2b6198982",
+    "config": {
+      "text": "'; DROP TABLE artworks; --",
+      "theme": "multiline",
+      "colorMode": "green-smooth",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "currentFrame": 8,
+      "isPaused": true
+    },
+    "createdAt": 1766445062857
+  },
+  {
+    "id": "c8b46b031b6e",
+    "config": {
+      "text": "<<toggle Online",
+      "theme": "lines",
+      "colorMode": "green-inv",
+      "numLines": 5,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 2,
+      "mode": "spotlight",
+      "animationOriginX": 0.6466,
+      "animationOriginY": 0.4961,
+      "animationPhaseOffset": 2.9531,
+      "isPaused": false
+    },
+    "createdAt": 1766444946087
+  },
+  {
+    "id": "63f994723476",
+    "config": {
+      "text": "<<CCC Day -3 <<CCC",
+      "theme": "lines",
+      "colorMode": "violet-smooth",
+      "numLines": 24,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 0.3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766444819835
+  },
+  {
+    "id": "14e0647123b9",
+    "config": {
+      "text": "<<CCC Day -3 <<CCC",
+      "theme": "lines",
+      "colorMode": "green",
+      "numLines": 24,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 0.3,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766444772549
+  },
+  {
+    "id": "b2f8c9dce1b6",
+    "config": {
+      "text": "<<CCC",
+      "theme": "lines",
+      "colorMode": "violet-smooth",
+      "numLines": 2,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766444677640
+  },
+  {
+    "id": "2f51618dbb38",
+    "config": {
+      "text": "Ich hoffe, der Späti\nakzeptiert wieder\nArlipay <<toggle",
+      "theme": "multiline",
+      "colorMode": "violet-smooth",
+      "widthValue": 65,
+      "opszValue": 140,
+      "minWeight": 89,
+      "maxWeight": 91,
+      "animationSpeed": 1,
+      "mode": "spotlight",
+      "animationOriginX": 0.039,
+      "animationOriginY": 0.7273,
+      "animationPhaseOffset": 4.0422,
+      "currentFrame": 134,
+      "isPaused": true
+    },
+    "createdAt": 1766442879893
+  },
+  {
+    "id": "5bec46343ac8",
+    "config": {
+      "text": "Hackertour gebucht",
+      "theme": "toggle",
+      "toggleVariant": "right-outlined",
+      "colorMode": "violet-inv",
+      "widthValue": 65,
+      "opszValue": 140,
+      "minWeight": 89,
+      "maxWeight": 91,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 120,
+      "isPaused": true
+    },
+    "createdAt": 1766442715137
+  },
+  {
+    "id": "2dfb32f9ed82",
+    "config": {
+      "text": "Kuchenblechmafia",
+      "theme": "toggle",
+      "toggleVariant": "right-filled",
+      "colorMode": "mono",
+      "widthValue": 65,
+      "opszValue": 140,
+      "minWeight": 89,
+      "maxWeight": 91,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 120,
+      "isPaused": true
+    },
+    "createdAt": 1766442593631
+  },
+  {
+    "id": "6f0fe7b54828",
+    "config": {
+      "text": "Meow.",
+      "theme": "lines",
+      "colorMode": "green",
+      "numLines": 4,
+      "widthValue": 109,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 32,
+      "isPaused": true
+    },
+    "createdAt": 1766434808914
+  },
+  {
+    "id": "9eadda6f3274",
+    "config": {
+      "text": "Do not forget your Ethernet cable.\nWi-Fi is a social experiment.\n<<CCC<<CCC<<CCC<<CCC<<CCC",
+      "theme": "multiline",
+      "colorMode": "mono-inv",
+      "widthValue": 58,
+      "opszValue": 66,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766434752784
+  },
+  {
+    "id": "b8d2b5e46956",
+    "config": {
+      "text": "VORFREUDE <<CCC",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "violet-smooth",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766431003590
+  },
+  {
+    "id": "2866a342104a",
+    "config": {
+      "text": "Day -4 <<CCC",
+      "theme": "multiline",
+      "colorMode": "violet",
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766407169740
+  },
+  {
+    "id": "c605e4b35f1e",
+    "config": {
+      "text": "<<39C3 Aufbauleaks\nAktuelle Musikuntermalung:\nDas Brummen der Dieselmotoren\nfür die Sofentour.",
+      "theme": "multiline",
+      "colorMode": "green-inv",
+      "widthValue": 69,
+      "opszValue": 14,
+      "minWeight": 63,
+      "maxWeight": 63,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 42,
+      "isPaused": true
+    },
+    "createdAt": 1766391396092
+  },
+  {
+    "id": "d7226e5f7dc6",
+    "config": {
+      "text": "„Läuft das DECT schon?“",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "mono",
+      "widthValue": 58,
+      "opszValue": 14,
+      "minWeight": 34,
+      "maxWeight": 35,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766391129970
+  },
+  {
+    "id": "08ddfca9c76c",
+    "config": {
+      "text": "Heute <<toggle  Morgen \nist ein guter Tag,\nverschlüsselte Backups an\nsicheren Orten von allen wichtigen\nDateien und Systemen zu machen.",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 45,
+      "maxWeight": 45,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766334928557
+  },
+  {
+    "id": "417f93f80a34",
+    "config": {
+      "text": "My art is a fax now.\nIt carries the hiss,\nthe delay,\nand the patience\nwe lost.\n<<39C3 approved\nperfectly secure,\nand absolutely\nunreadable.",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 56,
+      "opszValue": 140,
+      "minWeight": 30,
+      "maxWeight": 30,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 89,
+      "isPaused": true
+    },
+    "createdAt": 1766325228432
+  },
+  {
+    "id": "bed6055115b4",
+    "config": {
+      "text": "ßEIBER",
+      "theme": "lines",
+      "colorMode": "violet",
+      "numLines": 18,
+      "widthValue": 126,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "spotlight",
+      "animationOriginX": 0.493,
+      "animationOriginY": 0.4981,
+      "animationPhaseOffset": 2.4504,
+      "isPaused": false
+    },
+    "createdAt": 1766321558790
+  },
+  {
+    "id": "9b6cac70be34",
+    "config": {
+      "text": "Day -5",
+      "theme": "lines",
+      "colorMode": "green-smooth",
+      "numLines": 5,
+      "widthValue": 160,
+      "opszValue": 14,
+      "minWeight": 40,
+      "maxWeight": 93,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 71,
+      "isPaused": true
+    },
+    "createdAt": 1766311811019
+  },
+  {
+    "id": "7ddef62a933c",
+    "config": {
+      "text": "Hubwagen gefahren √ \nDas Bällebad angerichtet √",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 92,
+      "opszValue": 64,
+      "minWeight": 36,
+      "maxWeight": 94,
+      "animationSpeed": 1,
+      "mode": "spotlight",
+      "animationOriginX": 0.5065,
+      "animationOriginY": 0.2338,
+      "animationPhaseOffset": 2.1991,
+      "currentFrame": 121,
+      "isPaused": true
+    },
+    "createdAt": 1766255840475
+  },
+  {
+    "id": "345cc906e5eb",
+    "config": {
+      "text": "<<39C3\nENDLICH\nNORMLE\n LEUTE!\n<<toggle",
+      "theme": "multiline",
+      "colorMode": "green-inv",
+      "widthValue": 141,
+      "opszValue": 14,
+      "minWeight": 70,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "spotlight",
+      "animationOriginX": 0.5065,
+      "animationOriginY": 0.2338,
+      "animationPhaseOffset": 2.1991,
+      "currentFrame": 130,
+      "isPaused": true
+    },
+    "createdAt": 1766255406222
+  },
+  {
+    "id": "04505d237cf6",
+    "config": {
+      "text": "39C3 FLORA POWER",
+      "theme": "lines",
+      "colorMode": "violet-inv",
+      "numLines": 11,
+      "widthValue": 103,
+      "opszValue": 14,
+      "minWeight": 34,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "spotlight",
+      "animationOriginX": 0.555,
+      "animationOriginY": 0.5413,
+      "animationPhaseOffset": -0.1466,
+      "isPaused": false
+    },
+    "createdAt": 1766255009893
+  },
+  {
+    "id": "7c150cfbbde9",
+    "config": {
+      "text": "FLORA\nODER\nCLUB?\n<<toggle",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 67,
+      "opszValue": 25,
+      "minWeight": 100,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 74,
+      "isPaused": true
+    },
+    "createdAt": 1766253945064
+  },
+  {
+    "id": "04e70673de97",
+    "config": {
+      "text": "SHINY HAPPY PEOPLE",
+      "theme": "terminal",
+      "colorMode": "green",
+      "numLines": 10,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766253567837
+  },
+  {
+    "id": "a5b7d7137619",
+    "config": {
+      "text": "404",
+      "theme": "toggle",
+      "toggleVariant": "left-outlined",
+      "colorMode": "green-smooth",
+      "widthValue": 160,
+      "opszValue": 14,
+      "minWeight": 21,
+      "maxWeight": 21,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 20,
+      "isPaused": true
+    },
+    "createdAt": 1766253434222
+  },
+  {
+    "id": "b9fef348a851",
+    "config": {
+      "text": "BE EXCELLENT TO EACH OTHER",
+      "theme": "multiline",
+      "colorMode": "mono",
+      "widthValue": 160,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 64,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766250791676
+  },
+  {
+    "id": "5a01966a3037",
+    "config": {
+      "text": "Day -6",
+      "theme": "toggle39c3Animated",
+      "toggleVariant": "left-filled",
+      "colorMode": "green-inv",
+      "opszValue": 140,
+      "minWeight": 100,
+      "maxWeight": 100,
+      "staticWeight": 80,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 115,
+      "isPaused": true
+    },
+    "createdAt": 1766239847560
+  },
+  {
+    "id": "7ddaf44c2c42",
+    "config": {
+      "text": "39C3 POWER CYCLES",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "mono",
+      "widthValue": 50,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 133,
+      "isPaused": true
+    },
+    "createdAt": 1766239330000
+  },
+  {
+    "id": "cbca94ad42d2",
+    "config": {
+      "text": "Rated: F (for font-nerds only)",
+      "theme": "lines",
+      "colorMode": "mono",
+      "numLines": 14,
+      "widthValue": 100,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 72,
+      "isPaused": true
+    },
+    "createdAt": 1766229614298
+  },
+  {
+    "id": "13d18baf7605",
+    "config": {
+      "text": "CHAOSMENTORS",
+      "theme": "toggle",
+      "toggleVariant": "left-filled",
+      "colorMode": "violet-smooth",
+      "widthValue": 54,
+      "opszValue": 14,
+      "minWeight": 61,
+      "maxWeight": 63,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "isPaused": false
+    },
+    "createdAt": 1766229492269
+  },
+  {
+    "id": "86c267138f21",
+    "config": {
+      "text": "39C3 POWER CYCLES",
+      "theme": "lines",
+      "colorMode": "mono",
+      "numLines": 11,
+      "widthValue": 55,
+      "opszValue": 14,
+      "minWeight": 10,
+      "maxWeight": 100,
+      "animationSpeed": 1,
+      "mode": "wave",
+      "currentFrame": 28,
+      "isPaused": true
+    },
+    "createdAt": 1766226773985
+  }
+]
