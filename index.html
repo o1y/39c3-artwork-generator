@@ -1333,8 +1333,11 @@
       </div>
 
       <div class="lightbox-info" x-show="currentLightboxItem">
-        <span class="lightbox-day" x-show="currentLightboxDay" x-text="currentLightboxDay"></span>
-        <span class="lightbox-counter" x-text="`${lightboxIndex + 1} / ${communityTotal}`"></span>
+        <span
+          class="lightbox-day"
+          x-show="currentLightboxDay"
+          x-text="`Published at 39C3 ${currentLightboxDay}`"
+        ></span>
       </div>
     </div>
 

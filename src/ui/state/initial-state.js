@@ -15,6 +15,15 @@ import { impressum } from '../../config/impressum.js';
 import { loadGallery } from '../../gallery/storage.js';
 import communityGalleryItems from '../../data/community-gallery.json';
 
+function shuffled(items) {
+  const arr = items.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 const NUMERIC_BOUNDS = {
   numLines: [1, 100],
   widthValue: FONT_AXES.width,
@@ -195,9 +204,8 @@ export function createInitialState() {
     impressumOpen: false,
     impressum,
 
-    // Community gallery state (read-only, bundled at build time)
-    communityItems: communityGalleryItems,
-    communityTotal: communityGalleryItems.length,
+    // Community gallery state
+    communityItems: shuffled(communityGalleryItems),
 
     // Lightbox state
     lightboxOpen: false,

@@ -427,6 +427,8 @@
   .lightbox {
     position: fixed;
     inset: 0;
+    flex-direction: column;
+    gap: 16px;
     z-index: 400;
     display: flex;
     align-items: center;
@@ -540,10 +542,6 @@
   }
 
   .lightbox-info {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -601,15 +599,6 @@
     color: var(--accent-color);
     font-variation-settings:
       'wght' 60,
-      'wdth' 80,
-      'opsz' 14;
-  }
-
-  .lightbox-counter {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-variation-settings:
-      'wght' 40,
       'wdth' 80,
       'opsz' 14;
   }
@@ -680,10 +669,6 @@
     .lightbox-delete {
       padding: 8px 12px;
       font-size: 13px;
-    }
-
-    .lightbox-info {
-      bottom: 20px;
     }
   }
 }
